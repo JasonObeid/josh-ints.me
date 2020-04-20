@@ -9,26 +9,28 @@ on:
 jobs:
 
   build:
-    name: Push Container to Heroku
+    name: CI/CD
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Login to Heroku Container registry
-      env: 
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:login 
+
+    - name: Update SHA
+      run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
       
-    - name: Build and push
+    - name: Build container image
+      run: docker build -t jasonobeid/josh-ints.me:$(echo $GITHUB_SHA | head -c7) .
+
+    - name: Docker Login
       env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:push -a shielded-badlands-30380 web 
-      
-    - name: Release
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+    - name: Push image to Docker Hub
+      run: docker push jasonobeid/josh-ints.me
+        
+    - name: Push to DO droplet
+      uses: digitalocean/action-doctl@master
       env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:release -a shielded-badlands-30380 web 
-    - name: Test
-      env: 
-        code: $(curl -s -o /dev/null -w "%{http_code}" http://www.josh-ints.me/summoners)
-      run: echo 'hi'
-      if: contains(env.code, '200')
+        DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      with:
+        args: echo "test"
