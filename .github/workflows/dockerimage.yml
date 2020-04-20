@@ -12,6 +12,11 @@ jobs:
     name: CI/CD
     runs-on: ubuntu-latest
     steps:
+    - name: Publish Docker2
+      run: ls
+      
+    - name: Publish Docker1
+      run: ls /github/workspace/
       
     - name: Publish Docker
       uses: elgohr/Publish-Docker-Github-Action@2.14
