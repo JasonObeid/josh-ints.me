@@ -1,5 +1,3 @@
-Forked from: [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
-
 ## Want to use this project?
 
 1. Fork/Clone
@@ -25,3 +23,6 @@ Forked from: [post](https://testdriven.io/developing-a-single-page-app-with-flas
     ```
 
     Navigate to [http://localhost:8080](http://localhost:8080)
+
+
+Based on: [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
