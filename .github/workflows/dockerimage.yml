@@ -14,7 +14,7 @@ jobs:
     steps:
       
     - name: Build container image
-      run: docker build -t jasonobeid/josh-ints.me:$(echo $head) .
+      run: docker build -t jasonobeid/josh-ints.me .
 
     - name: Docker Login
       env:
