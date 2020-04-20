@@ -12,12 +12,9 @@ jobs:
     name: CI/CD
     runs-on: ubuntu-latest
     steps:
-
-    - name: Update SHA
-      run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
       
     - name: Build container image
-      run: docker build -t jasonobeid/josh-ints.me:$(echo $GITHUB_SHA | head -c7) .
+      run: docker build -t jasonobeid/josh-ints.me:$(echo $head) .
 
     - name: Docker Login
       env:
