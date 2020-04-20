@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-    - name: Build container image
-      run: docker build -t jasonobeid/josh-ints.me .
-
-    - name: Docker Login
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-    - name: Push image to Docker Hub
-      run: docker push jasonobeid/josh-ints.me
+    - name: Publish Docker
+      uses: elgohr/Publish-Docker-Github-Action@2.14
+      with:
+          # The name of the image you would like to push
+          name: josh-ints
+          # The login username for the registry
+          username: ${{ secrets.dockerName }}
+          # The login password for the registry
+          password: ${{ secrets.dockerPass }
+          # Use dockerfile when you would like to explicitly build a Dockerfile
+          dockerfile: .Dockerfile
         
     - name: Push to DO droplet
       uses: digitalocean/action-doctl@master
