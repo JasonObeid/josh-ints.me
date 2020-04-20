@@ -12,6 +12,7 @@ jobs:
     name: CI/CD
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@master
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
@@ -24,4 +25,4 @@ jobs:
       env:
         DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       with:
-        args: echo "test"
+        args: sudo docker pull jasonobeid/josh-ints
