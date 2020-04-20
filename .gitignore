@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+/dist/
+env/
+__pycache__
+josh-ints.me.csr
+josh-ints.me.key
+josh-ints.me.ctr

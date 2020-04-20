@@ -1,0 +1,3 @@
+game date, kill participation, mean level gap?
+change uri in nginx config
+add items, summoner spells
