@@ -173,7 +173,22 @@ button.sort
                 </td>
                 <td class='redTeam'>
                   <tr v-for="(player, index) in match.teamInfo.red" :key="index">
-                    <a> {{ player.summonerName }} </a>
+                    <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
+                    player.participantId === match.teamInfo.redTeamDPSIndex"
+                    style="background-color: #f2e0ff;" v-b-tooltip.hover title="Carried">
+                       {{ player.summonerName }}
+                    </a>
+                    <a v-else-if="player.participantId === match.teamInfo.redTeamDPSIndex"
+                    style="background-color: #ffc4c9;" v-b-tooltip.hover title="Team damage btw">
+                       {{ player.summonerName }}
+                    </a>
+                    <a v-else-if="player.participantId === match.teamInfo.redTeamTankIndex "
+                    style="background-color: #e0f3ff;" v-b-tooltip.hover title="Team tank btw">
+                       {{ player.summonerName }}
+                    </a>
+                    <a v-else>
+                       {{ player.summonerName }}
+                    </a>
                     <img :src="player.champImgPath" width="20px" height="auto">
                   </tr>
                 </td>
