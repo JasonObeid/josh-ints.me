@@ -18,6 +18,11 @@
   text-align: right;
   align-items:right;
 }
+button.sort
+{
+  background-color: transparent;
+  border-style:ridge;
+}
 </style>
 
 <template>
@@ -58,10 +63,18 @@
                 <th>Score</th>
                 <th>KDA</th>
                 <th>CS</th>
-                <th><button @click='sortByInt(summoner)'>Int Score</button></th>
+                <th>Int Score
+                  <button class='sort' @click='sortByInt(summoner)'>
+                    {{ getSortDirection(intSortCount) }}
+                  </button>
+                </th>
                 <th>Blue Team</th>
                 <th>Red Team</th>
-                <th><button @click='sortByDate(summoner)'>Date</button></th>
+                <th>Date
+                  <button class='sort' @click='sortByDate(summoner)'>
+                  {{ getSortDirection(dateSortCount) }}
+                  </button>
+                </th>
               </tr>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
                 <td>
@@ -135,12 +148,27 @@
                 <td>{{ match.stats.kda }}</td>
                 <td>{{ match.stats.creepScore }}</td>
                 <td>
-                  <a v-b-tooltip.hover title="Tooltip">{{ match.stats.intScore + '%'}}</a>
+                  <a> {{ match.stats.intScore + '%' }}</a>
                 </td>
                 <td class='blueTeam'>
                   <tr v-for="(player, index) in match.teamInfo.blue" :key="index">
                     <img :src="player.champImgPath" width="20px" height="auto">
-                    <a> {{ player.summonerName }} </a>
+                    <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
+                    player.participantId === match.teamInfo.blueTeamDPSIndex"
+                    style="background-color: #f2e0ff;" v-b-tooltip.hover title="Carried">
+                       {{ player.summonerName }}
+                    </a>
+                    <a v-else-if="player.participantId === match.teamInfo.blueTeamDPSIndex"
+                    style="background-color: #ffc4c9;" v-b-tooltip.hover title="Team damage btw">
+                       {{ player.summonerName }}
+                    </a>
+                    <a v-else-if="player.participantId === match.teamInfo.blueTeamTankIndex "
+                    style="background-color: #e0f3ff;" v-b-tooltip.hover title="Team tank btw">
+                       {{ player.summonerName }}
+                    </a>
+                    <a v-else>
+                       {{ player.summonerName }}
+                    </a>
                   </tr>
                 </td>
                 <td class='redTeam'>
@@ -245,6 +273,12 @@ export default {
     alert: Alert,
   },
   methods: {
+    getSortDirection(sortCount) {
+      if (sortCount % 2 === 0) {
+        return 'v';
+      }
+      return '^';
+    },
     sortArrays(itemArray, sortCount) {
       const tempArray = itemArray;
       if (sortCount % 2 === 0) {

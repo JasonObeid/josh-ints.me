@@ -4,6 +4,7 @@ import requests
 import random
 import json
 import datetime
+import operator
 from math import floor
 
 api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
@@ -126,8 +127,8 @@ def getAllStats(players):
     return [killsArr, deathsArr, assistsArr]
 
 
-def getParticipantId(particpantIds, accId):
-    for participant in particpantIds:
+def getParticipantId(participantIds, accId):
+    for participant in participantIds:
         accountID = participant['player']['accountId']
         if (accountID == accId):
             return  participant['participantId']
@@ -144,6 +145,10 @@ def getSummonersNames(particpants):
 def getTeamInfo(players, summonerNames):
     redTeamInfo = []
     blueTeamInfo = []
+    redDamageTaken = {}
+    redDamageDealt = {}
+    blueDamageTaken = {}
+    blueDamageDealt = {}
     teamInfo = {}
     for player in players:
         participantId = player['participantId']
@@ -152,13 +157,24 @@ def getTeamInfo(players, summonerNames):
         teamSide = getTeamSide(teamId)
         champId = player['championId']
         championInfo = getChampInfo(champId)
-        summonerInfo = {'summonerName':summonerName, 'particpantId':participantId,
+        summonerInfo = {'summonerName':summonerName, 'participantId':participantId,
         'champName':championInfo['champName'], 'champImgPath':championInfo['champImgPath']}
+        damageTaken = int(player['stats']['totalDamageTaken'])
+        damageDealt = int(player['stats']['totalDamageDealtToChampions'])
         if(teamSide == 'red'):
             redTeamInfo.append(summonerInfo)
+            redDamageTaken[participantId] = damageTaken
+            redDamageDealt[participantId] = damageDealt
         elif(teamSide == 'blue'):
             blueTeamInfo.append(summonerInfo)
-    teamInfo = {'red':redTeamInfo, 'blue':blueTeamInfo}
+            blueDamageTaken[participantId] = damageTaken
+            blueDamageDealt[participantId] = damageDealt
+    redTeamTank=max(redDamageTaken.items(), key=operator.itemgetter(1))[0]
+    redTeamDPS=max(redDamageDealt.items(), key=operator.itemgetter(1))[0]
+    blueTeamTank=max(blueDamageTaken.items(), key=operator.itemgetter(1))[0]
+    blueTeamDPS=max(blueDamageDealt.items(), key=operator.itemgetter(1))[0]
+    teamInfo = {'red':redTeamInfo, 'redTeamTankIndex':redTeamTank, 'redTeamDPSIndex':redTeamDPS, 
+                'blue':blueTeamInfo, 'blueTeamTankIndex':blueTeamTank, 'blueTeamDPSIndex':blueTeamDPS}
     return teamInfo
 
 
@@ -173,7 +189,7 @@ def getMatchDate(unixTime):
     matchDate = datetime.datetime.utcfromtimestamp(unixTime/1000)
     date = str(matchDate.month) + '/' + str(matchDate.day) + '/' + str(matchDate.year)[2:]
     return date
-    
+
 
 def getMatchDuration(gameDuration):
     minutes = str(floor(gameDuration / 60))
@@ -194,7 +210,6 @@ def getId(name):
         return accountID
     return 'Summoner not found'
     
-
 
 def getHistory(accId, startIndex=0, endIndex=10):
     gameArr = []
