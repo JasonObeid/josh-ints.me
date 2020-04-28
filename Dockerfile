@@ -22,6 +22,7 @@ COPY --from=build-vue /app/dist /usr/share/nginx/html
 COPY ./images /usr/share/nginx/html/images
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./server/requirements.txt ./
+COPY ./dataDragon .
 RUN pip3 install -r requirements.txt
 RUN pip3 install gunicorn
 RUN pip3 install requests
