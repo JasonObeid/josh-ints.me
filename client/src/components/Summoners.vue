@@ -40,6 +40,7 @@ button.sort
         <button class="nav-link" @click.prevent="setActive(summoner.name)"
         :class="{ active: isActive(summoner.name) }">
           {{ summoner.name }}
+          {{ summoner.rank }}
           <b-button size='sm' @click=onDeleteSummoner(summoner)
           variant="outline-danger">x</b-button>
         </button>
@@ -268,7 +269,6 @@ const localhost = '';
 export default {
   data() {
     return {
-      ogSummoners: [],
       summoners: [],
       addSummonerForm: {
         name: '',
