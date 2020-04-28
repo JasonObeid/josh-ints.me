@@ -21,10 +21,9 @@ RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 COPY --from=build-vue /app/dist /usr/share/nginx/html
 COPY ./images /usr/share/nginx/html/images
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY ./server/requirements.txt ./
-COPY ./dataDragon .
+COPY ./dataDragon ../
+COPY ./server .
 RUN pip3 install -r requirements.txt
 RUN pip3 install gunicorn
 RUN pip3 install requests
-COPY ./server .
 CMD gunicorn -b 0.0.0.0:5000 app:app --daemon && sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
