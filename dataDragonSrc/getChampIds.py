@@ -2,7 +2,7 @@ import json
 
 def mapIds():
     champMap = {}
-    with open('/home/jason/Downloads/10.4.1/data/en_US/champion.json') as file:
+    with open('./champion.json') as file:
         x = file.read()
         x = json.loads(x)
         championList = x['data']
@@ -10,7 +10,7 @@ def mapIds():
             champKey = x['data'][champ]['key']
             champMap[champKey] = champ
     #print(champMap)
-    with open('champIds.json', 'w') as json_file:
+    with open('../dataDragon/champIds.json', 'w') as json_file:
         json.dump(champMap, json_file)
 
 

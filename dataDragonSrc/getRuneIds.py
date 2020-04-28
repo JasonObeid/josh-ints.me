@@ -21,9 +21,9 @@ def mapIds():
                     runeDict[runeId] = {'name': runeName, 'imgPath': imgPath}
             #print(runeDict)
         #print(branchDict)
-    with open('runeIds.json', 'w') as json_file:
+    with open('../dataDragon/runeIds.json', 'w') as json_file:
         json.dump(runeDict, json_file)
-    with open('branchIds.json', 'w') as json_file:
+    with open('../dataDragon/branchIds.json', 'w') as json_file:
         json.dump(branchDict, json_file)
 
 mapIds()

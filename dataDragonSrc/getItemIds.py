@@ -11,7 +11,7 @@ def mapIds():
             imgPath = "images/item/" + itemList['data'][itemId]['image']['full']
             itemDict[itemId] = {'name':name,'imgPath':imgPath}
         print(itemDict)
-    with open('itemIds.json', 'w') as json_file:
+    with open('../dataDragon/itemIds.json', 'w') as json_file:
         json.dump(itemDict, json_file)
 
 

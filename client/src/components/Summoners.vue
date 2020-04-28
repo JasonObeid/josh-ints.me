@@ -39,8 +39,8 @@ button.sort
       :key="index" :title="summoner.name">
         <button class="nav-link" @click.prevent="setActive(summoner.name)"
         :class="{ active: isActive(summoner.name) }">
-          {{ summoner.name }}
-          {{ summoner.rank }}
+          <a>{{ summoner.name }} | </a>
+          <a>{{ summoner.rank }}</a>
           <b-button size='sm' @click=onDeleteSummoner(summoner)
           variant="outline-danger">x</b-button>
         </button>
@@ -263,8 +263,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-const localhost = '';
-// const localhost = 'http://localhost:5000';
+// const localhost = '';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {
