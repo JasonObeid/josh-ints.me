@@ -8,6 +8,18 @@
   padding: 3%;
   padding-top: 0px;
 }
+.btn-carry
+{
+  background-color: #f2e0ff;
+}
+.btn-damage
+{
+  background-color: #ffc4c9;
+}
+.btn-tank
+{
+  background-color: #e0f3ff;
+}
 .blueTeam
 {
   text-align: left;
@@ -156,19 +168,31 @@ button.sort
                     <img :src="player.champImgPath" width="20px" height="auto">
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
-                    style="background-color: #f2e0ff;" v-b-tooltip.hover title="Carried">
-                       {{ player.summonerName }}
+                    v-b-tooltip.hover title="Carried">
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="carry">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamDPSIndex"
-                    style="background-color: #ffc4c9;" v-b-tooltip.hover title="Team damage btw">
-                       {{ player.summonerName }}
+                    v-b-tooltip.hover title="Team damage btw">
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="damage">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamTankIndex "
-                    style="background-color: #e0f3ff;" v-b-tooltip.hover title="Team tank btw">
-                       {{ player.summonerName }}
+                    v-b-tooltip.hover title="Team tank btw">
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="tank">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <a v-else>
-                       {{ player.summonerName }}
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="light">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                   </tr>
                 </td>
@@ -176,19 +200,31 @@ button.sort
                   <tr v-for="(player, index) in match.teamInfo.red" :key="index">
                     <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
                     player.participantId === match.teamInfo.redTeamDPSIndex"
-                    style="background-color: #f2e0ff;" v-b-tooltip.hover title="Carried">
-                       {{ player.summonerName }}
+                    v-b-tooltip.hover title="Carried">
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="light" style="background-color: #f2e0ff;">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamDPSIndex"
-                    style="background-color: #ffc4c9;" v-b-tooltip.hover title="Team damage btw">
-                       {{ player.summonerName }}
+                     v-b-tooltip.hover title="Team damage btw">
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="light" style="background-color: #ffc4c9;">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamTankIndex "
-                    style="background-color: #e0f3ff;" v-b-tooltip.hover title="Team tank btw">
-                       {{ player.summonerName }}
+                     v-b-tooltip.hover title="Team tank btw">
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="light" style="background-color: #e0f3ff;">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <a v-else>
-                       {{ player.summonerName }}
+                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                        variant="light">
+                         {{ player.summonerName }}
+                       </b-button>
                     </a>
                     <img :src="player.champImgPath" width="20px" height="auto">
                   </tr>
@@ -288,6 +324,13 @@ export default {
     alert: Alert,
   },
   methods: {
+    addTeammate(summonerID) {
+      const payload = {
+        name: summonerID,
+        code: 1,
+      };
+      this.addSummoner(payload);
+    },
     getSortDirection(sortCount) {
       if (sortCount % 2 === 0) {
         return 'v';
@@ -409,6 +452,8 @@ export default {
       } else {
         axios.get(path)
           .then((res) => {
+            console.log(res.data.summoners);
+            console.log(res.data.message);
             this.message = res.data.message;
             this.summoners = res.data.summoners;
           })
@@ -419,12 +464,14 @@ export default {
       }
     },
     addSummoner(payload) {
+      console.log(payload);
       const path = `${localhost}/summoners`;
       this.message = 'Fetching...';
       this.showRefresh = true;
       this.showMessage = true;
       axios.post(path, payload)
         .then(() => {
+          console.log(payload);
           this.getSummoners(payload.code);
           this.showMessage = true;
           this.showRefresh = false;

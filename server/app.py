@@ -234,6 +234,7 @@ def getMatch(matchIdArr, accId):
         resp = requests.get(url).json()
         respArr.append(resp)
     for resp in respArr:
+        # print(resp)
         matchDate = getMatchDate(resp['gameCreation'])
         matchDuration = getMatchDuration(resp['gameDuration'])
         players = resp['participants']
