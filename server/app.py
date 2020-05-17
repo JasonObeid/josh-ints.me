@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, send_from_directory
+from flask_caching import Cache
 from flask_cors import CORS
 import requests
 import random
@@ -6,6 +7,12 @@ import json
 import datetime
 import operator
 from math import floor
+
+config = {
+    "DEBUG": True,          # some Flask specific configs
+    "CACHE_TYPE": "simple", # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
 
 api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
 #fix date sort, check march dates
@@ -327,6 +334,10 @@ DEBUG = True
 # instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+# enable caching
+app.config.from_mapping(config)
+cache = Cache(app)
 
 # enable CORS.
 CORS(app, resources={r'/*': {'origins': '*'}})
