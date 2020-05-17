@@ -136,7 +136,7 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(0,3)"
                       :key="index">
-                        <img :src="item.imgPath" :alt="item.imgPath">
+                        <img :src="item.imgPath" :alt="item.name">
                       </td>
                       <td rowspan="2">
                         <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.name">
@@ -304,8 +304,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-const localhost = '';
-// const localhost = 'http://localhost:5000';
+// const localhost = '';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {

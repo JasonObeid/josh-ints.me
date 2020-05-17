@@ -11,7 +11,7 @@ api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
 #fix date sort, check march dates
 def getChampInfo(champId):
     champName = champList[str(champId)]
-    champImgPath = '/images/champion/' + champName + '.png'
+    champImgPath = '/images/champion/' + champName + '.jpg'
     return {'champName':champName, 'champImgPath':champImgPath}
 
 
