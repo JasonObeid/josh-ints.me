@@ -94,27 +94,27 @@ button.sort
                   <a>{{ match.championInfo.champName }}</a>
                   <br>
                   <img :src="match.championInfo.champImgPath"
-                  :alt="match.championInfo.champImgPath">
+                  :alt="match.championInfo.champName">
                 </td>
                 <td>
                   <tr>
                     <td>
                       <img :src="match.spells.spell1.imgPath"
-                      :alt="match.spells.spell1.imgPath">
+                      :alt="match.spells.spell1.name">
                     </td>
                     <td>
                       <img :src="match.spells.spell2.imgPath"
-                      :alt="match.spells.spell2.imgPath">
+                      :alt="match.spells.spell2.name">
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <img :src="match.runes.primaryBranch.keystone.imgPath"
-                      :alt="match.runes.primaryBranch.keystone.imgPath">
+                      :alt="match.runes.primaryBranch.keystone.name">
                     </td>
                     <td>
                       <img :src="match.runes.secondaryBranch.imgPath"
-                      :alt="match.runes.secondaryBranch.imgPath">
+                      :alt="match.runes.secondaryBranch.name">
                     </td>
                   </tr>
                 </td>
@@ -123,10 +123,10 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList
                       .slice(0,match.items.count)" :key="index">
-                        <img :src="item.imgPath" :alt="item.imgPath">
+                        <img :src="item.imgPath" :alt="item.name">
                       </td>
                       <td rowspan="2">
-                        <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.imgPath">
+                        <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>
@@ -139,13 +139,13 @@ button.sort
                         <img :src="item.imgPath" :alt="item.imgPath">
                       </td>
                       <td rowspan="2">
-                        <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.imgPath">
+                        <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(3)"
                       :key="index">
-                        <img :src="item.imgPath" :alt="item.imgPath">
+                        <img :src="item.imgPath" :alt="item.name">
                       </td>
                     </tr>
                   </div>
@@ -169,7 +169,7 @@ button.sort
                 <td class='blueTeam'>
                   <tr v-for="(player, index) in match.teamInfo.blue" :key="index">
                     <img :src="player.champImgPath" width="20px" height="auto"
-                    :alt="player.champImgPath">
+                    :alt="player.champName">
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
                     v-b-tooltip.hover title="Carried">
@@ -231,7 +231,7 @@ button.sort
                        </b-button>
                     </a>
                     <img :src="player.champImgPath" width="20px" height="auto"
-                    :alt="player.champImgPath">
+                    :alt="player.champName">
                   </tr>
                 </td>
                 <td align="middle">
@@ -304,8 +304,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-// const localhost = '';
-const localhost = 'http://localhost:5000';
+const localhost = '';
+// const localhost = 'http://localhost:5000';
 
 export default {
   data() {
