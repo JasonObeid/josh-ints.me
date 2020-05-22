@@ -21,12 +21,12 @@ jobs:
     - name: Build and push
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:push -a shielded-badlands-30380 web 
+      run: heroku container:push -a josh-ints web 
       
     - name: Release
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:release -a shielded-badlands-30380 web 
+      run: heroku container:release -a josh-ints web 
     - name: Test
       env: 
         code: $(curl -s -o /dev/null -w "%{http_code}" http://www.josh-ints.me/summoners)
