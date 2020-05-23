@@ -8,6 +8,14 @@
   padding: 3%;
   padding-top: 0px;
 }
+.champName
+{
+  vertical-align: top;
+}
+.trinket
+{
+  vertical-align: middle;
+}
 .btn-carry
 {
   background-color: #f2e0ff;
@@ -66,7 +74,7 @@ button.sort
     <div class="tab-content py-3" id="myTabContent">
       <div v-for="summoner in summoners" :key="summoner.id"
       class="tab-pane fade" :class="{ 'active show': isActive(summoner.name) }" :id=(summoner.name)>
-        <table class="table" id="summonerTable">
+        <table class="table" id="summonerTable" border="1px">
           <tbody>
               <tr align="center">
                 <th>Champion</th>
@@ -91,7 +99,7 @@ button.sort
               </tr>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
                 <td>
-                  <a>{{ match.championInfo.champName }}</a>
+                  <a class="champName">{{ match.championInfo.champName }}</a>
                   <br>
                   <img :src="match.championInfo.champImgPath"
                   :alt="match.championInfo.champName">
@@ -125,7 +133,7 @@ button.sort
                       .slice(0,match.items.count)" :key="index">
                         <img :src="item.imgPath" :alt="item.name">
                       </td>
-                      <td rowspan="2">
+                      <td rowspan="2" class="trinket">
                         <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.name">
                       </td>
                     </tr>
@@ -158,16 +166,14 @@ button.sort
                   <p>{{ winLoss(match.stats.win) + ': ' }}</p>
                   <a>{{ match.gameInfo.queue}}</a>
                 </td>
-                <td>
+                <td class="trinket">
                   {{ match.stats.kills + '/' + match.stats.deaths + '/' + match.stats.assists }}
                 </td>
-                <td>{{ match.stats.kda }}</td>
-                <td>{{ match.stats.creepScore }}</td>
-                <td>
-                  <a> {{ match.stats.intScore + '%' }}</a>
-                </td>
+                <td class="trinket">{{ match.stats.kda }}</td>
+                <td class="trinket">{{ match.stats.creepScore }}</td>
+                <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
-                  <tr v-for="(player, index) in match.teamInfo.blue" :key="index">
+                  <div v-for="(player, index) in match.teamInfo.blue" :key="index">
                     <img :src="player.champImgPath" width="20px" height="auto"
                     :alt="player.champName">
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
@@ -198,10 +204,10 @@ button.sort
                          {{ player.summonerName }}
                        </b-button>
                     </a>
-                  </tr>
+                  </div>
                 </td>
                 <td class='redTeam'>
-                  <tr v-for="(player, index) in match.teamInfo.red" :key="index">
+                  <div v-for="(player, index) in match.teamInfo.red" :key="index">
                     <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
                     player.participantId === match.teamInfo.redTeamDPSIndex"
                     v-b-tooltip.hover title="Carried">
@@ -232,7 +238,7 @@ button.sort
                     </a>
                     <img :src="player.champImgPath" width="20px" height="auto"
                     :alt="player.champName">
-                  </tr>
+                  </div>
                 </td>
                 <td align="middle">
                     <a>{{ match.matchDuration }}</a>
@@ -304,8 +310,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-const localhost = '';
-// const localhost = 'http://localhost:5000';
+// const localhost = '';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {
