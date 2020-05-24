@@ -43,6 +43,26 @@ button.sort
   background-color: transparent;
   border-style:ridge;
 }
+.win
+{
+  background-color: #c2f0c2ad;
+}
+.loss
+{
+  background-color: #ff9999a8;
+}
+.table td
+{
+  vertical-align: middle;
+}
+.summonerTab
+{
+  margin-left: 5%;
+}
+.sort
+{
+  cursor: pointer;
+}
 </style>
 
 <template>
@@ -62,12 +82,16 @@ button.sort
           <a>{{ summoner.name }} | </a>
           <a>{{ summoner.rank }}</a>
           <b-button size='sm' @click=onDeleteSummoner(summoner)
-          variant="outline-danger">x</b-button>
+          variant="outline-danger" class="summonerTab">
+            <b-icon icon="x"></b-icon>
+          </b-button>
         </button>
       </li>
       <li class="nav-item">
         <a class="nav-link">
-          <b-button variant="outline-primary" size='sm' v-b-modal.summoner-modal>+</b-button>
+          <b-button variant="outline-primary" size='sm' v-b-modal.summoner-modal>
+            <b-icon icon="plus"></b-icon>
+          </b-button>
         </a>
       </li>
     </ul>
@@ -84,17 +108,15 @@ button.sort
                 <th>Score</th>
                 <th>KDA</th>
                 <th>CS</th>
-                <th>Int Score
-                  <button class='sort' @click='sortByInt(summoner)'>
-                    {{ getSortDirection(intSortCount) }}
-                  </button>
+                <th class="sort" @click='sortByInt(summoner)'>
+                  Int Score
+                  <b-icon id=intSort icon="chevron-expand"></b-icon>
                 </th>
                 <th>Blue Team</th>
                 <th>Red Team</th>
-                <th>Date
-                  <button class='sort' @click='sortByDate(summoner)'>
-                  {{ getSortDirection(dateSortCount) }}
-                  </button>
+                <th class="sort" @click='sortByDate(summoner)'>
+                  Date
+                  <b-icon id=dateSort icon="chevron-expand"></b-icon>
                 </th>
               </tr>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
@@ -122,7 +144,7 @@ button.sort
                     </td>
                     <td>
                       <img :src="match.runes.secondaryBranch.imgPath"
-                      :alt="match.runes.secondaryBranch.name">
+                      :alt="match.runes.secondaryBranch.name" height="25px" width="auto">
                     </td>
                   </tr>
                 </td>
@@ -158,11 +180,11 @@ button.sort
                     </tr>
                   </div>
                 </td>
-                <td v-if="match.stats.win == true" style="background-color: #c2f0c2;">
+                <td v-if="match.stats.win == true" class="win">
                   <p>{{ winLoss(match.stats.win) + ': ' }}</p>
                   <a>{{ match.gameInfo.queue}}</a>
                 </td>
-                <td v-else style="background-color: #ff9999;">
+                <td v-else class="loss">
                   <p>{{ winLoss(match.stats.win) + ': ' }}</p>
                   <a>{{ match.gameInfo.queue}}</a>
                 </td>
@@ -371,6 +393,7 @@ export default {
       sortedSummoner.matchInfo = sortedMatches;
       this.$set(this.summoners, index, sortedSummoner);
       this.intSortCount += 1;
+      document.getElementById('intScore').icon = 'chevron-bar-down';
     },
     sortByDate(summoner) {
       let index = '';
