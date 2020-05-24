@@ -264,41 +264,23 @@ button.sort
     <b-modal ref="addSummonerModal"
             id="summoner-modal"
             title="Add a new summoner"
-            hide-footer>
+            hide-footer
+            @shown="focusInput()">
       <b-form @submit="onSubmit" @reset="onReset" class="w-100">
         <b-form-group id="form-name-group"
                       label="Summoner:"
                       label-for="form-name-input">
             <b-form-input id="form-name-input"
+                          ref="addSummoner"
                           type="text"
                           v-model="addSummonerForm.name"
                           required
+                          autofocus
                           placeholder="Enter summoner name">
             </b-form-input>
           </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">Submit</b-button>
-          <b-button type="reset" variant="danger">Cancel</b-button>
-        </b-button-group>
-      </b-form>
-    </b-modal>
-    <b-modal ref="editSummonerModal"
-            id="summoner-update-modal"
-            title="Update"
-            hide-footer>
-      <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
-        <b-form-group id="form-name-edit-group"
-                      label="Summoner:"
-                      label-for="form-name-edit-input">
-            <b-form-input id="form-name-edit-input"
-                          type="text"
-                          v-model="editForm.name"
-                          required
-                          placeholder="Enter summoner name">
-            </b-form-input>
-          </b-form-group>
-        <b-button-group>
-          <b-button type="submit" variant="primary">Update</b-button>
           <b-button type="reset" variant="danger">Cancel</b-button>
         </b-button-group>
       </b-form>
@@ -335,6 +317,9 @@ export default {
     alert: Alert,
   },
   methods: {
+    focusInput() {
+      this.$refs.addSummoner.focus();
+    },
     addTeammate(summonerID) {
       const payload = {
         name: summonerID,
