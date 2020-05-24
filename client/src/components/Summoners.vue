@@ -74,7 +74,7 @@ button.sort
     <div class="tab-content py-3" id="myTabContent">
       <div v-for="summoner in summoners" :key="summoner.id"
       class="tab-pane fade" :class="{ 'active show': isActive(summoner.name) }" :id=(summoner.name)>
-        <table class="table" id="summonerTable" border="1px">
+        <table class="table" id="summonerTable">
           <tbody>
               <tr align="center">
                 <th>Champion</th>
@@ -146,7 +146,7 @@ button.sort
                       :key="index">
                         <img :src="item.imgPath" :alt="item.name">
                       </td>
-                      <td rowspan="2">
+                      <td rowspan="2" class="trinket">
                         <img :src="match.items.trinket.imgPath" :alt="match.items.trinket.name">
                       </td>
                     </tr>
