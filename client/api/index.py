@@ -14,42 +14,11 @@ app = Flask(__name__)
 #you can have multiple routes for one method
 response_object = {'status': 'success', 'message':''}
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
-@app.route('/<path:path>', methods=['GET', 'POST'])
 def all_summoners(path):
     return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (SUMMONERS), mimetype="text/html")
     
-@app.route('/summoners', methods=['GET', 'POST'], defaults={'path': ''})
-def all_summoners():
-    if request.method == 'POST':
-        post_data = request.get_json()
-        accId, summId = getIds(post_data.get('name'))
-        if(accId == 'Summoner not found'):
-            response_object['status'] = 'failure'
-            response_object['message'] = accId
-        else:
-            history = getHistory(accId)
-            if(history == 'Match history not found'):
-                response_object['status'] = 'failure'
-                response_object['message'] = history
-            else:
-                SUMMONERS.append({
-                    'id': accId,
-                    'summId': summId,
-                    'name': post_data.get('name'),
-                    'history': history,
-                    'matchInfo': getMatch(history, accId),
-                    'startIndex': 0,
-                    'endIndex': 10,
-                    'rank': getRank(summId)
-                })
-                response_object['message'] = 'Summoner added!'
-    else:
-        #response_object['message'] = 'Summoner added!'
-        response_object['summoners'] = SUMMONERS
-    return jsonify(response_object)
 
-
-@app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'], defaults={'path': ''})
+@app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
 def single_summoner(summoner_id):
     response_object['status'] = 'success'
     if request.method == 'PUT':
