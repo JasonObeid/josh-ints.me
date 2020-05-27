@@ -10,14 +10,11 @@ from math import floor
 
 app = Flask(__name__)
 
-
+#'/<path:path>') means path plus passes path as parameter
+#you can have multiple routes for one method
 response_object = {'status': 'success', 'message':''}
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (SUMMONERS), mimetype="text/html")
-@app.route('/summoners', methods=['GET', 'POST'])
-def all_summoners():
+@app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
+def all_summoners(path):
     if request.method == 'POST':
         post_data = request.get_json()
         accId, summId = getIds(post_data.get('name'))
