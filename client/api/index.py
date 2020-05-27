@@ -13,6 +13,9 @@ app = Flask(__name__)
 
 response_object = {'status': 'success', 'message':''}
 @app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (SUMMONERS), mimetype="text/html")
 @app.route('/summoners', methods=['GET', 'POST'])
 def all_summoners():
     if request.method == 'POST':
