@@ -16,6 +16,9 @@ response_object = {'status': 'success', 'message':'test'}
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
+    response_object['message'] = 'Summoner added!'
+    #response_object['message'] = 'Summoner added!'
+    response_object['summoners'] = SUMMONERS
     return jsonify(response_object)
     #return Response(response_object, mimetype="application/json")
     
