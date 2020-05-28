@@ -16,7 +16,8 @@ response_object = {'status': 'success', 'message':''}
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    return Response(response_object, mimetype="application/json")
+    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+    #return Response(response_object, mimetype="application/json")
     
 
 @app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
