@@ -12,16 +12,68 @@ app = Flask(__name__)
 
 #'/<path:path>') means path plus passes path as parameter
 #you can have multiple routes for one method
-response_object = {'status': 'success', 'message':'test'}
+response_object = {'status': 'success', 'message':''}
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def catch_all(path):
-    response_object['message'] = 'Summoner added!'
-    #response_object['message'] = 'Summoner added!'
-    response_object['summoners'] = SUMMONERS
+def all_summoners(path):
+    if request.method == 'POST':
+        post_data = request.get_json()
+        accId, summId = getIds(post_data.get('name'))
+        if(accId == 'Summoner not found'):
+            response_object['status'] = 'failure'
+            response_object['message'] = accId
+        else:
+            history = getHistory(accId)
+            if(history == 'Match history not found'):
+                response_object['status'] = 'failure'
+                response_object['message'] = history
+            else:
+                SUMMONERS.append({
+                    'id': accId,
+                    'summId': summId,
+                    'name': post_data.get('name'),
+                    'history': history,
+                    'matchInfo': getMatch(history, accId),
+                    'startIndex': 0,
+                    'endIndex': 10,
+                    'rank': getRank(summId)
+                })
+                response_object['message'] = 'Summoner added!'
+    else:
+        #response_object['message'] = 'Summoner added!'
+        response_object['summoners'] = SUMMONERS
     return jsonify(response_object)
-    #return Response(response_object, mimetype="application/json")
     
+@app.route('/summoners', methods=['GET', 'POST'])
+def all_summoners():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        accId, summId = getIds(post_data.get('name'))
+        if(accId == 'Summoner not found'):
+            response_object['status'] = 'failure'
+            response_object['message'] = accId
+        else:
+            history = getHistory(accId)
+            if(history == 'Match history not found'):
+                response_object['status'] = 'failure'
+                response_object['message'] = history
+            else:
+                SUMMONERS.append({
+                    'id': accId,
+                    'summId': summId,
+                    'name': post_data.get('name'),
+                    'history': history,
+                    'matchInfo': getMatch(history, accId),
+                    'startIndex': 0,
+                    'endIndex': 10,
+                    'rank': getRank(summId)
+                })
+                response_object['message'] = 'Summoner added!'
+    else:
+        #response_object['message'] = 'Summoner added!'
+        response_object['summoners'] = SUMMONERS
+    return jsonify(response_object)
+
 
 @app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
 def single_summoner(summoner_id):
