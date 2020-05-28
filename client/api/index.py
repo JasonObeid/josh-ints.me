@@ -43,7 +43,7 @@ def all_summoners(path):
         #response_object['message'] = 'Summoner added!'
         response_object['summoners'] = SUMMONERS
     return jsonify(response_object)
-    
+"""
 @app.route('/summoners', methods=['GET', 'POST'])
 def all_summoners():
     if request.method == 'POST':
@@ -73,7 +73,7 @@ def all_summoners():
         #response_object['message'] = 'Summoner added!'
         response_object['summoners'] = SUMMONERS
     return jsonify(response_object)
-
+"""
 
 @app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
 def single_summoner(summoner_id):

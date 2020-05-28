@@ -13,7 +13,7 @@ app = Flask(__name__)
 #'/<path:path>') means any path plus passes the path as parameter
 #you can have multiple routes for one method
 response_object = {'status': 'success', 'message':'test'}
-@app.route('/', defaults={'path': ''})
+@app.route('/summoners', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     response_object['message'] = 'Summoner added!'
@@ -23,7 +23,7 @@ def catch_all(path):
     #return Response(response_object, mimetype="application/json")
     
 
-@app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
+"""@app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
 def single_summoner(summoner_id):
     response_object['status'] = 'success'
     if request.method == 'PUT':
@@ -35,7 +35,7 @@ def single_summoner(summoner_id):
     if request.method == 'DELETE':
         remove_summoner(summoner_id)
         response_object['message'] = 'Summoner removed!'
-    return jsonify(response_object)
+    return jsonify(response_object)"""
 
 
 api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
