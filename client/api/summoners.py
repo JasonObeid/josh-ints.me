@@ -75,7 +75,7 @@ def all_summoners():
     return jsonify(response_object)
 """
 
-@app.route('/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
+@app.route('/<summoner_id>', methods=['PUT', 'DELETE'])
 def single_summoner(summoner_id):
     response_object['status'] = 'success'
     if request.method == 'PUT':
