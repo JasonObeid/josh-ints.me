@@ -12,11 +12,11 @@ app = Flask(__name__)
 
 #'/<path:path>') means path plus passes path as parameter
 #you can have multiple routes for one method
-response_object = {'status': 'success', 'message':''}
+response_object = {'status': 'success', 'message':'test'}
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+    return jsonify(response_object)
     #return Response(response_object, mimetype="application/json")
     
 
