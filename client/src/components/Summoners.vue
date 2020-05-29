@@ -345,7 +345,7 @@ export default {
     addTeammate(summonerID) {
       const payload = {
         name: summonerID,
-        code: 1,
+        code: 'goTabSummoner',
       };
       this.addSummoner(payload);
     },

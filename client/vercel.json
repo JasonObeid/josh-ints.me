@@ -1,7 +1,11 @@
 {
   "routes": [
-    { "src": "/api/summoners", "methods": ["POST", "GET"], "dest": "/api/summoners" },
-    { "src": "/api/summoners/(?<id>[^/]*)", "methods": ["DELETE", "PUT"], "dest": "/api/summoners/$id" },
-    { "src": "/images/(.*)", "methods": ["GET"], "dest": "/images/" }
+    { "src": "/api/summoners/(<id>[^/]*)", "methods": ["DELETE", "PUT"], "dest": "/api/summoners/$id"},
+    { "src": "/api/summoners", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/summoners"},
+    {
+        "src": "/images/(.*)",
+        "headers": { "cache-control": "s-maxage=604800" },
+        "dest": "/images/$1"
+    }
   ]
 }
