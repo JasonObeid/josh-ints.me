@@ -1,7 +1,0 @@
-{
-    "routes": [
-        {
-          "methods": ["GET", "POST", "OPTIONS"]
-        }
-    ]
-}

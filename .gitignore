@@ -7,3 +7,4 @@ josh-ints.me.csr
 josh-ints.me.key
 josh-ints.me.ctr
 .github/workflows/dockerimage.yml
+.vercel

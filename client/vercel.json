@@ -1,0 +1,7 @@
+{
+  "routes": [
+    { "src": "/api/summoners", "methods": ["POST", "GET"], "dest": "/api/summoners" },
+    { "src": "/api/summoners/(?<id>[^/]*)", "methods": ["DELETE", "PUT"], "dest": "/api/summoners/$id" },
+    { "src": "/images/(.*)", "methods": ["GET"], "dest": "/images/" }
+  ]
+}
