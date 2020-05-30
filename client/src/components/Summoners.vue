@@ -127,27 +127,27 @@ button.sort
                 <td>
                   <a class="champName">{{ match.championInfo.champName }}</a>
                   <br>
-                  <img :src="'./'+match.championInfo.champImgPath"
+                  <img :src="match.championInfo.champImgPath"
                   :alt="match.championInfo.champName">
                 </td>
                 <td>
                   <tr>
                     <td>
-                      <img :src="'./'+match.spells.spell1.imgPath"
+                      <img :src="match.spells.spell1.imgPath"
                       :alt="match.spells.spell1.name">
                     </td>
                     <td>
-                      <img :src="'./'+match.spells.spell2.imgPath"
+                      <img :src="match.spells.spell2.imgPath"
                       :alt="match.spells.spell2.name">
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <img :src="'./'+match.runes.primaryBranch.keystone.imgPath"
+                      <img :src="match.runes.primaryBranch.keystone.imgPath"
                       :alt="match.runes.primaryBranch.keystone.name">
                     </td>
                     <td>
-                      <img :src="'./'+match.runes.secondaryBranch.imgPath"
+                      <img :src="match.runes.secondaryBranch.imgPath"
                       :alt="match.runes.secondaryBranch.name" height="25px" width="auto">
                     </td>
                   </tr>
@@ -157,10 +157,10 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList
                       .slice(0,match.items.count)" :key="index">
-                        <img :src="'./'+item.imgPath" :alt="item.name">
+                        <img :src="item.imgPath" :alt="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
-                        <img :src="'./'+match.items.trinket.imgPath"
+                        <img :src="match.items.trinket.imgPath"
                         :alt="match.items.trinket.name">
                       </td>
                     </tr>
@@ -171,17 +171,17 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(0,3)"
                       :key="index">
-                        <img :src="'./'+item.imgPath" :alt="item.name">
+                        <img :src="item.imgPath" :alt="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
-                        <img :src="'./'+match.items.trinket.imgPath"
+                        <img :src="match.items.trinket.imgPath"
                         :alt="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(3)"
                       :key="index">
-                        <img :src="'./'+item.imgPath" :alt="item.name">
+                        <img :src="item.imgPath" :alt="item.name">
                       </td>
                     </tr>
                   </div>
@@ -202,7 +202,7 @@ button.sort
                 <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
                   <div v-for="(player, index) in match.teamInfo.blue" :key="index">
-                    <img :src="'./'+player.champImgPath" width="20px" height="auto"
+                    <img :src="player.champImgPath" width="20px" height="auto"
                     :alt="player.champName">
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
@@ -264,7 +264,7 @@ button.sort
                          {{ player.summonerName }}
                        </b-button>
                     </a>
-                    <img :src="'./'+player.champImgPath" width="20px" height="auto"
+                    <img :src="player.champImgPath" width="20px" height="auto"
                     :alt="player.champName">
                   </div>
                 </td>
@@ -320,7 +320,7 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-require('../assets/images/champion/Aatrox.jpg');
+// require('../assets/images/champion/Aatrox.jpg');
 
 const localhost = '/api';
 // const localhost = 'http://localhost:5000';

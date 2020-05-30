@@ -1,17 +1,30 @@
 {
   "routes": [
-    { "src": "/images/spells/SummonerFlash.jpg", "dest": "/images/spells/SummonerFlash.jpg" },
+    { "src": "/api/summoners/ZsRTE08by5S1tlGOnXlhnIMy5Dlri35TrwbUIUnROsCvkis", 
+      "dest": "/api/summoners/ZsRTE08by5S1tlGOnXlhnIMy5Dlri35TrwbUIUnROsCvkis" , "methods": ["DELETE", "PUT"]},
     {
-      "src": "/images/spells/(js|css|img)/.*",
-      "headers": { "cache-control": "max-age=31536000, immutable" }
+      "src": "/images/spells/(.*)",
+      "headers": { "cache-control": "max-age=31536000, immutable" },
+      "dest": "/images/spells/$1"
     },
     {
-      "src": "/images/(.*)",
-      "headers": { "cache-control": "s-maxage=604800" },
-      "dest": "/images/$1"
+      "src": "/images/champion/(.*)",
+      "headers": { "cache-control": "max-age=31536000, immutable" },
+      "dest": "/images/champion/$1"
     },
+    {
+      "src": "/images/item/(.*)",
+      "headers": { "cache-control": "max-age=31536000, immutable" },
+      "dest": "/images/item/$1"
+    },
+    {
+      "src": "/images/runes/(.*)",
+      "headers": { "cache-control": "max-age=31536000, immutable" },
+      "dest": "/images/runes/$1"
+    },
+    { "src": "/api/summoners/(.*)", "dest": "/api/summoners/$1" , "methods": ["DELETE", "PUT"]},
     { "handle": "filesystem" },
-    { "src": ".*", "dest": "/" },
+    { "src": ".*", "dest": "/" , "methods": ["POST", "GET", "DELETE", "PUT"]},
     { "src": "/api/summoners", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/summoners"}
   ]
 }
