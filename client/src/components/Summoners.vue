@@ -320,6 +320,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
+require('../assets/images/champion/Aatrox.jpg');
+
 const localhost = '/api';
 // const localhost = 'http://localhost:5000';
 
@@ -345,9 +347,6 @@ export default {
     alert: Alert,
   },
   methods: {
-    getImgUrl(pic) {
-      return require(`../assets/${pic}`);
-    },
     focusInput() {
       this.$refs.addSummoner.focus();
     },
