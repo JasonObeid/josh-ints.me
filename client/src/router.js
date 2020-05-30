@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Summoners from './components/Summoners.vue';
+
+const Summoners = () => import('./components/Summoners.vue');
 
 Vue.use(Router);
 

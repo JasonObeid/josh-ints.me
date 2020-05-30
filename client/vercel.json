@@ -1,11 +1,17 @@
 {
   "routes": [
-    { "src": "/api/summoners/(<id>[^/]*)", "methods": ["DELETE", "PUT"], "dest": "/api/summoners/$id"},
-    { "src": "/api/summoners", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/summoners"},
+    { "src": "/images/spells/SummonerFlash.jpg", "dest": "/images/spells/SummonerFlash.jpg" },
     {
-        "src": "/images/(.*)",
-        "headers": { "cache-control": "s-maxage=604800" },
-        "dest": "/images/$1"
-    }
+      "src": "/images/spells/(js|css|img)/.*",
+      "headers": { "cache-control": "max-age=31536000, immutable" }
+    },
+    {
+      "src": "/images/(.*)",
+      "headers": { "cache-control": "s-maxage=604800" },
+      "dest": "/images/$1"
+    },
+    { "handle": "filesystem" },
+    { "src": ".*", "dest": "/" },
+    { "src": "/api/summoners", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/summoners"}
   ]
 }
