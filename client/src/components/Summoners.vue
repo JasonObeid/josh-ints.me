@@ -8,6 +8,11 @@
   padding: 3%;
   padding-top: 0px;
 }
+div.teams
+{
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
 .alert
 {
   margin: .25rem 1.25rem;
@@ -201,26 +206,26 @@ button.sort
                 <td class="trinket">{{ match.stats.creepScore }}</td>
                 <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
-                  <div v-for="(player, index) in match.teamInfo.blue" :key="index">
+                  <div class="teams" v-for="(player, index) in match.teamInfo.blue" :key="index">
                     <img :src="player.champImgPath" width="20px" height="auto"
                     :alt="player.champName">
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
-                    v-b-tooltip.hover title="Carried">
+                    v-b-tooltip.hover noninteractive title="Carried">
                        <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="carry">
                          {{ player.summonerName }}
                        </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamDPSIndex"
-                    v-b-tooltip.hover title="Team damage btw">
+                    v-b-tooltip.hover noninteractive title="Team damage btw">
                        <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="damage">
                          {{ player.summonerName }}
                        </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamTankIndex "
-                    v-b-tooltip.hover title="Team tank btw">
+                    v-b-tooltip.hover noninteractive title="Team tank btw">
                        <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="tank">
                          {{ player.summonerName }}
@@ -235,26 +240,26 @@ button.sort
                   </div>
                 </td>
                 <td class='redTeam'>
-                  <div v-for="(player, index) in match.teamInfo.red" :key="index">
+                  <div class="teams" v-for="(player, index) in match.teamInfo.red" :key="index">
                     <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
                     player.participantId === match.teamInfo.redTeamDPSIndex"
-                    v-b-tooltip.hover title="Carried">
+                    v-b-tooltip.hover noninteractive title="Carried">
                        <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="light" style="background-color: #f2e0ff;">
+                        variant="carry">
                          {{ player.summonerName }}
                        </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamDPSIndex"
-                     v-b-tooltip.hover title="Team damage btw">
+                     v-b-tooltip.hover noninteractive title="Team damage btw">
                        <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="light" style="background-color: #ffc4c9;">
+                        variant="damage">
                          {{ player.summonerName }}
                        </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamTankIndex "
-                     v-b-tooltip.hover title="Team tank btw">
+                     v-b-tooltip.hover noninteractive title="Team tank btw">
                        <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="light" style="background-color: #e0f3ff;">
+                        variant="tank">
                          {{ player.summonerName }}
                        </b-button>
                     </a>
@@ -322,8 +327,8 @@ import Alert from './Alert.vue';
 
 // require('../assets/images/champion/Aatrox.jpg');
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {
