@@ -13,7 +13,7 @@ def mapIds():
                 description = description[0:startIndex-1]
             queueDict[queue['queueId']] = {'map': queue['map'], 'description': description}
         print(queueDict)
-    with open('../dataDragon/queueIds.json', 'w') as json_file:
+    with open('../client/api/dataDragon/queueIds.json', 'w') as json_file:
         json.dump(queueDict, json_file)
 
 

@@ -44,9 +44,11 @@ def all_summoners():
     return jsonify(response_object)
 
 
-@app.route('/api/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
+@app.route('/api/summoners/<summoner_id>', methods=['GET', 'PUT', 'DELETE'])
 def single_summoner(summoner_id):
     response_object['status'] = 'success'
+    if request.method == 'GET':
+        response_object['message'] = f'hello there, {summoner_id}'
     if request.method == 'PUT':
         post_data = request.get_json()
         if(len(post_data) > 1):
