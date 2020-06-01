@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
-const Summoners = () => import('./components/Summoners.vue');
+import Home from './components/Home.vue';
 
 Vue.use(Router);
+
+const Summoners = () => import('./components/Summoners.vue');
+const Builds = () => import('./components/Builds.vue');
 
 export default new Router({
   mode: 'history',
@@ -11,8 +13,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Summoners',
-      component: Summoners,
+      component: Home,
+      children: [
+        { path: 'summoners', component: Summoners, name: 'Home' },
+        { path: 'builds', component: Builds },
+      ],
     },
   ],
 });

@@ -133,6 +133,10 @@ def getItems(player):
     itemIds = [player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5']]
     trinketId = player['item6']
     trinketName = itemList[str(trinketId)]
+    if trinketId != 0:
+        trinketName = itemList[str(trinketId)]
+    else:
+        trinketName = ''
     for item in itemIds:
         if(item != 0):
             name = itemList[str(item)]

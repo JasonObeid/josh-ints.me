@@ -6,6 +6,7 @@
 
 <style>
 #app {
-  margin-top: 60px
+  font-family:Helvetica, sans-serif;
+  margin-top: 10px
 }
 </style>

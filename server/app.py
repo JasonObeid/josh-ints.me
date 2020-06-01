@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request, send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
+from collections import Counter
+from statistics import mode, mean
+import json
 import requests
 import random
 import json
@@ -85,7 +88,10 @@ def getItems(player):
     itemsList = []
     itemIds = [player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5']]
     trinketId = player['item6']
-    trinketName = itemList[str(trinketId)]
+    if trinketId != 0:
+        trinketName = itemList[str(trinketId)]
+    else:
+        trinketName = ''
     for item in itemIds:
         if(item != 0):
             name = itemList[str(item)]
@@ -238,8 +244,11 @@ def getMatch(matchIdArr, accId):
     respArr = []
     for matchId in matchIdArr:
         url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + str(matchId) + '?api_key=' + api_key
-        resp = requests.get(url).json()
-        respArr.append(resp)
+        resp = requests.get(url)
+        code = resp.status_code
+        if code == 200:
+            body = resp.json()
+            respArr.append(body)
     for resp in respArr:
         # print(resp)
         matchDate = getMatchDate(resp['gameCreation'])
@@ -249,9 +258,9 @@ def getMatch(matchIdArr, accId):
         myParticipantId = getParticipantId(participants, accId)
         summonersNames = getSummonersNames(participants)
         queueType = getQueueName(resp['queueId'])
-        #create arrays of player stats
+        # create arrays of player stats
         killsArr, deathsArr, assistsArr = getAllStats(players)
-        #iterate and find chosen player stats
+        # iterate and find chosen player stats
         for player in players:
             if(player['participantId'] == myParticipantId):
                 teamInfo = getTeamInfo(players, summonersNames)
@@ -285,6 +294,135 @@ def getRank(summId):
     return 'Summoner not found', 'error'
 
 
+def getRuneIds(player):
+    
+    keystone = str(player['perk0'])
+    primary1 = str(player['perk1'])
+    primary2 = str(player['perk2'])
+    primary3 = str(player['perk3'])
+    secondary0 = str(player['perk4'])
+    secondary1 = str(player['perk5'])
+    primaryBranchId = str(player['perkPrimaryStyle'])
+    primaryBranch = (primaryBranchId, keystone, primary1, primary2, primary3)
+    secondaryBranchId = str(player['perkSubStyle'])
+    secondaryBranch = (secondaryBranchId, secondary0, secondary1)
+    runes = (primaryBranch, secondaryBranch)
+    return runes
+
+
+def getItemIds(player):
+    itemIds = (player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5'])
+    trinketId = player['item6']
+    items = (itemIds, trinketId)
+    return items
+
+
+def getSpellIds(player):
+    spell1Id = str(player['spell1Id'])
+    spell2Id = str(player['spell2Id'])
+    spells = (spell1Id, spell2Id)
+    return spells
+
+
+def getMasterMatches():
+    endIndex = '10'
+    queueId = '420'
+    seasonId = '13'
+    accountId = 'ZsRTE08by5S1tlGOnXlhnIMy5Dlri35TrwbUIUnROsCvkis'
+    matchHistoryTemplate = f'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/{accountId}?queue={queueId}&season={seasonId}&endIndex={endIndex}&api_key={api_key}'
+    mastersUrl = 'https://na1.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
+    gmastersUrl = 'https://na1.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
+    challengersUrl = 'https://na1.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
+    resp = requests.get(challengersUrl)
+    code = resp.status_code
+    if code == 200:
+        playerList = []
+        historyList = []
+        statsDict = {'kills':[], 'deaths':[], 'assists':[], 'cs':[],
+                    'primaryBranch':[], #'keystone':[], 'perk1':[], 'perk2':[], 'perk3':[], 
+                    'secondaryBranch':[], #'perk0':[], 'perk1':[],
+                    'items':[], 'trinket':[],
+                    'spells':[]}# 'spell2':[]}
+        champStats = { k:statsDict for k,v in champList.items() }
+        matchStatsList = []
+        body = resp.json()
+        #get summoner ids
+        for player in body['entries'][:1]:
+            accountId = getIds(player['summonerName'])[0]
+            playerList.append(accountId)
+        #get matches for each summoner
+        #print(playerList)
+        for accountId in playerList[:1]:
+            matchIds = getHistory(accountId)
+            [historyList.append(match) for match in matchIds if match not in historyList]
+        #print(historyList)
+        #remove duplicates
+        historyList = list(dict.fromkeys(historyList))
+        #get match details for each match in history
+        for matchId in historyList:
+            #print(matchId)
+            matchInfo = getMatchInfo(matchId)
+            [matchStatsList.append(player) for player in matchInfo]
+        print(matchStatsList[1])
+        print(matchStatsList[2])
+        for stat in matchStatsList[0:5]: #stats, runes, items, spells
+            champId = str(stat[0])
+            stats = stat[1]
+            #champStats[champId]['kills'] += values['stats']['kills'])
+            #champStats[champId]['assists']  += values['stats']['assists'])
+            #champStats[champId]['deaths'] += values['stats']['deaths'])
+            cs = stats['creepScore']
+            print(champId, cs)
+            champStats[champId]['cs'].append(cs)
+            #champStats[champId]['primaryBranch'].append(values['runes'][0])
+            #champStats[champId]['secondaryBranch'].append(values['runes'][1])
+            #champStats[champId]['items'].append(values['items'][0])
+            #champStats[champId]['trinket'].append(values['items'][1])
+            #champStats[champId]['spells'].append(values['spells'])
+        print(champStats)
+        cleanStats = {}
+        for champId, stats in champStats.items():
+            kills = mean(stats['kills'])
+            assists = mean(stats['assists'])
+            deaths = mean(stats['deaths'])
+            cs = mean(stats['cs'])
+            items = mode(stats['items'])
+            trinket = mode(stats['trinket'])
+            spells = mode(stats['spells'])
+            primary = mode(stats['primaryBranch'])
+            secondary = mode(stats['secondaryBranch'])
+            lengths = [len(x) for x in stats]
+            assert lengths[0] == lengths[4] == lengths[7]
+            champDict = {'kills':kills, 'deaths':deaths, 'assists':assists, 'cs':cs,
+                        'primaryBranch':primary, 'secondaryBranch':secondary,
+                        'items':items, 'trinket':trinket,
+                        'spells':spells, 'sampleSize':lengths[0]}
+            cleanStats[champId] = champDict
+        with open('stats.json', mode='w') as statsFile:
+            json.dump(cleanStats, statsFile, indent=2, sort_keys=True)
+        #store each match in a dict mapping champId to a list of stats
+            
+
+def getMatchInfo(matchId):
+    playerStats = []
+    url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + str(matchId) + '?api_key=' + api_key
+    resp = requests.get(url).json()
+    #matchDuration = getMatchDuration(resp['gameDuration'])
+    players = resp['participants']
+    # create arrays of player stats
+    killsArr, deathsArr, assistsArr = getAllStats(players)
+    # iterate and find chosen player stats
+    for player in players:
+        champId = player['championId']
+        stats = getStats(player['stats'], killsArr, deathsArr, assistsArr)
+        runes = getRuneIds(player['stats'])
+        items = getItemIds(player['stats'])
+        spells = getSpellIds(player)
+        matchDict = (champId, stats, runes, items, spells)
+        playerStats.append(matchDict)
+    return playerStats
+
+
 #starting summoners
 SUMMONERS = [
     {
@@ -313,6 +451,7 @@ with open('../dataDragon/summonerIds.json') as file6:
   spellList = json.load(file6)
 
 def useAPI():
+    getMasterMatches()
     for summoner in SUMMONERS:
         accountId, summonerId = getIds(summoner['name'])
         history = getHistory(accountId)

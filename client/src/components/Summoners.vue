@@ -6,7 +6,6 @@
   text-align:center;
   white-space: nowrap;
   padding: 3%;
-  padding-top: 0px;
 }
 div.teams
 {
@@ -77,13 +76,10 @@ button.sort
 <template>
   <div class="flex-container">
     <div class="head">
-      <a><h1>Summoners</h1> <alert :message=message v-if="showMessage"></alert></a>
-      <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='getSummoners()'>
-        Refresh
-      </button>
+      <a><alert :message=message v-if="showMessage"></alert></a>
       <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
     </div>
-     <ul class="nav nav-tabs" width='1800px'>
+     <ul class="nav nav-tabs" width='90%'>
       <li class="nav-item" v-for="(summoner, index) in summoners"
       :key="index" :title="summoner.name">
         <button class="nav-link" @click.prevent="setActive(summoner.name)"
@@ -92,19 +88,24 @@ button.sort
           <a>{{ summoner.rank }}</a>
           <b-button size='sm' @click=onDeleteSummoner(summoner)
           variant="outline-danger" class="summonerTab">
-            <b-icon icon="x"></b-icon>
+            x
           </b-button>
         </button>
       </li>
       <li class="nav-item">
         <a class="nav-link">
           <b-button variant="outline-primary" size='sm' v-b-modal.summoner-modal>
-            <b-icon icon="plus"></b-icon>
+            +
           </b-button>
         </a>
       </li>
+      <li class="nav-item ml-auto">
+        <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='getSummoners()'>
+      Refresh
+    </button>
+      </li>
     </ul>
-    <div class="tab-content py-3" id="myTabContent">
+    <div class="tab-content py-3 flex-container" id="myTabContent">
       <div v-for="summoner in summoners" :key="summoner.id"
       class="tab-pane fade" :class="{ 'active show': isActive(summoner.name) }" :id=(summoner.name)>
         <table class="table" id="summonerTable">
@@ -119,13 +120,13 @@ button.sort
                 <th>CS</th>
                 <th class="sort" @click='sortByInt(summoner)'>
                   Int Score
-                  <b-icon id=intSort icon="chevron-expand"></b-icon>
+                  <b-icon :icon="intSortIcon"></b-icon>
                 </th>
                 <th>Blue Team</th>
                 <th>Red Team</th>
                 <th class="sort" @click='sortByDate(summoner)'>
                   Date
-                  <b-icon id=dateSort icon="chevron-expand"></b-icon>
+                  <b-icon :icon="dateSortIcon"></b-icon>
                 </th>
               </tr>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
@@ -344,6 +345,8 @@ export default {
         name: '',
       },
       activeItem: '',
+      intSortIcon: 'chevron-expand',
+      dateSortIcon: 'chevron-expand',
       intSortCount: 0,
       dateSortCount: 0,
     };
@@ -362,11 +365,22 @@ export default {
       };
       this.addSummoner(payload);
     },
-    getSortDirection(sortCount) {
-      if (sortCount % 2 === 0) {
-        return 'v';
+    setSortIcons(sortCount, type) {
+      if (type === 'intScore') {
+        if (sortCount % 2 === 0) {
+          this.intSortIcon = 'chevron-down';
+        } else {
+          this.intSortIcon = 'chevron-up';
+        }
+        this.dateSortIcon = 'chevron-expand';
+      } else if (type === 'date') {
+        if (sortCount % 2 === 0) {
+          this.dateSortIcon = 'chevron-down';
+        } else {
+          this.dateSortIcon = 'chevron-up';
+        }
+        this.intSortIcon = 'chevron-expand';
       }
-      return '^';
     },
     sortArrays(itemArray, sortCount) {
       const tempArray = itemArray;
@@ -406,7 +420,7 @@ export default {
       sortedSummoner.matchInfo = sortedMatches;
       this.$set(this.summoners, index, sortedSummoner);
       this.intSortCount += 1;
-      document.getElementById('intScore').icon = 'chevron-bar-down';
+      this.setSortIcons(this.intSortCount, 'intScore');
     },
     sortByDate(summoner) {
       let index = '';
@@ -442,6 +456,7 @@ export default {
       sortedSummoner.matchInfo = sortedDates;
       this.$set(this.summoners, index, sortedSummoner);
       this.dateSortCount += 1;
+      this.setSortIcons(this.dateSortCount, 'date');
     },
     isActive(menuItem) {
       return this.activeItem === menuItem;
