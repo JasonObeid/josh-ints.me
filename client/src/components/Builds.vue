@@ -13,6 +13,7 @@
   <div class="flex-container">
     <div>
       <b-nav tabs justified>
+        v-model if active add to laneFilter
         <b-nav-item exact exact-active-class="active">All</b-nav-item>
         <b-nav-item exact exact-active-class="active">Top</b-nav-item>
         <b-nav-item exact exact-active-class="active">Jungle</b-nav-item>
@@ -24,17 +25,16 @@
         <b-row>
           <b-col>
              <b-form-input
-                @input="search_text()"
-                v-model="text"
+                v-model="searchText"
                 type="text"
                 placeholder="Search by Name"
               ></b-form-input>
                <div class="container-fluid">
                 <div class="row">
                   <div class="col-md-6 pad-15-ver"
-                  v-for="champion in all_champions" :key="champion.name">
+                  v-for="champ in filtered" :key="champ.key">
                     <div class="card-inner">
-                      <img class="card-img" :src="champion.imageURL">
+                      <img class="card-img" :src="champ.championInfo.champImgPath">
                     </div>
                   </div>
                 </div>
@@ -55,162 +55,55 @@
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+
+// const localhost = '/api';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {
     return {
-      allChampions: [],
-      champions: [],
-      top: [],
+      top: ['zilean'],
       jungle: [],
-      mid: [],
+      mid: ['zilean'],
       bot: [],
-      support: [],
+      support: ['zilean'],
+      laneFilter: '',
       intSortCount: 0,
       dateSortCount: 0,
       searchText: '',
+      allChampions: [],
     };
   },
-  methods: {
-    search_text() {
-      this.champions = this.allChampions.filter((champion) => {
-        if (champion.name.toLowerCase()
-          .indexOf(this.searchText.toLowerCase()) !== '-1') {
-          return champion;
-        }
-        return null;
-      });
-    },
-    getSummoners(run = '1') {
-      const path = `${localhost}/summoners`;
-      // console.log(this.summoners[0]);
-      if (run === 'goTab0') {
-        axios.get(path)
-          .then((res) => {
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-            this.setActive(this.summoners[0].name);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      } else if (run === 'goTabSummoner') {
-        axios.get(path)
-          .then((res) => {
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-            const len = this.summoners.length;
-            this.setActive(this.summoners[len - 1].name);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      } else {
-        axios.get(path)
-          .then((res) => {
-            console.log(res.data.summoners);
-            console.log(res.data.message);
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
+  computed: {
+    filtered() {
+      if (this.searchText === '') {
+        return this.allChampions;
       }
+      return Object.fromEntries(
+        Object.entries(this.allChampions)
+          // eslint-disable-next-line no-unused-vars
+          .filter(([k, v]) => v.championInfo.champName.toLowerCase()
+            .indexOf(this.searchText.toLowerCase()) !== -1),
+      );
     },
-    addSummoner(payload) {
-      console.log(payload);
-      const path = `${localhost}/summoners`;
-      this.message = 'Fetching...';
-      this.showRefresh = true;
-      this.showMessage = true;
-      axios.post(path, payload)
-        .then(() => {
-          console.log(payload);
-          this.getSummoners(payload.code);
-          this.showMessage = true;
-          this.showRefresh = false;
-          this.isActive(payload.name);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-          this.getSummoners();
-        });
-    },
-    initForm() {
-      this.addSummonerForm.name = '';
-      this.editForm.name = '';
-    },
-    onSubmit(evt) {
-      evt.preventDefault();
-      this.$refs.addSummonerModal.hide();
-      const payload = {
-        name: this.addSummonerForm.name,
-        code: 'goTabSummoner',
-      };
-      this.addSummoner(payload);
-      this.initForm();
-    },
-    onReset(evt) {
-      evt.preventDefault();
-      this.$refs.addSummonerModal.hide();
-      this.initForm();
-    },
-    editSummoner(summoner) {
-      this.editForm = summoner;
-    },
-    onSubmitUpdate(evt) {
-      evt.preventDefault();
-      this.$refs.editSummonerModal.hide();
-      const payload = {
-        name: this.editForm.name,
-      };
-      this.updateSummoner(payload, this.editForm.id);
-    },
-    updateSummoner(payload, summonerID) {
-      const path = `${localhost}/summoners/${summonerID}`;
-      this.message = 'Fetching...';
-      this.showRefresh = true;
-      this.showMessage = true;
-      axios.put(path, payload)
-        .then(() => {
-          this.getSummoners();
-          this.message = 'Summoner updated!';
-          this.showMessage = true;
-          this.showRefresh = false;
+  },
+  methods: {
+    getBuilds() {
+      const path = `${localhost}/builds`;
+      axios.get(path)
+        .then((res) => {
+          console.log(res);
+          this.allChampions = res.data.builds;
+          console.log(this.allChampions);
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getSummoners();
         });
     },
-    onResetUpdate(evt) {
-      evt.preventDefault();
-      this.$refs.editSummonerModal.hide();
-      this.initForm();
-      this.getSummoners();
-    },
-    removeSummoner(summonerID) {
-      const path = `${localhost}/summoners/${summonerID}`;
-      axios.delete(path)
-        .then(() => {
-          this.getSummoners('goTab0');
-          this.message = 'Summoner removed!';
-          this.showMessage = true;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.getSummoners();
-        });
-    },
+  },
+  created() {
+    this.getBuilds();
   },
 };
 </script>

@@ -1,31 +1,33 @@
+import csv
+import datetime
+import json
+import operator
+import random
+import sys
+import time
+from collections import Counter
+from math import floor
+from statistics import mean, mode
+
+import requests
 from flask import Flask, jsonify, request, send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
-from collections import Counter
-from statistics import mode, mean
-import json
-import requests
-import random
-import json
-import datetime
-import operator
-import time
-import sys
-from math import floor
-from copy import deepcopy
 
 config = {
     "DEBUG": True,          # some Flask specific configs
-    "CACHE_TYPE": "simple", # Flask-Caching related configs
+    "CACHE_TYPE": "simple",  # Flask-Caching related configs
     "CACHE_DEFAULT_TIMEOUT": 300
 }
 
 api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
-#fix date sort, check march dates
+# fix date sort, check march dates
+
+
 def getChampInfo(champId):
     champName = champList[str(champId)]
     champImgPath = '/images/champion/' + champName + '.jpg'
-    return {'champName':champName, 'champImgPath':champImgPath}
+    return {'champName': champName, 'champImgPath': champImgPath}
 
 
 def getQueueName(queueId):
@@ -47,9 +49,10 @@ def getIntScore(kills, deaths, assists, killsArr, deathsArr, assistsArr):
     normalizedDeaths = (deaths - min(deathsArr)) / deltaDeaths
     normalizedAssists = (assists - min(assistsArr)) / deltaAssists
     if(normalizedAssists != 0 or normalizedKills != 0):
-        intScore = round((normalizedDeaths / (normalizedKills + normalizedAssists)) * 100, 2)
+        intScore = round(
+            (normalizedDeaths / (normalizedKills + normalizedAssists)) * 100, 2)
     else:
-        intScore = random.randrange(20,400)
+        intScore = random.randrange(20, 400)
     return intScore
 
 
@@ -58,7 +61,7 @@ def getGameInfo(queueType, gameDuration):
         gameLength = (int(gameDuration) / 60)
     else:
         gameLength = 0
-    return {'queue':queueType, 'duration':gameLength}
+    return {'queue': queueType, 'duration': gameLength}
 
 
 def getRunes(player):
@@ -77,10 +80,12 @@ def getRunes(player):
     secondary1 = runeList[secondary1Id]
     primaryBranchId = str(player['perkPrimaryStyle'])
     primaryBranchName = branchList[primaryBranchId]
-    primaryBranch = {'keystone':keystone, 'perk1':primary1, 'perk2':primary2, 'perk3':primary3, 'name':primaryBranchName['name'], 'imgPath':primaryBranchName['imgPath']}
+    primaryBranch = {'keystone': keystone, 'perk1': primary1, 'perk2': primary2, 'perk3': primary3,
+                     'name': primaryBranchName['name'], 'imgPath': primaryBranchName['imgPath']}
     secondaryBranchId = str(player['perkSubStyle'])
     secondaryBranchName = branchList[secondaryBranchId]
-    secondaryBranch = {'perk0':secondary0, 'perk1':secondary1, 'name':secondaryBranchName['name'], 'imgPath':secondaryBranchName['imgPath']}
+    secondaryBranch = {'perk0': secondary0, 'perk1': secondary1,
+                       'name': secondaryBranchName['name'], 'imgPath': secondaryBranchName['imgPath']}
     runes['primaryBranch'] = primaryBranch
     runes['secondaryBranch'] = secondaryBranch
     return runes
@@ -89,7 +94,8 @@ def getRunes(player):
 def getItems(player):
     items = {}
     itemsList = []
-    itemIds = [player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5']]
+    itemIds = [player['item0'], player['item1'], player['item2'],
+               player['item3'], player['item4'], player['item5']]
     trinketId = player['item6']
     if trinketId != 0:
         trinketName = itemList[str(trinketId)]
@@ -100,10 +106,10 @@ def getItems(player):
             name = itemList[str(item)]
             itemsList.append(name)
     items['itemsList'] = itemsList
-    items['count'] = len(itemsList) #not including trinket
+    items['count'] = len(itemsList)  # not including trinket
     items['trinket'] = trinketName
     return items
-    
+
 
 def getSpells(player):
     spells = {}
@@ -120,15 +126,16 @@ def getStats(player, killsArr, deathsArr, assistsArr):
     assists = player['assists']
     win = player['win']
     cs = player['totalMinionsKilled']
-    intScore = getIntScore(kills, deaths, assists, killsArr, deathsArr, assistsArr)
+    intScore = getIntScore(kills, deaths, assists,
+                           killsArr, deathsArr, assistsArr)
     if(deaths != 0):
         kda = round((int(kills) + int(assists)) / int(deaths), 2)
         #deathsPerMin = round(int(deaths) / gameLength,2)
     else:
         kda = 'Perfect'
         #deathsPerMin = 'N/A'
-    stats = {'kills':kills, 'deaths':deaths, 'assists':assists, 'win':win, 
-    'creepScore':cs, 'kda':kda, 'intScore':intScore}
+    stats = {'kills': kills, 'deaths': deaths, 'assists': assists, 'win': win,
+             'creepScore': cs, 'kda': kda, 'intScore': intScore}
     return stats
 
 
@@ -147,7 +154,7 @@ def getParticipantId(participantIds, accId):
     for participant in participantIds:
         accountID = participant['player']['accountId']
         if (accountID == accId):
-            return  participant['participantId']
+            return participant['participantId']
 
 
 def getSummonersNames(particpants):
@@ -173,8 +180,8 @@ def getTeamInfo(players, summonerNames):
         teamSide = getTeamSide(teamId)
         champId = player['championId']
         championInfo = getChampInfo(champId)
-        summonerInfo = {'summonerName':summonerName, 'participantId':participantId,
-        'champName':championInfo['champName'], 'champImgPath':championInfo['champImgPath']}
+        summonerInfo = {'summonerName': summonerName, 'participantId': participantId,
+                        'champName': championInfo['champName'], 'champImgPath': championInfo['champImgPath']}
         damageTaken = int(player['stats']['totalDamageTaken'])
         damageDealt = int(player['stats']['totalDamageDealtToChampions'])
         if(teamSide == 'red'):
@@ -185,12 +192,12 @@ def getTeamInfo(players, summonerNames):
             blueTeamInfo.append(summonerInfo)
             blueDamageTaken[participantId] = damageTaken
             blueDamageDealt[participantId] = damageDealt
-    redTeamTank=max(redDamageTaken.items(), key=operator.itemgetter(1))[0]
-    redTeamDPS=max(redDamageDealt.items(), key=operator.itemgetter(1))[0]
-    blueTeamTank=max(blueDamageTaken.items(), key=operator.itemgetter(1))[0]
-    blueTeamDPS=max(blueDamageDealt.items(), key=operator.itemgetter(1))[0]
-    teamInfo = {'red':redTeamInfo, 'redTeamTankIndex':redTeamTank, 'redTeamDPSIndex':redTeamDPS, 
-                'blue':blueTeamInfo, 'blueTeamTankIndex':blueTeamTank, 'blueTeamDPSIndex':blueTeamDPS}
+    redTeamTank = max(redDamageTaken.items(), key=operator.itemgetter(1))[0]
+    redTeamDPS = max(redDamageDealt.items(), key=operator.itemgetter(1))[0]
+    blueTeamTank = max(blueDamageTaken.items(), key=operator.itemgetter(1))[0]
+    blueTeamDPS = max(blueDamageDealt.items(), key=operator.itemgetter(1))[0]
+    teamInfo = {'red': redTeamInfo, 'redTeamTankIndex': redTeamTank, 'redTeamDPSIndex': redTeamDPS,
+                'blue': blueTeamInfo, 'blueTeamTankIndex': blueTeamTank, 'blueTeamDPSIndex': blueTeamDPS}
     return teamInfo
 
 
@@ -203,7 +210,8 @@ def getTeamSide(teamNumber):
 
 def getMatchDate(unixTime):
     matchDate = datetime.datetime.utcfromtimestamp(unixTime/1000)
-    date = str(matchDate.month) + '/' + str(matchDate.day) + '/' + str(matchDate.year)[2:]
+    date = str(matchDate.month) + '/' + str(matchDate.day) + \
+        '/' + str(matchDate.year)[2:]
     return date
 
 
@@ -217,7 +225,8 @@ def getMatchDuration(gameDuration):
 
 
 def getIds(name):
-    url = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+ name +'?api_key=' + api_key
+    url = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + \
+        name + '?api_key=' + api_key
     resp = requests.get(url)
     code = resp.status_code
     if code == 200:
@@ -226,11 +235,13 @@ def getIds(name):
         summonerID = body['id']
         return accountID, summonerID
     return 'Summoner not found'
-    
+
 
 def getHistory(accId, startIndex=0, endIndex=10):
     gameArr = []
-    url = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accId + '?endIndex='+ str(endIndex) + '&beginIndex='+ str(startIndex) + '&api_key=' + api_key
+    url = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accId + \
+        '?endIndex=' + str(endIndex) + '&beginIndex=' + \
+        str(startIndex) + '&api_key=' + api_key
     resp = requests.get(url)
     code = resp.status_code
     if code == 200:
@@ -246,7 +257,8 @@ def getMatch(matchIdArr, accId):
     matchArr = []
     respArr = []
     for matchId in matchIdArr:
-        url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + str(matchId) + '?api_key=' + api_key
+        url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + \
+            str(matchId) + '?api_key=' + api_key
         resp = requests.get(url)
         code = resp.status_code
         if code == 200:
@@ -268,21 +280,23 @@ def getMatch(matchIdArr, accId):
             if(player['participantId'] == myParticipantId):
                 teamInfo = getTeamInfo(players, summonersNames)
                 champInfo = getChampInfo(player['championId'])
-                stats = getStats(player['stats'], killsArr, deathsArr, assistsArr)
+                stats = getStats(
+                    player['stats'], killsArr, deathsArr, assistsArr)
                 runes = getRunes(player['stats'])
                 items = getItems(player['stats'])
                 spells = getSpells(player)
                 gameInfo = getGameInfo(queueType, resp['gameDuration'])
-                matchInfo = {'championInfo':champInfo, 'stats':stats, 'gameInfo':gameInfo, 
-                'teamInfo':teamInfo, 'runes':runes, 'items':items, 'spells':spells, 
-                'matchDate':matchDate, 'matchDuration':matchDuration}
+                matchInfo = {'championInfo': champInfo, 'stats': stats, 'gameInfo': gameInfo,
+                             'teamInfo': teamInfo, 'runes': runes, 'items': items, 'spells': spells,
+                             'matchDate': matchDate, 'matchDuration': matchDuration}
                 matchArr.append(matchInfo)
                 break
     return matchArr
 
 
 def getRank(summId):
-    url = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/'+ summId +'?api_key=' + api_key
+    url = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/' + \
+        summId + '?api_key=' + api_key
     resp = requests.get(url)
     code = resp.status_code
     if code == 200:
@@ -298,7 +312,6 @@ def getRank(summId):
 
 
 def getRuneIds(player):
-    
     keystone = str(player['perk0'])
     primary1 = str(player['perk1'])
     primary2 = str(player['perk2'])
@@ -314,7 +327,8 @@ def getRuneIds(player):
 
 
 def getItemIds(player):
-    itemIds = (player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5'])
+    itemIds = (player['item0'], player['item1'], player['item2'],
+               player['item3'], player['item4'], player['item5'])
     trinketId = player['item6']
     items = (itemIds, trinketId)
     return items
@@ -337,129 +351,280 @@ def getChallengerHistory(accId, startIndex=0, endIndex=10):
     if code == 200:
         body = resp.json()
         matches = body['matches']
+        print(code)
         for game in matches:
             gameArr.append(game['gameId'])
         return gameArr
     return 'Match history not found'
 
 
-#todo, write to file on each loop to reduce memory
+def getMasterPlayers():
+    playerList = []
+    requestCount = 0
+    mastersUrl = 'https://na1.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5' + \
+        '?api_key=' + api_key
+    gmastersUrl = 'https://na1.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
+    challengersUrl = 'https://na1.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
+    with open('accounts.txt', mode='w') as accountsFile:
+        for league in [challengersUrl, mastersUrl, gmastersUrl]:
+            try:
+                resp = requests.get(league)
+                requestCount += 1
+                if requestCount + 1 > 100:
+                    requestCount = 0
+                    print('waiting')
+                    time.sleep(130)
+                code = resp.status_code
+                if code == 200:
+                    body = resp.json()
+                    # get summoner ids
+                    for player in body['entries']:
+                        accountId = getIds(player['summonerName'])[0]
+                        requestCount += 1
+                        if requestCount + 1 > 100:
+                            requestCount = 0
+                            print('waiting')
+                            time.sleep(130)
+                        if accountId != 'Summoner not found':
+                            playerList.append(accountId)
+                            accountsFile.write(f"{accountId}\n")
+            except Exception as e:
+                print(f'exception {e} at line {sys.exc_info()[-1].tb_lineno}')
+                continue
+    print(len(playerList))
+    return playerList
+
+
+def getMasterHistory(playerList):
+    requestCount = 0
+    historyList = []
+    with open('matches.txt', mode='a') as matchesFile:
+        for accountId in playerList:
+            try:
+                matchIds = getChallengerHistory(accountId)
+                requestCount += 1
+                if requestCount + 1 > 100:
+                    requestCount = 0
+                    print('waiting')
+                    time.sleep(130)
+                print(matchIds)
+                if matchIds != 'Match history not found':
+                    for match in matchIds:
+                        if match not in historyList:
+                            historyList.append(str(match))
+                            matchesFile.write(f"{match}\n")
+            except Exception as e:
+                print(f'exception {e} at line {sys.exc_info()[-1].tb_lineno}')
+                continue
+    time.sleep(130)
+    return historyList
+
+
+def getChampions(historyList):
+    requestCount = 0
+    with open('entries.csv', mode='a+', newline='') as statsFile:
+        writer = csv.writer(statsFile, delimiter=',')
+        for matchId in historyList:
+            try:
+                matchInfo = getMatchInfo(matchId)
+                requestCount += 1
+                if requestCount + 1 > 100:
+                    requestCount = 0
+                    print('waiting')
+                    time.sleep(130)
+                for champ in matchInfo:
+                    champStats = []
+                    stats = champ[1]
+                    # id
+                    champStats.append(champ[0])
+                    # stats
+                    champStats.append(int(stats['kills']))
+                    champStats.append(int(stats['assists']))
+                    champStats.append(int(stats['deaths']))
+                    champStats.append(int(stats['creepScore']))
+                    champStats.append(bool(stats['win']))
+                    # primary
+                    champStats.append(int(champ[2][0][0]))
+                    champStats.append(int(champ[2][0][1]))
+                    champStats.append(int(champ[2][0][2]))
+                    champStats.append(int(champ[2][0][3]))
+                    champStats.append(int(champ[2][0][4]))
+                    # secondary
+                    champStats.append(int(champ[2][1][0]))
+                    champStats.append(int(champ[2][1][1]))
+                    champStats.append(int(champ[2][1][2]))
+                    # items
+                    champStats.append(int(champ[3][0][0]))
+                    champStats.append(int(champ[3][0][1]))
+                    champStats.append(int(champ[3][0][2]))
+                    champStats.append(int(champ[3][0][3]))
+                    champStats.append(int(champ[3][0][4]))
+                    champStats.append(int(champ[3][0][5]))
+                    # trinket
+                    champStats.append(int(champ[3][1]))
+                    # summoner spells
+                    champStats.append(int(champ[4][0]))
+                    champStats.append(int(champ[4][1]))
+                    writer.writerow(champStats)
+            except KeyError as e:
+                print(f'KeyError {e} at line {sys.exc_info()[-1].tb_lineno}')
+                continue
+
+
+# todo, write to file on each loop to reduce memory
 def getMasterMatches():
     try:
-        requestCount = 0
-        mastersUrl = 'https://na1.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
-        gmastersUrl = 'https://na1.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
-        challengersUrl = 'https://na1.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5' + '?api_key=' + api_key
-        champDico = {}
-        for league in [gmastersUrl, challengersUrl]:
-            resp = requests.get(league)
-            code = resp.status_code
-            requestCount += 1
-            if requestCount + 1 > 100:
-                requestCount = 0
-                print('waiting')
-                time.sleep(130)
-            if code == 200:
-                playerList = []
-                historyList = []
-                matchStatsList = []
-                body = resp.json()
-                #get summoner ids
-                for player in body['entries']:
-                    accountId = getIds(player['summonerName'])[0]
-                    requestCount += 1
-                    if requestCount + 1 > 100:
-                        requestCount = 0
-                        print('waiting')
-                        time.sleep(130)
-                    playerList.append(accountId)
-                #get matches for each summoner
-                for accountId in playerList:
-                    matchIds = getChallengerHistory(accountId)
-                    requestCount += 1
-                    if requestCount + 1 > 100:
-                        requestCount = 0
-                        print('waiting')
-                        time.sleep(130)
-                    [historyList.append(match) for match in matchIds if match not in historyList]
-                #print(historyList)
-                #remove duplicates
-                historyList = list(dict.fromkeys(historyList))
-                #get match details for each match in history
-                for matchId in historyList:
-                    #print(matchId)
-                    matchInfo = getMatchInfo(matchId)
-                    requestCount += 1
-                    if requestCount + 1 > 100:
-                        requestCount = 0
-                        print('waiting')
-                        time.sleep(130)
-                    [matchStatsList.append(player) for player in matchInfo]
-                for champId in champList.keys():
-                    champStats = [ [], [], [], [], [], [], [], [], [] ]
-                    for stat in matchStatsList: #(id, stats, runes, items, spells)
-                        if str(champId) == str(stat[0]):
-                            stats = stat[1]
-                            champStats[0].append(stats['kills'])
-                            champStats[1].append(stats['assists'])
-                            champStats[2].append(stats['deaths'])
-                            champStats[3].append(stats['creepScore'])
-                            champStats[4].append(stat[2][0])
-                            champStats[5].append(stat[2][1])
-                            champStats[6].append(stat[3][0])
-                            champStats[7].append(stat[3][1])
-                            champStats[8].append(stat[4])
-                    champDico[champId] = champStats
-        cleanStats = {}
-        for champId, stats in champDico.items():
-            if stats[0] != []:
-                kills = mean(stats[0])
-                assists = mean(stats[1])
-                deaths = mean(stats[2])
-                cs = mean(stats[3])
-                primary = mode(stats[4])
-                secondary = mode(stats[5])
-                items = mode(stats[6])
-                trinket = mode(stats[7])
-                spells = mode(stats[8])
-                lengths = [len(x) for x in stats]
-                assert lengths[0] == lengths[4] == lengths[7]
-                champDict = {'kills':kills, 'deaths':deaths, 'assists':assists, 'cs':cs,
-                            'primaryBranch':primary, 'secondaryBranch':secondary,
-                            'items':items, 'trinket':trinket,
-                            'spells':spells, 'sampleSize':lengths[0]}
-                cleanStats[champId] = champDict
-        with open('stats.json', mode='w') as statsFile:
-            json.dump(cleanStats, statsFile, indent=3, sort_keys=True)
-        print(requestCount)
+        # get top players
+        playerList = getMasterPlayers()
+        # get matches for each summoner
+        historyList = getMasterHistory(playerList)
+        print(len(historyList))
+        # with open('matches.txt', mode='r') as matchesFile:
+        #     historyList = [line.strip() for line in matchesFile.readlines()]
+        # remove duplicates
+        historyList = list(dict.fromkeys(historyList))
+        # get match details for each match in history
+        getChampions(historyList)
+        writeTopItems()
     except Exception as e:
-        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+        print('Error on line {}'.format(
+            sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
-        #store each match in a dict mapping champId to a list of stats
-            
+# todo look into KeyError 'perkSubStyle' in roughly every 250 matches
 
 def getMatchInfo(matchId):
     playerStats = []
-    url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + str(matchId) + '?api_key=' + api_key
-    resp = requests.get(url).json()
-    #matchDuration = getMatchDuration(resp['gameDuration'])
-    print(resp)
-    players = resp['participants']
-    # create arrays of player stats
-    killsArr, deathsArr, assistsArr = getAllStats(players)
-    # iterate and find chosen player stats
-    for player in players:
-        champId = player['championId']
-        stats = getStats(player['stats'], killsArr, deathsArr, assistsArr)
-        runes = getRuneIds(player['stats'])
-        items = getItemIds(player['stats'])
-        spells = getSpellIds(player)
-        matchDict = (champId, stats, runes, items, spells)
-        playerStats.append(matchDict)
+    url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + \
+        str(matchId) + '?api_key=' + api_key
+    resp = requests.get(url)
+    code = resp.status_code
+    if code == 200:
+        body = resp.json()
+        #matchDuration = getMatchDuration(resp['gameDuration'])
+        players = body['participants']
+        # create arrays of player stats
+        killsArr, deathsArr, assistsArr = getAllStats(players)
+        # iterate and find chosen player stats
+        for player in players:
+            champId = player['championId']
+            stats = getStats(player['stats'], killsArr, deathsArr, assistsArr)
+            runes = getRuneIds(player['stats'])
+            items = getItemIds(player['stats'])
+            spells = getSpellIds(player)
+            matchDict = (champId, stats, runes, items, spells)
+            playerStats.append(matchDict)
     return playerStats
 
 
-#starting summoners
+def writeTopItems():
+    with open('./entries_2.csv', mode='r', newline='') as statsFile:
+        reader = csv.reader(statsFile, delimiter=',')
+        rows = [line for line in reader]
+
+    with open('./stats.json', 'w') as json_file:
+        champDict = {}
+        for champId in champList.keys():
+            kills = []
+            assists = []
+            deaths = []
+            wins = 0
+            cs = []
+            primary = []
+            secondary = []
+            items = []
+            trinket = []
+            spells = []
+            for row in rows:
+                if row[0] == champId:
+                    if row[5] == 'True':
+                        wins += 1
+                    kills.append(int(row[1]))
+                    assists.append(int(row[2]))
+                    deaths.append(int(row[3]))
+                    cs.append(int(row[4]))
+                    primaries = tuple(int(x) for x in row[6:10])
+                    primary.append(primaries)
+                    secondaries = tuple(int(x) for x in row[11:13])
+                    secondary.append(secondaries)
+                    item = tuple(int(x) for x in row[14:19])
+                    items.append(item)
+                    trinket.append(int(row[20]))
+                    summSpells = tuple(int(x) for x in row[21:])
+                    spells.append(summSpells[0])
+                    spells.append(summSpells[1])
+            if len(kills) > 0:
+                topPrimary = Counter(primary).most_common(2)
+                topSecondary = Counter(secondary).most_common(2)
+                topSpells = Counter(spells).most_common(2)
+                stats = {'kills': mean(kills), 'deaths': mean(deaths), 'cs': mean(cs), 'wins':f'{round((wins/len(kills)*100),1)}%'}
+                runes = getRunes2(topPrimary, topSecondary)
+                items = getItems2(mode(items),  mode(trinket))
+                spells = getSpells2(topSpells)
+                championInfo = getChampInfo(champId)
+                champDict[champId] = {'championInfo':championInfo, 'samples': len(kills), 'stats':stats,
+                        'items': items, 'runes': runes, 'spells': spells}
+        json.dump(champDict, json_file, indent=3)
+
+
+def getSpells2(spellIds):
+    spells = {}
+    spells['spell1'] = spellIds[0][0]
+    spells['spell2'] = spellIds[1][0]
+    return spells
+
+
+def getItems2(itemIds, trinketId):
+    items = {}
+    itemsList = []
+    print(itemIds)
+    if trinketId != 0:
+        trinketName = itemList[str(trinketId)]
+    else:
+        trinketName = ''
+    for item in itemIds:
+        if(item != 0):
+            name = itemList[str(item)]
+            itemsList.append(name)
+    items['itemsList'] = itemsList
+    items['count'] = len(itemsList)  # not including trinket
+    items['trinket'] = trinketName
+    return items
+
+
+def getRunes2(topPrimary, topSecondary):
+    runes = {}
+    print(topPrimary, topSecondary)
+    for optionPrimary, optionSecondary, i in zip(topPrimary, topSecondary, range(len(topPrimary))):
+        optionPrimary = optionPrimary[0]
+        optionSecondary = optionSecondary[0]
+        option = {}
+        keystoneId = '8112'#str(optionPrimary[0])
+        keystone = runeList[keystoneId]
+        primary1Id = str(optionPrimary[1])
+        primary1 = runeList[primary1Id]
+        primary2Id = str(optionPrimary[2])
+        primary2 = runeList[primary2Id]
+        primary3Id = str(optionPrimary[3])
+        primary3 = runeList[primary3Id]
+        secondary0Id = '8345' # str(optionSecondary[0])
+        secondary0 = runeList[secondary0Id]
+        secondary1Id = str(optionSecondary[1])
+        secondary1 = runeList[secondary1Id]
+        for key, value in branchList.items():
+            if keystoneId[:2] in key:
+                primaryBranchName = value
+            if secondary0Id[:2] in key:
+                secondaryBranchName = value
+        primaryBranch = {'keystone': keystone, 'perk1': primary1, 'perk2': primary2, 'perk3': primary3,
+                        'name': primaryBranchName['name'], 'imgPath': primaryBranchName['imgPath']}
+        secondaryBranch = {'perk0': secondary0, 'perk1': secondary1,
+                        'name': secondaryBranchName['name'], 'imgPath': secondaryBranchName['imgPath']}
+        option['primaryBranch'] = primaryBranch
+        option['secondaryBranch'] = secondaryBranch
+        runes[i] = option
+    return runes
+
+# starting summoners
 SUMMONERS = [
     {
         'id': '',
@@ -474,18 +639,19 @@ SUMMONERS = [
 ]
 
 with open('../dataDragon/champIds.json') as file1:
-  champList = json.load(file1)
+    champList = json.load(file1)
 with open('../dataDragon/queueIds.json') as file2:
-  queueList = json.load(file2)
+    queueList = json.load(file2)
 with open('../dataDragon/branchIds.json') as file3:
-  branchList = json.load(file3)
+    branchList = json.load(file3)
 with open('../dataDragon/runeIds.json') as file4:
-  runeList = json.load(file4)
+    runeList = json.load(file4)
 with open('../dataDragon/itemIds.json') as file5:
-  itemList = json.load(file5)
+    itemList = json.load(file5)
 with open('../dataDragon/summonerIds.json') as file6:
-  spellList = json.load(file6)
-
+    spellList = json.load(file6)
+with open('../dataDragon/stats.json') as file7:
+    builds = json.load(file7)
 
 def useAPI():
     for summoner in SUMMONERS:
@@ -498,12 +664,13 @@ def useAPI():
         summoner['rank'] = getRank(summonerId)
 
 
-getMasterMatches()
+#getMasterMatches()
 
 try:
     useAPI()
 except Exception as e:
-    print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+    print('Error on line {}'.format(
+        sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
 
 # configuration
@@ -539,7 +706,18 @@ def update_summoner(summoner_id, history, startIndex, endIndex, matchInfo):
             return True
     return False
 
-response_object = {'status': 'success', 'message':''}
+
+response_object = {'status': 'success', 'message': ''}
+    
+@app.route('/builds', methods=['GET'])
+def get_builds():
+    print('HERE ')
+    response_object['message'] = 'Summoner added!'
+    response_object['builds'] = builds
+    # response_object['champs'] = champList
+    return jsonify(response_object)
+
+
 @app.route('/summoners', methods=['GET', 'POST'])
 def all_summoners():
     if request.method == 'POST':
@@ -577,9 +755,11 @@ def single_summoner(summoner_id):
     if request.method == 'PUT':
         post_data = request.get_json()
         if(len(post_data) > 1):
-            response_object['message'] = get_more_matches_summoner(summoner_id, post_data)
+            response_object['message'] = get_more_matches_summoner(
+                summoner_id, post_data)
         else:
-            response_object['message'] = replace_summoner(summoner_id, post_data)
+            response_object['message'] = replace_summoner(
+                summoner_id, post_data)
     if request.method == 'DELETE':
         remove_summoner(summoner_id)
         response_object['message'] = 'Summoner removed!'
@@ -601,7 +781,7 @@ def replace_summoner(summoner_id, post_data):
         'rank': getRank(summId)
     })
     return 'Summoner updated!'
-    
+
 
 def get_more_matches_summoner(summoner_id, post_data):
     accId = post_data.get('id')
