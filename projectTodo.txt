@@ -1,0 +1,9 @@
+- damage dealt / gold earned
+- champ roles
+- use match timelines for proper 
+-table sorting
+item buy paths, 
+boots, 
+starting items, 
+skill level order
+tertiary runes?

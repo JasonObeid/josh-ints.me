@@ -1,11 +1,14 @@
 <style scoped>
+img.champIcon {
+  border-radius: 50%;
+}
 .flex-container
 {
   vertical-align:middle;
   align-items:center;
   text-align:center;
   white-space: nowrap;
-  padding: 3%;
+  padding: 1%;
 }
 div.teams
 {
@@ -134,7 +137,7 @@ button.sort
                   <a class="champName">{{ match.championInfo.champName }}</a>
                   <br>
                   <img :src="match.championInfo.champImgPath"
-                  :alt="match.championInfo.champName">
+                  :alt="match.championInfo.champName" class="champIcon">
                 </td>
                 <td>
                   <tr>

@@ -520,107 +520,125 @@ def writeTopItems():
     with open('./entries_2.csv', mode='r', newline='') as statsFile:
         reader = csv.reader(statsFile, delimiter=',')
         rows = [line for line in reader]
-
-    with open('./stats.json', 'w') as json_file:
-        champDict = {}
-        for champId in champList.keys():
-            kills = []
-            assists = []
-            deaths = []
-            wins = 0
-            cs = []
-            primary = []
-            secondary = []
-            items = []
-            trinket = []
-            spells = []
-            for row in rows:
-                if row[0] == champId:
-                    if row[5] == 'True':
-                        wins += 1
-                    kills.append(int(row[1]))
-                    assists.append(int(row[2]))
-                    deaths.append(int(row[3]))
-                    cs.append(int(row[4]))
-                    primaries = tuple(int(x) for x in row[6:10])
-                    primary.append(primaries)
-                    secondaries = tuple(int(x) for x in row[11:13])
-                    secondary.append(secondaries)
-                    item = tuple(int(x) for x in row[14:19])
-                    items.append(item)
-                    trinket.append(int(row[20]))
-                    summSpells = tuple(int(x) for x in row[21:])
-                    spells.append(summSpells[0])
-                    spells.append(summSpells[1])
-            if len(kills) > 0:
-                topPrimary = Counter(primary).most_common(2)
-                topSecondary = Counter(secondary).most_common(2)
-                topSpells = Counter(spells).most_common(2)
-                stats = {'kills': mean(kills), 'deaths': mean(deaths), 'cs': mean(cs), 'wins':f'{round((wins/len(kills)*100),1)}%'}
-                runes = getRunes2(topPrimary, topSecondary)
-                items = getItems2(mode(items),  mode(trinket))
-                spells = getSpells2(topSpells)
-                championInfo = getChampInfo(champId)
-                champDict[champId] = {'championInfo':championInfo, 'samples': len(kills), 'stats':stats,
-                        'items': items, 'runes': runes, 'spells': spells}
-        json.dump(champDict, json_file, indent=3)
+    champStats = {}
+    champBuilds = {}
+    for champId in champList.keys():
+        kills = []
+        assists = []
+        deaths = []
+        wins = 0
+        cs = []
+        primary = []
+        secondary = []
+        items = []
+        trinket = []
+        spells = []
+        for row in rows:
+            if row[0] == champId:
+                if row[5] == 'True':
+                    wins += 1
+                kills.append(int(row[1]))
+                assists.append(int(row[2]))
+                deaths.append(int(row[3]))
+                cs.append(int(row[4]))
+                primaries = tuple(int(x) for x in row[6:11])
+                primary.append(primaries)
+                secondaries = tuple(int(x) for x in row[11:14])
+                secondary.append(secondaries)
+                item = tuple(int(x) for x in row[14:20])
+                for itemId in item:
+                    if itemId != 0:
+                        items.append(itemId)
+                trinket.append(int(row[20]))
+                summSpells = tuple(int(x) for x in row[21:])
+                spells.append(summSpells[0])
+                spells.append(summSpells[1])
+        if len(kills) > 0:
+            topPrimary = Counter(primary).most_common(2)
+            topSecondary = Counter(secondary).most_common(2)
+            topSpells = Counter(spells).most_common(2)
+            topItems = Counter(items).most_common(6)
+            winRatio = f'{round((wins/len(kills)*100),1)}%'
+            pickRate = f'{round((len(kills)/len(rows)*100),1)}%'
+            stats = {'kills': round(mean(kills),1), 'deaths': round(mean(deaths),1), 
+            'assists': round(mean(assists),1), 'cs': round(mean(cs),1), 
+            'pickRate':pickRate, 'wins': winRatio}
+            runes = getRunes2(topPrimary, topSecondary, len(kills))
+            items = getItems2(topItems, mode(trinket), len(kills))
+            spells = getSpells2(topSpells)
+            champName = champList[str(champId)]
+            champImgPath = '/images/champion/' + champName + '.jpg'
+            champStats[champId] = {'name': champName, 'imgPath':champImgPath, 'samples': len(kills), 'stats':stats}
+            champBuilds[champId] = {'name': champName, 'imgPath':champImgPath, 'samples': len(kills), 'items': items,
+            'runes': runes, 'spells': spells}
+    with open('./stats.json', 'w') as stats_file:
+        json.dump(champStats, stats_file)
+    with open('./builds.json', 'w') as builds_file:
+        json.dump(champBuilds, builds_file)
 
 
 def getSpells2(spellIds):
     spells = {}
-    spells['spell1'] = spellIds[0][0]
-    spells['spell2'] = spellIds[1][0]
+    spells['spell1'] = spellList[str(spellIds[0][0])]
+    spells['spell2'] = spellList[str(spellIds[1][0])]
     return spells
 
 
-def getItems2(itemIds, trinketId):
+def getItems2(itemIds, trinketIds, sampleSize):
+    print(itemIds)
     items = {}
     itemsList = []
-    print(itemIds)
+    for itemId, count in itemIds:
+        print(itemId, count)
+        pickRate = f'{round(count/sampleSize*100, 1)}%'
+        if(itemId != 0):
+            name = itemList[str(itemId)]
+            name['pickRate'] = pickRate
+            itemsList.append(name)
+    trinketId = trinketIds
     if trinketId != 0:
         trinketName = itemList[str(trinketId)]
     else:
         trinketName = ''
-    for item in itemIds:
-        if(item != 0):
-            name = itemList[str(item)]
-            itemsList.append(name)
     items['itemsList'] = itemsList
     items['count'] = len(itemsList)  # not including trinket
     items['trinket'] = trinketName
     return items
 
 
-def getRunes2(topPrimary, topSecondary):
+def getRunes2(topPrimary, topSecondary, sampleSize):
     runes = {}
-    print(topPrimary, topSecondary)
+    #print(topPrimary, topSecondary)
     for optionPrimary, optionSecondary, i in zip(topPrimary, topSecondary, range(len(topPrimary))):
+        pickRate = f'{round(optionPrimary[1]/sampleSize*100, 1)}%'
+        print(pickRate)
+        print(optionPrimary[1])
         optionPrimary = optionPrimary[0]
         optionSecondary = optionSecondary[0]
         option = {}
-        keystoneId = '8112'#str(optionPrimary[0])
+        primaryBranchId = str(optionPrimary[0])
+        secondaryBranchId = str(optionSecondary[0])
+        primaryBranchName = branchList[primaryBranchId]
+        secondaryBranchName = branchList[secondaryBranchId]
+        keystoneId = str(optionPrimary[1])
         keystone = runeList[keystoneId]
-        primary1Id = str(optionPrimary[1])
+        primary1Id = str(optionPrimary[2])
         primary1 = runeList[primary1Id]
-        primary2Id = str(optionPrimary[2])
+        primary2Id = str(optionPrimary[3])
         primary2 = runeList[primary2Id]
-        primary3Id = str(optionPrimary[3])
+        primary3Id = str(optionPrimary[4])
         primary3 = runeList[primary3Id]
-        secondary0Id = '8345' # str(optionSecondary[0])
+        secondary0Id = str(optionSecondary[1])
         secondary0 = runeList[secondary0Id]
-        secondary1Id = str(optionSecondary[1])
+        secondary1Id = str(optionSecondary[2])
         secondary1 = runeList[secondary1Id]
-        for key, value in branchList.items():
-            if keystoneId[:2] in key:
-                primaryBranchName = value
-            if secondary0Id[:2] in key:
-                secondaryBranchName = value
         primaryBranch = {'keystone': keystone, 'perk1': primary1, 'perk2': primary2, 'perk3': primary3,
                         'name': primaryBranchName['name'], 'imgPath': primaryBranchName['imgPath']}
         secondaryBranch = {'perk0': secondary0, 'perk1': secondary1,
                         'name': secondaryBranchName['name'], 'imgPath': secondaryBranchName['imgPath']}
         option['primaryBranch'] = primaryBranch
         option['secondaryBranch'] = secondaryBranch
+        option['pickRate'] = pickRate
         runes[i] = option
     return runes
 
@@ -650,8 +668,11 @@ with open('../dataDragon/itemIds.json') as file5:
     itemList = json.load(file5)
 with open('../dataDragon/summonerIds.json') as file6:
     spellList = json.load(file6)
-with open('../dataDragon/stats.json') as file7:
+
+with open('../dataDragon/builds.json') as file7:
     builds = json.load(file7)
+with open('../dataDragon/stats.json') as file8:
+    stats = json.load(file8)
 
 def useAPI():
     for summoner in SUMMONERS:
@@ -667,6 +688,7 @@ def useAPI():
 #getMasterMatches()
 
 try:
+    writeTopItems()
     useAPI()
 except Exception as e:
     print('Error on line {}'.format(
@@ -714,6 +736,7 @@ def get_builds():
     print('HERE ')
     response_object['message'] = 'Summoner added!'
     response_object['builds'] = builds
+    response_object['stats'] = stats
     # response_object['champs'] = champList
     return jsonify(response_object)
 

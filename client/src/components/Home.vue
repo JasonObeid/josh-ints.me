@@ -1,9 +1,11 @@
 <template>
 <main id="home">
 <div>
-  <b-card title="Nav Bar" no-body>
+  <b-card title="Nav Bar" no-body style="
+  border: 0px;
+  background-color: inherit;">
     <b-card-header header-tag="nav">
-      <b-nav card-header pills justified>
+      <b-nav card-header tabs justified>
         <!-- <b-nav-item>'s with child routes. Note the trailing slash on the first <b-nav-item> -->
         <b-nav-item to="/summoners" exact exact-active-class="active">Summoners</b-nav-item>
         <b-nav-item to="/builds" exact exact-active-class="active">Builds</b-nav-item>
