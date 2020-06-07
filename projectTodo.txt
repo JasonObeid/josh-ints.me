@@ -2,8 +2,6 @@
 - champ roles
 - use match timelines for proper 
 -table sorting
-item buy paths, 
-boots, 
-starting items, 
+item buy paths + starting items
 skill level order
 tertiary runes?

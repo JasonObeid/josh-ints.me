@@ -1,14 +1,39 @@
-from flask import Flask, Response, jsonify, request, send_from_directory
+import csv
+import datetime
+import json
+import operator
+import random
+import sys
+import time
+from collections import Counter
+from math import floor
+from statistics import mean, mode
+
+import requests
+from flask import Flask, jsonify, request, send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
-import requests
-import random
-import json
-import datetime
-import operator
-from math import floor
 
+config = {
+    "DEBUG": True,          # some Flask specific configs
+    "CACHE_TYPE": "simple",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
+
+# configuration
+DEBUG = True
+
+# instantiate the app
 app = Flask(__name__)
+app.config.from_object(__name__)
+
+# enable caching
+app.config.from_mapping(config)
+cache = Cache(app)
+
+# enable CORS.
+CORS(app, resources={r'/*': {'origins': '*'}})
+
 
 #'/<path:path>') means path plus passes path as parameter
 #you can have multiple routes for one method
@@ -41,6 +66,16 @@ def all_summoners():
     else:
         #response_object['message'] = 'Summoner added!'
         response_object['summoners'] = SUMMONERS
+    return jsonify(response_object)
+
+
+@app.route('/builds', methods=['GET'])
+def get_builds():
+    print('HERE ')
+    response_object['message'] = 'Summoner added!'
+    response_object['builds'] = builds
+    response_object['stats'] = stats
+    # response_object['champs'] = champList
     return jsonify(response_object)
 
 
@@ -363,6 +398,12 @@ with open('dataDragon/itemIds.json') as file5:
 with open('dataDragon/summonerIds.json') as file6:
   spellList = json.load(file6)
 
+
+with open('../dataDragon/builds.json') as file7:
+    builds = json.load(file7)
+with open('../dataDragon/stats.json') as file8:
+    stats = json.load(file8)
+    
 def useAPI():
     for summoner in SUMMONERS:
         accountId, summonerId = getIds(summoner['name'])
