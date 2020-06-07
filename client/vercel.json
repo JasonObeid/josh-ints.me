@@ -1,7 +1,5 @@
 {
   "routes": [
-    { "src": "/api/summoners/ZsRTE08by5S1tlGOnXlhnIMy5Dlri35TrwbUIUnROsCvkis", 
-      "dest": "/api/summoners/ZsRTE08by5S1tlGOnXlhnIMy5Dlri35TrwbUIUnROsCvkis" , "methods": ["DELETE", "PUT"]},
     {
       "src": "/images/spells/(.*)",
       "headers": { "cache-control": "max-age=31536000, immutable" },
@@ -22,9 +20,10 @@
       "headers": { "cache-control": "max-age=31536000, immutable" },
       "dest": "/images/runes/$1"
     },
-    { "src": "/api/summoners/(.*)", "dest": "/api/summoners/$1" , "methods": ["DELETE", "PUT"]},
     { "handle": "filesystem" },
+    { "src": "/api/summoners/(.*)", "methods": ["DELETE", "PUT"], "dest": "/api/summoners/$1"},
     { "src": ".*", "dest": "/" , "methods": ["POST", "GET", "DELETE", "PUT"]},
-    { "src": "/api/summoners", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/summoners"}
+    { "src": "/api/summoners", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/summoners"},
+    { "src": "/api/builds", "methods": ["POST", "GET", "DELETE", "PUT"], "dest": "/api/builds"}
   ]
 }

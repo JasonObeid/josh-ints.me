@@ -23,6 +23,8 @@
 .div21 { grid-area: 1 / 1 / 2 / 2; }
 .div22 { grid-area: 2 / 1 / 3 / 2; }
 .div23 { grid-area: 3 / 1 / 4 / 2; }
+.div24 { grid-area: 4 / 1 / 5 / 2; }
+.div25 { grid-area: 5 / 1 / 6 / 2; }
 .div26 { grid-area: 6 / 1 / 7 / 2; }
 .div27 { grid-area: 7 / 1 / 8 / 2; }
 
@@ -46,6 +48,11 @@ vertical-align: top; }
 {
   vertical-align: middle;
 }
+
+.sort
+{
+  cursor: pointer;
+}
 </style>
 
 <template>
@@ -66,40 +73,46 @@ vertical-align: top; }
       ></b-form-input>
       <br>
       <table class="table">
-        <tbody>
-            <tr align="center">
-              <th>Champion</th>
-              <th>W/L</th>
-              <th>Pick Rate</th>
-              <th>Score</th>
-              <th>CS</th>
-              <th>Sample Size</th>
-            </tr>
-            <tr v-for="(champ, name) in filtered" :key="champ.key">
-              <td>
-                <div class="champName">
-                <b-button @click='changeSelected(name)'
-                style='background-color: #e2e2e2b8; color: black;'>
-                <img :src="champ.imgPath" class='champIcon'
-                    :alt="champ.name" width='32px'>
-                    {{ champ.name }}
-                </b-button>
-                </div>
-              </td>
-              <td>
-                {{ champ.stats.wins }}
-              </td>
-              <td>
-                {{ champ.stats.pickRate }}
-              </td>
-              <td class="trinket">
-                {{ champ.stats.kills + ' / ' + champ.stats.deaths + ' / ' + champ.stats.assists }}
-              </td>
-              <td class="trinket">{{ champ.stats.cs }}</td>
-              <td class="trinket">{{ champ.samples }}</td>
-            </tr>
-        </tbody>
-      </table>
+          <tbody>
+              <tr align="center">
+                <th>Champion</th>
+                <th class="sort" @click='sortByWin(summoner)'>
+                  W/L
+                  <b-icon :icon="winSortIcon"></b-icon>
+                </th>
+                <th class="sort" @click='sortByPick(summoner)'>
+                  Pick Rate
+                  <b-icon :icon="pickSortIcon"></b-icon>
+                </th>
+                <th>Score</th>
+                <th>CS</th>
+                <th>Sample Size</th>
+              </tr>
+              <tr v-for="(champ, name) in filtered" :key="name">
+                <td>
+                  <div class="champName">
+                  <b-button @click='changeSelected(name)' class="btn btn-light btn-sm"
+                  style='background-color: #e2e2e2b8; color: black;'>
+                  <img :src="champ.imgPath" class='champIcon'
+                      :alt="champ.name" width='32px'>
+                  <a style="padding-right: 10%">{{ champ.name }}</a>
+                  </b-button>
+                  </div>
+                </td>
+                <td>
+                  {{ champ.stats.wins }}
+                </td>
+                <td>
+                  {{ champ.stats.pickRate }}
+                </td>
+                <td class="trinket">
+                  {{ champ.stats.kills + ' / ' + champ.stats.deaths + ' / ' + champ.stats.assists }}
+                </td>
+                <td class="trinket">{{ champ.stats.cs }}</td>
+                <td class="trinket">{{ champ.samples }}</td>
+              </tr>
+          </tbody>
+        </table>
     </div>
     <div class="build">
       <div class="builds">
@@ -107,27 +120,23 @@ vertical-align: top; }
           <b-row>
             <b-col><img :src='selected.imgPath' class='champIcon'></b-col>
             <b-col>
-              <b-row>
-                <b-col><h1>{{ selected.name }}</h1></b-col>
-              </b-row>
-              <b-row>
-                <b-col><img :src='selected.spells.spell1.imgPath' class='champIcon'></b-col>
-                <b-col><img :src='selected.spells.spell2.imgPath' class='champIcon'></b-col>
-              </b-row>
+              <h1>{{ selected.name }}</h1>
+              <img :src='selected.spells.spell1.imgPath' style="padding: 5%">
+              <img :src='selected.spells.spell2.imgPath' style="padding: 5%">
             </b-col>
           </b-row>
         </div>
         <div class="div22">
            <b-nav tabs justified>
             <b-nav-item exact exact-active-class="active" @click="changeRunes('0')">
-              <img class='champIcon' :src="selected.runes['0'].primaryBranch.keystone.imgPath">
-              <img class='champIcon' width='24px'
+              <img  :src="selected.runes['0'].primaryBranch.keystone.imgPath">
+              <img  width='24px'
               :src="selected.runes['0'].secondaryBranch.imgPath">
               {{ selected.runes['0'].pickRate }}
             </b-nav-item>
             <b-nav-item exact exact-active-class="active" @click="changeRunes('1')">
-              <img class='champIcon' :src="selected.runes['1'].primaryBranch.keystone.imgPath">
-              <img class='champIcon' width='24px'
+              <img  :src="selected.runes['1'].primaryBranch.keystone.imgPath">
+              <img  width='24px'
               :src="selected.runes['1'].secondaryBranch.imgPath">
               {{ selected.runes['1'].pickRate }}
             </b-nav-item>
@@ -136,45 +145,39 @@ vertical-align: top; }
         <div class="div23">
           <b-row>
             <b-col>
-              <img class='champIcon' :src='runes.primaryBranch.imgPath'>
-            </b-col>
-            <b-col>
-              <img class='champIcon' :src='runes.secondaryBranch.imgPath'>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
               <b-row>
-                <b-col><img class='champIcon' :src='runes.primaryBranch.keystone.imgPath'></b-col>
+                <b-col><img  :src='runes.primaryBranch.keystone.imgPath' width='64px'></b-col>
               </b-row>
               <b-row>
-                <b-col><img class='champIcon' :src='runes.primaryBranch.perk1.imgPath'></b-col>
+                <b-col><img  :src='runes.primaryBranch.perk1.imgPath'></b-col>
               </b-row>
               <b-row>
-                <b-col><img class='champIcon' :src='runes.primaryBranch.perk2.imgPath'></b-col>
+                <b-col><img  :src='runes.primaryBranch.perk2.imgPath'></b-col>
               </b-row>
               <b-row>
-                <b-col><img class='champIcon' :src='runes.primaryBranch.perk3.imgPath'></b-col>
+                <b-col><img  :src='runes.primaryBranch.perk3.imgPath'></b-col>
               </b-row>
             </b-col>
             <b-col>
               <b-row>
-                <b-col><img class='champIcon' :src='runes.secondaryBranch.perk0.imgPath'></b-col>
+                <b-col><img  :src='runes.secondaryBranch.perk0.imgPath'></b-col>
               </b-row>
               <b-row>
-                <b-col><img class='champIcon' :src='runes.secondaryBranch.perk1.imgPath'></b-col>
+                <b-col><img  :src='runes.secondaryBranch.perk1.imgPath'></b-col>
               </b-row>
             </b-col>
           </b-row>
         </div>
+        <div class="div24"> skills </div>
+        <div class="div25"> q -> e -> w </div>
         <div class="div26"> items </div>
         <div class="div27">
           <b-row>
             <b-col v-for="item in selected.items.itemsList" :key="item.name">
-              <img :src='item.imgPath' class='champIcon'>
+              <img :src='item.imgPath' >
             </b-col>
             <b-col>
-              <img :src='selected.items.trinket.imgPath' class='champIcon'>
+              <img :src='selected.items.trinket.imgPath' >
             </b-col>
           </b-row>
         </div>
@@ -187,8 +190,8 @@ vertical-align: top; }
 import axios from 'axios';
 
 
-// const localhost = '/api';
-const localhost = 'http://localhost:5000';
+const localhost = '/api';
+// const localhost = 'http://localhost:5000';
 
 export default {
   data() {
@@ -206,6 +209,10 @@ export default {
       searchText: '',
       allChampions: [],
       builds: [],
+      winSortIcon: 'chevron-expand',
+      pickSortIcon: 'chevron-expand',
+      winSortCount: 0,
+      pickSortCount: 0,
     };
   },
   computed: {
@@ -213,18 +220,19 @@ export default {
       if (this.searchText === '') {
         return this.allChampions;
       }
-      return Object.fromEntries(
+      const filter = Object.fromEntries(
         Object.entries(this.allChampions)
           // eslint-disable-next-line no-unused-vars
           .filter(([k, v]) => v.name.toLowerCase()
             .indexOf(this.searchText.toLowerCase()) !== -1),
       );
+      return filter;
     },
   },
   methods: {
     changeRunes(option) {
       this.runes = this.selected.runes[option];
-      console.log(JSON.stringify(this.runes));
+      // console.log(JSON.stringify(this.runes));
     },
     changeSelected(name) {
       this.selected = this.builds[name];
@@ -235,15 +243,12 @@ export default {
       const path = `${localhost}/builds`;
       axios.get(path)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           this.allChampions = res.data.stats;
           this.builds = res.data.builds;
-          console.log(this.allChampions);
-          console.log(this.builds);
           this.selected = this.builds['1'];
           this.runes = this.selected.runes['0'];
-          console.log(JSON.stringify(this.selected));
-          console.log(JSON.stringify(this.runes));
+          // console.log(this.allChampions);
         })
         .catch((error) => {
           // eslint-disable-next-line

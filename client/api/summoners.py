@@ -69,16 +69,6 @@ def all_summoners():
     return jsonify(response_object)
 
 
-@app.route('/builds', methods=['GET'])
-def get_builds():
-    print('HERE ')
-    response_object['message'] = 'Summoner added!'
-    response_object['builds'] = builds
-    response_object['stats'] = stats
-    # response_object['champs'] = champList
-    return jsonify(response_object)
-
-
 @app.route('/api/summoners/<summoner_id>', methods=['GET', 'PUT', 'DELETE'])
 def single_summoner(summoner_id):
     response_object['status'] = 'success'
@@ -385,25 +375,20 @@ SUMMONERS = [
     }
 ]
 
-with open('dataDragon/champIds.json') as file1:
+with open('api/dataDragon/champIds.json') as file1:
   champList = json.load(file1)
-with open('dataDragon/queueIds.json') as file2:
+with open('api/dataDragon/queueIds.json') as file2:
   queueList = json.load(file2)
-with open('dataDragon/branchIds.json') as file3:
+with open('api/dataDragon/branchIds.json') as file3:
   branchList = json.load(file3)
-with open('dataDragon/runeIds.json') as file4:
+with open('api/dataDragon/runeIds.json') as file4:
   runeList = json.load(file4)
-with open('dataDragon/itemIds.json') as file5:
+with open('api/dataDragon/itemIds.json') as file5:
   itemList = json.load(file5)
-with open('dataDragon/summonerIds.json') as file6:
+with open('api/dataDragon/summonerIds.json') as file6:
   spellList = json.load(file6)
 
 
-with open('../dataDragon/builds.json') as file7:
-    builds = json.load(file7)
-with open('../dataDragon/stats.json') as file8:
-    stats = json.load(file8)
-    
 def useAPI():
     for summoner in SUMMONERS:
         accountId, summonerId = getIds(summoner['name'])

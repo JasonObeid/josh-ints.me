@@ -5,3 +5,43 @@
 item buy paths + starting items
 skill level order
 tertiary runes?
+
+
+<b-table small :fields="fields" :items="filtered" responsive="sm">
+
+        <!-- A custom formatted column -->
+        <template v-slot:cell(name)="filtered">
+          <b class="text-info">{{ filtered[0].name }}</b>
+        </template>
+        <!-- Optional default data cell scoped slot -->
+        <template v-slot:cell()="filtered">
+          <i>{{ filtered.samples }}</i>
+        </template>
+      </b-table>
+      <b-table hover :items="filtered"></b-table>
+
+
+      fields: [
+        // A column that needs custom formatting
+        { key: 'name', label: 'Full Name' },
+        // A virtual column made up from two fields
+        { key: 'nameage', label: 'First name and age' },
+      ],
+
+
+
+       if (this.searchText === '') {
+        const arr = Object.keys(this.allChampions).map(key => this.allChampions[key]);
+        console.log(arr);
+        return arr;
+      }
+      const filter = Object.fromEntries(
+        Object.entries(this.allChampions)
+          // eslint-disable-next-line no-unused-vars
+          .filter(([k, v]) => v.name.toLowerCase()
+            .indexOf(this.searchText.toLowerCase()) !== -1),
+      );
+      const arr = Object.keys(filter).map(key => filter[key]);
+      console.log(arr);
+      return arr;
+    },

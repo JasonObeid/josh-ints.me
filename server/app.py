@@ -688,7 +688,7 @@ def useAPI():
 #getMasterMatches()
 
 try:
-    writeTopItems()
+    #writeTopItems()
     useAPI()
 except Exception as e:
     print('Error on line {}'.format(
