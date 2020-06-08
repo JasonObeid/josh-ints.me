@@ -190,8 +190,8 @@ vertical-align: top; }
 import axios from 'axios';
 
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {

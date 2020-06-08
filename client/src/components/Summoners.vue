@@ -331,8 +331,8 @@ import Alert from './Alert.vue';
 
 // require('../assets/images/champion/Aatrox.jpg');
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {

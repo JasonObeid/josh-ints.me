@@ -6,6 +6,8 @@ item buy paths + starting items
 skill level order
 tertiary runes?
 
+https://api.mobalytics.gg/lol/champions/v1/meta?name=CHAMPNAME
+
 
 <b-table small :fields="fields" :items="filtered" responsive="sm">
 
