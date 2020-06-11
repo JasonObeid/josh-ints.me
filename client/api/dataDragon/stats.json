@@ -1,150 +1,1186 @@
 [
-   "Aatrox",
-   "Ahri",
-   "Akali",
-   "Alistar",
-   "Amumu",
-   "Anivia",
-   "Annie",
-   "Aphelios",
-   "Ashe",
-   "AurelionSol",
-   "Azir",
-   "Bard",
-   "Blitzcrank",
-   "Brand",
-   "Braum",
-   "Caitlyn",
-   "Camille",
-   "Cassiopeia",
-   "Chogath",
-   "Corki",
-   "Darius",
-   "Diana",
-   "Draven",
-   "DrMundo",
-   "Ekko",
-   "Elise",
-   "Evelynn",
-   "Ezreal",
-   "Fiddlesticks",
-   "Fiora",
-   "Fizz",
-   "Galio",
-   "Gangplank",
-   "Garen",
-   "Gnar",
-   "Gragas",
-   "Graves",
-   "Hecarim",
-   "Heimerdinger",
-   "Illaoi",
-   "Irelia",
-   "Ivern",
-   "Janna",
-   "JarvanIV",
-   "Jax",
-   "Jayce",
-   "Jhin",
-   "Jinx",
-   "Kaisa",
-   "Kalista",
-   "Karma",
-   "Karthus",
-   "Kassadin",
-   "Katarina",
-   "Kayle",
-   "Kayn",
-   "Kennen",
-   "Khazix",
-   "Kindred",
-   "Kled",
-   "KogMaw",
-   "Leblanc",
-   "LeeSin",
-   "Leona",
-   "Lissandra",
-   "Lucian",
-   "Lulu",
-   "Lux",
-   "Malphite",
-   "Malzahar",
-   "Maokai",
-   "MasterYi",
-   "MissFortune",
-   "MonkeyKing",
-   "Mordekaiser",
-   "Morgana",
-   "Nami",
-   "Nasus",
-   "Nautilus",
-   "Neeko",
-   "Nidalee",
-   "Nocturne",
-   "Nunu",
-   "Olaf",
-   "Orianna",
-   "Ornn",
-   "Pantheon",
-   "Poppy",
-   "Pyke",
-   "Qiyana",
-   "Quinn",
-   "Rakan",
-   "Rammus",
-   "RekSai",
-   "Renekton",
-   "Rengar",
-   "Riven",
-   "Rumble",
-   "Ryze",
-   "Sejuani",
-   "Senna",
-   "Sett",
-   "Shaco",
-   "Shen",
-   "Shyvana",
-   "Singed",
-   "Sion",
-   "Sivir",
-   "Skarner",
-   "Sona",
-   "Soraka",
-   "Swain",
-   "Sylas",
-   "Syndra",
-   "TahmKench",
-   "Taliyah",
-   "Talon",
-   "Taric",
-   "Teemo",
-   "Thresh",
-   "Tristana",
-   "Trundle",
-   "Tryndamere",
-   "TwistedFate",
-   "Twitch",
-   "Udyr",
-   "Urgot",
-   "Varus",
-   "Vayne",
-   "Veigar",
-   "Velkoz",
-   "Vi",
-   "Viktor",
-   "Vladimir",
-   "Volibear",
-   "Warwick",
-   "Xayah",
-   "Xerath",
-   "XinZhao",
-   "Yasuo",
-   "Yorick",
-   "Yuumi",
-   "Zac",
-   "Zed",
-   "Ziggs",
-   "Zilean",
-   "Zoe",
-   "Zyra"
+   {
+      "id": "266",
+      "name": "Aatrox",
+      "banRate": 4.7,
+      "pickRate": 3.2,
+      "winRate": 47.9,
+      "imgPath": "/images/champion/Aatrox.jpg"
+   },
+   {
+      "id": "103",
+      "name": "Ahri",
+      "banRate": 1.0,
+      "pickRate": 5.3,
+      "winRate": 51.3,
+      "imgPath": "/images/champion/Ahri.jpg"
+   },
+   {
+      "id": "84",
+      "name": "Akali",
+      "banRate": 3.2,
+      "pickRate": 2.5,
+      "winRate": 44.6,
+      "imgPath": "/images/champion/Akali.jpg"
+   },
+   {
+      "id": "12",
+      "name": "Alistar",
+      "banRate": 0.4,
+      "pickRate": 3.5,
+      "winRate": 49.5,
+      "imgPath": "/images/champion/Alistar.jpg"
+   },
+   {
+      "id": "32",
+      "name": "Amumu",
+      "banRate": 0.4,
+      "pickRate": 2.9,
+      "winRate": 49.9,
+      "imgPath": "/images/champion/Amumu.jpg"
+   },
+   {
+      "id": "34",
+      "name": "Anivia",
+      "banRate": 0.4,
+      "pickRate": 1.8,
+      "winRate": 51.1,
+      "imgPath": "/images/champion/Anivia.jpg"
+   },
+   {
+      "id": "1",
+      "name": "Annie",
+      "banRate": 0.8,
+      "pickRate": 3.9,
+      "winRate": 51.3,
+      "imgPath": "/images/champion/Annie.jpg"
+   },
+   {
+      "id": "523",
+      "name": "Aphelios",
+      "banRate": 10.4,
+      "pickRate": 10.0,
+      "winRate": 48.4,
+      "imgPath": "/images/champion/Aphelios.jpg"
+   },
+   {
+      "id": "22",
+      "name": "Ashe",
+      "banRate": 0.5,
+      "pickRate": 8.1,
+      "winRate": 51.6,
+      "imgPath": "/images/champion/Ashe.jpg"
+   },
+   {
+      "id": "136",
+      "name": "AurelionSol",
+      "banRate": 0.1,
+      "pickRate": 0.8,
+      "winRate": 50.9,
+      "imgPath": "/images/champion/AurelionSol.jpg"
+   },
+   {
+      "id": "268",
+      "name": "Azir",
+      "banRate": 0.4,
+      "pickRate": 2.7,
+      "winRate": 46.0,
+      "imgPath": "/images/champion/Azir.jpg"
+   },
+   {
+      "id": "432",
+      "name": "Bard",
+      "banRate": 1.5,
+      "pickRate": 8.5,
+      "winRate": 50.9,
+      "imgPath": "/images/champion/Bard.jpg"
+   },
+   {
+      "id": "53",
+      "name": "Blitzcrank",
+      "banRate": 10.2,
+      "pickRate": 7.4,
+      "winRate": 50.8,
+      "imgPath": "/images/champion/Blitzcrank.jpg"
+   },
+   {
+      "id": "63",
+      "name": "Brand",
+      "banRate": 2.9,
+      "pickRate": 1.6,
+      "winRate": 46.3,
+      "imgPath": "/images/champion/Brand.jpg"
+   },
+   {
+      "id": "201",
+      "name": "Braum",
+      "banRate": 0.7,
+      "pickRate": 3.7,
+      "winRate": 47.1,
+      "imgPath": "/images/champion/Braum.jpg"
+   },
+   {
+      "id": "51",
+      "name": "Caitlyn",
+      "banRate": 11.1,
+      "pickRate": 17.7,
+      "winRate": 50.2,
+      "imgPath": "/images/champion/Caitlyn.jpg"
+   },
+   {
+      "id": "164",
+      "name": "Camille",
+      "banRate": 1.2,
+      "pickRate": 5.7,
+      "winRate": 50.5,
+      "imgPath": "/images/champion/Camille.jpg"
+   },
+   {
+      "id": "69",
+      "name": "Cassiopeia",
+      "banRate": 10.6,
+      "pickRate": 2.9,
+      "winRate": 51.9,
+      "imgPath": "/images/champion/Cassiopeia.jpg"
+   },
+   {
+      "id": "31",
+      "name": "Chogath",
+      "banRate": 0.5,
+      "pickRate": 1.4,
+      "winRate": 49.2,
+      "imgPath": "/images/champion/Chogath.jpg"
+   },
+   {
+      "id": "42",
+      "name": "Corki",
+      "banRate": 0.3,
+      "pickRate": 3.3,
+      "winRate": 46.6,
+      "imgPath": "/images/champion/Corki.jpg"
+   },
+   {
+      "id": "122",
+      "name": "Darius",
+      "banRate": 51.0,
+      "pickRate": 9.1,
+      "winRate": 50.7,
+      "imgPath": "/images/champion/Darius.jpg"
+   },
+   {
+      "id": "131",
+      "name": "Diana",
+      "banRate": 18.2,
+      "pickRate": 3.0,
+      "winRate": 48.3,
+      "imgPath": "/images/champion/Diana.jpg"
+   },
+   {
+      "id": "119",
+      "name": "Draven",
+      "banRate": 10.2,
+      "pickRate": 6.7,
+      "winRate": 50.2,
+      "imgPath": "/images/champion/Draven.jpg"
+   },
+   {
+      "id": "36",
+      "name": "DrMundo",
+      "banRate": 0.9,
+      "pickRate": 1.4,
+      "winRate": 50.2,
+      "imgPath": "/images/champion/DrMundo.jpg"
+   },
+   {
+      "id": "245",
+      "name": "Ekko",
+      "banRate": 21.4,
+      "pickRate": 5.2,
+      "winRate": 48.4,
+      "imgPath": "/images/champion/Ekko.jpg"
+   },
+   {
+      "id": "60",
+      "name": "Elise",
+      "banRate": 3.6,
+      "pickRate": 5.5,
+      "winRate": 49.0,
+      "imgPath": "/images/champion/Elise.jpg"
+   },
+   {
+      "id": "28",
+      "name": "Evelynn",
+      "banRate": 21.1,
+      "pickRate": 6.2,
+      "winRate": 49.6,
+      "imgPath": "/images/champion/Evelynn.jpg"
+   },
+   {
+      "id": "81",
+      "name": "Ezreal",
+      "banRate": 7.4,
+      "pickRate": 28.4,
+      "winRate": 48.9,
+      "imgPath": "/images/champion/Ezreal.jpg"
+   },
+   {
+      "id": "9",
+      "name": "Fiddlesticks",
+      "banRate": 26.5,
+      "pickRate": 4.1,
+      "winRate": 49.9,
+      "imgPath": "/images/champion/Fiddlesticks.jpg"
+   },
+   {
+      "id": "114",
+      "name": "Fiora",
+      "banRate": 15.9,
+      "pickRate": 7.6,
+      "winRate": 50.3,
+      "imgPath": "/images/champion/Fiora.jpg"
+   },
+   {
+      "id": "105",
+      "name": "Fizz",
+      "banRate": 10.8,
+      "pickRate": 6.0,
+      "winRate": 50.6,
+      "imgPath": "/images/champion/Fizz.jpg"
+   },
+   {
+      "id": "3",
+      "name": "Galio",
+      "banRate": 0.6,
+      "pickRate": 3.2,
+      "winRate": 52.0,
+      "imgPath": "/images/champion/Galio.jpg"
+   },
+   {
+      "id": "41",
+      "name": "Gangplank",
+      "banRate": 1.1,
+      "pickRate": 2.6,
+      "winRate": 45.8,
+      "imgPath": "/images/champion/Gangplank.jpg"
+   },
+   {
+      "id": "86",
+      "name": "Garen",
+      "banRate": 7.0,
+      "pickRate": 8.3,
+      "winRate": 51.2,
+      "imgPath": "/images/champion/Garen.jpg"
+   },
+   {
+      "id": "150",
+      "name": "Gnar",
+      "banRate": 0.7,
+      "pickRate": 3.6,
+      "winRate": 48.8,
+      "imgPath": "/images/champion/Gnar.jpg"
+   },
+   {
+      "id": "79",
+      "name": "Gragas",
+      "banRate": 0.2,
+      "pickRate": 1.4,
+      "winRate": 46.2,
+      "imgPath": "/images/champion/Gragas.jpg"
+   },
+   {
+      "id": "104",
+      "name": "Graves",
+      "banRate": 27.3,
+      "pickRate": 11.6,
+      "winRate": 49.4,
+      "imgPath": "/images/champion/Graves.jpg"
+   },
+   {
+      "id": "120",
+      "name": "Hecarim",
+      "banRate": 1.8,
+      "pickRate": 3.9,
+      "winRate": 50.2,
+      "imgPath": "/images/champion/Hecarim.jpg"
+   },
+   {
+      "id": "74",
+      "name": "Heimerdinger",
+      "banRate": 0.3,
+      "pickRate": 0.5,
+      "winRate": 51.2,
+      "imgPath": "/images/champion/Heimerdinger.jpg"
+   },
+   {
+      "id": "420",
+      "name": "Illaoi",
+      "banRate": 3.5,
+      "pickRate": 2.5,
+      "winRate": 51.4,
+      "imgPath": "/images/champion/Illaoi.jpg"
+   },
+   {
+      "id": "39",
+      "name": "Irelia",
+      "banRate": 6.7,
+      "pickRate": 4.8,
+      "winRate": 45.5,
+      "imgPath": "/images/champion/Irelia.jpg"
+   },
+   {
+      "id": "427",
+      "name": "Ivern",
+      "banRate": 0.2,
+      "pickRate": 2.6,
+      "winRate": 50.2,
+      "imgPath": "/images/champion/Ivern.jpg"
+   },
+   {
+      "id": "40",
+      "name": "Janna",
+      "banRate": 0.5,
+      "pickRate": 8.6,
+      "winRate": 51.7,
+      "imgPath": "/images/champion/Janna.jpg"
+   },
+   {
+      "id": "59",
+      "name": "JarvanIV",
+      "banRate": 1.0,
+      "pickRate": 6.0,
+      "winRate": 49.1,
+      "imgPath": "/images/champion/JarvanIV.jpg"
+   },
+   {
+      "id": "24",
+      "name": "Jax",
+      "banRate": 11.7,
+      "pickRate": 5.7,
+      "winRate": 49.0,
+      "imgPath": "/images/champion/Jax.jpg"
+   },
+   {
+      "id": "126",
+      "name": "Jayce",
+      "banRate": 0.3,
+      "pickRate": 1.8,
+      "winRate": 47.5,
+      "imgPath": "/images/champion/Jayce.jpg"
+   },
+   {
+      "id": "202",
+      "name": "Jhin",
+      "banRate": 1.2,
+      "pickRate": 15.0,
+      "winRate": 51.8,
+      "imgPath": "/images/champion/Jhin.jpg"
+   },
+   {
+      "id": "222",
+      "name": "Jinx",
+      "banRate": 0.3,
+      "pickRate": 9.2,
+      "winRate": 51.9,
+      "imgPath": "/images/champion/Jinx.jpg"
+   },
+   {
+      "id": "145",
+      "name": "Kaisa",
+      "banRate": 2.6,
+      "pickRate": 22.1,
+      "winRate": 47.8,
+      "imgPath": "/images/champion/Kaisa.jpg"
+   },
+   {
+      "id": "429",
+      "name": "Kalista",
+      "banRate": 1.0,
+      "pickRate": 2.3,
+      "winRate": 45.9,
+      "imgPath": "/images/champion/Kalista.jpg"
+   },
+   {
+      "id": "43",
+      "name": "Karma",
+      "banRate": 0.4,
+      "pickRate": 6.8,
+      "winRate": 49.4,
+      "imgPath": "/images/champion/Karma.jpg"
+   },
+   {
+      "id": "30",
+      "name": "Karthus",
+      "banRate": 0.9,
+      "pickRate": 1.5,
+      "winRate": 45.4,
+      "imgPath": "/images/champion/Karthus.jpg"
+   },
+   {
+      "id": "38",
+      "name": "Kassadin",
+      "banRate": 60.9,
+      "pickRate": 4.2,
+      "winRate": 50.5,
+      "imgPath": "/images/champion/Kassadin.jpg"
+   },
+   {
+      "id": "55",
+      "name": "Katarina",
+      "banRate": 14.8,
+      "pickRate": 7.6,
+      "winRate": 51.1,
+      "imgPath": "/images/champion/Katarina.jpg"
+   },
+   {
+      "id": "10",
+      "name": "Kayle",
+      "banRate": 0.5,
+      "pickRate": 2.7,
+      "winRate": 49.7,
+      "imgPath": "/images/champion/Kayle.jpg"
+   },
+   {
+      "id": "141",
+      "name": "Kayn",
+      "banRate": 21.0,
+      "pickRate": 8.3,
+      "winRate": 50.1,
+      "imgPath": "/images/champion/Kayn.jpg"
+   },
+   {
+      "id": "85",
+      "name": "Kennen",
+      "banRate": 0.3,
+      "pickRate": 1.4,
+      "winRate": 48.8,
+      "imgPath": "/images/champion/Kennen.jpg"
+   },
+   {
+      "id": "121",
+      "name": "Khazix",
+      "banRate": 4.5,
+      "pickRate": 9.0,
+      "winRate": 48.9,
+      "imgPath": "/images/champion/Khazix.jpg"
+   },
+   {
+      "id": "203",
+      "name": "Kindred",
+      "banRate": 0.3,
+      "pickRate": 2.4,
+      "winRate": 49.8,
+      "imgPath": "/images/champion/Kindred.jpg"
+   },
+   {
+      "id": "240",
+      "name": "Kled",
+      "banRate": 2.2,
+      "pickRate": 2.8,
+      "winRate": 52.0,
+      "imgPath": "/images/champion/Kled.jpg"
+   },
+   {
+      "id": "96",
+      "name": "KogMaw",
+      "banRate": 0.3,
+      "pickRate": 2.3,
+      "winRate": 51.9,
+      "imgPath": "/images/champion/KogMaw.jpg"
+   },
+   {
+      "id": "7",
+      "name": "Leblanc",
+      "banRate": 5.0,
+      "pickRate": 5.7,
+      "winRate": 47.2,
+      "imgPath": "/images/champion/Leblanc.jpg"
+   },
+   {
+      "id": "64",
+      "name": "LeeSin",
+      "banRate": 12.3,
+      "pickRate": 16.2,
+      "winRate": 47.5,
+      "imgPath": "/images/champion/LeeSin.jpg"
+   },
+   {
+      "id": "89",
+      "name": "Leona",
+      "banRate": 17.3,
+      "pickRate": 8.8,
+      "winRate": 49.7,
+      "imgPath": "/images/champion/Leona.jpg"
+   },
+   {
+      "id": "127",
+      "name": "Lissandra",
+      "banRate": 0.7,
+      "pickRate": 3.4,
+      "winRate": 48.5,
+      "imgPath": "/images/champion/Lissandra.jpg"
+   },
+   {
+      "id": "236",
+      "name": "Lucian",
+      "banRate": 1.8,
+      "pickRate": 5.0,
+      "winRate": 46.2,
+      "imgPath": "/images/champion/Lucian.jpg"
+   },
+   {
+      "id": "117",
+      "name": "Lulu",
+      "banRate": 24.7,
+      "pickRate": 19.0,
+      "winRate": 51.5,
+      "imgPath": "/images/champion/Lulu.jpg"
+   },
+   {
+      "id": "99",
+      "name": "Lux",
+      "banRate": 0.6,
+      "pickRate": 4.8,
+      "winRate": 50.4,
+      "imgPath": "/images/champion/Lux.jpg"
+   },
+   {
+      "id": "54",
+      "name": "Malphite",
+      "banRate": 5.6,
+      "pickRate": 2.6,
+      "winRate": 49.2,
+      "imgPath": "/images/champion/Malphite.jpg"
+   },
+   {
+      "id": "90",
+      "name": "Malzahar",
+      "banRate": 3.0,
+      "pickRate": 3.3,
+      "winRate": 50.4,
+      "imgPath": "/images/champion/Malzahar.jpg"
+   },
+   {
+      "id": "57",
+      "name": "Maokai",
+      "banRate": 1.5,
+      "pickRate": 1.7,
+      "winRate": 50.6,
+      "imgPath": "/images/champion/Maokai.jpg"
+   },
+   {
+      "id": "11",
+      "name": "MasterYi",
+      "banRate": 21.1,
+      "pickRate": 3.2,
+      "winRate": 47.4,
+      "imgPath": "/images/champion/MasterYi.jpg"
+   },
+   {
+      "id": "21",
+      "name": "MissFortune",
+      "banRate": 1.9,
+      "pickRate": 9.9,
+      "winRate": 50.6,
+      "imgPath": "/images/champion/MissFortune.jpg"
+   },
+   {
+      "id": "62",
+      "name": "MonkeyKing",
+      "banRate": 9.4,
+      "pickRate": 2.8,
+      "winRate": 51.9,
+      "imgPath": "/images/champion/MonkeyKing.jpg"
+   },
+   {
+      "id": "82",
+      "name": "Mordekaiser",
+      "banRate": 10.3,
+      "pickRate": 2.6,
+      "winRate": 47.2,
+      "imgPath": "/images/champion/Mordekaiser.jpg"
+   },
+   {
+      "id": "25",
+      "name": "Morgana",
+      "banRate": 33.4,
+      "pickRate": 2.8,
+      "winRate": 50.1,
+      "imgPath": "/images/champion/Morgana.jpg"
+   },
+   {
+      "id": "267",
+      "name": "Nami",
+      "banRate": 0.5,
+      "pickRate": 10.0,
+      "winRate": 51.9,
+      "imgPath": "/images/champion/Nami.jpg"
+   },
+   {
+      "id": "75",
+      "name": "Nasus",
+      "banRate": 4.2,
+      "pickRate": 5.1,
+      "winRate": 50.8,
+      "imgPath": "/images/champion/Nasus.jpg"
+   },
+   {
+      "id": "111",
+      "name": "Nautilus",
+      "banRate": 26.4,
+      "pickRate": 10.1,
+      "winRate": 49.2,
+      "imgPath": "/images/champion/Nautilus.jpg"
+   },
+   {
+      "id": "518",
+      "name": "Neeko",
+      "banRate": 0.2,
+      "pickRate": 0.7,
+      "winRate": 49.8,
+      "imgPath": "/images/champion/Neeko.jpg"
+   },
+   {
+      "id": "76",
+      "name": "Nidalee",
+      "banRate": 0.9,
+      "pickRate": 3.8,
+      "winRate": 47.2,
+      "imgPath": "/images/champion/Nidalee.jpg"
+   },
+   {
+      "id": "56",
+      "name": "Nocturne",
+      "banRate": 1.2,
+      "pickRate": 1.8,
+      "winRate": 49.8,
+      "imgPath": "/images/champion/Nocturne.jpg"
+   },
+   {
+      "id": "20",
+      "name": "Nunu",
+      "banRate": 0.4,
+      "pickRate": 3.3,
+      "winRate": 53.2,
+      "imgPath": "/images/champion/Nunu.jpg"
+   },
+   {
+      "id": "2",
+      "name": "Olaf",
+      "banRate": 7.5,
+      "pickRate": 3.6,
+      "winRate": 51.0,
+      "imgPath": "/images/champion/Olaf.jpg"
+   },
+   {
+      "id": "61",
+      "name": "Orianna",
+      "banRate": 0.9,
+      "pickRate": 7.5,
+      "winRate": 50.0,
+      "imgPath": "/images/champion/Orianna.jpg"
+   },
+   {
+      "id": "516",
+      "name": "Ornn",
+      "banRate": 1.9,
+      "pickRate": 4.6,
+      "winRate": 49.0,
+      "imgPath": "/images/champion/Ornn.jpg"
+   },
+   {
+      "id": "80",
+      "name": "Pantheon",
+      "banRate": 0.6,
+      "pickRate": 0.9,
+      "winRate": 47.6,
+      "imgPath": "/images/champion/Pantheon.jpg"
+   },
+   {
+      "id": "78",
+      "name": "Poppy",
+      "banRate": 0.4,
+      "pickRate": 1.3,
+      "winRate": 50.0,
+      "imgPath": "/images/champion/Poppy.jpg"
+   },
+   {
+      "id": "555",
+      "name": "Pyke",
+      "banRate": 7.4,
+      "pickRate": 4.5,
+      "winRate": 50.1,
+      "imgPath": "/images/champion/Pyke.jpg"
+   },
+   {
+      "id": "246",
+      "name": "Qiyana",
+      "banRate": 1.0,
+      "pickRate": 2.7,
+      "winRate": 49.0,
+      "imgPath": "/images/champion/Qiyana.jpg"
+   },
+   {
+      "id": "133",
+      "name": "Quinn",
+      "banRate": 0.9,
+      "pickRate": 2.0,
+      "winRate": 52.3,
+      "imgPath": "/images/champion/Quinn.jpg"
+   },
+   {
+      "id": "497",
+      "name": "Rakan",
+      "banRate": 0.3,
+      "pickRate": 4.2,
+      "winRate": 48.9,
+      "imgPath": "/images/champion/Rakan.jpg"
+   },
+   {
+      "id": "33",
+      "name": "Rammus",
+      "banRate": 2.5,
+      "pickRate": 2.1,
+      "winRate": 50.2,
+      "imgPath": "/images/champion/Rammus.jpg"
+   },
+   {
+      "id": "421",
+      "name": "RekSai",
+      "banRate": 2.6,
+      "pickRate": 4.1,
+      "winRate": 49.1,
+      "imgPath": "/images/champion/RekSai.jpg"
+   },
+   {
+      "id": "58",
+      "name": "Renekton",
+      "banRate": 8.2,
+      "pickRate": 7.6,
+      "winRate": 48.6,
+      "imgPath": "/images/champion/Renekton.jpg"
+   },
+   {
+      "id": "107",
+      "name": "Rengar",
+      "banRate": 9.6,
+      "pickRate": 3.1,
+      "winRate": 50.8,
+      "imgPath": "/images/champion/Rengar.jpg"
+   },
+   {
+      "id": "92",
+      "name": "Riven",
+      "banRate": 1.1,
+      "pickRate": 4.3,
+      "winRate": 50.5,
+      "imgPath": "/images/champion/Riven.jpg"
+   },
+   {
+      "id": "68",
+      "name": "Rumble",
+      "banRate": 0.2,
+      "pickRate": 1.1,
+      "winRate": 49.5,
+      "imgPath": "/images/champion/Rumble.jpg"
+   },
+   {
+      "id": "13",
+      "name": "Ryze",
+      "banRate": 0.4,
+      "pickRate": 1.9,
+      "winRate": 45.3,
+      "imgPath": "/images/champion/Ryze.jpg"
+   },
+   {
+      "id": "113",
+      "name": "Sejuani",
+      "banRate": 0.3,
+      "pickRate": 2.6,
+      "winRate": 48.2,
+      "imgPath": "/images/champion/Sejuani.jpg"
+   },
+   {
+      "id": "235",
+      "name": "Senna",
+      "banRate": 5.9,
+      "pickRate": 6.2,
+      "winRate": 48.7,
+      "imgPath": "/images/champion/Senna.jpg"
+   },
+   {
+      "id": "875",
+      "name": "Sett",
+      "banRate": 13.0,
+      "pickRate": 3.1,
+      "winRate": 49.0,
+      "imgPath": "/images/champion/Sett.jpg"
+   },
+   {
+      "id": "35",
+      "name": "Shaco",
+      "banRate": 6.8,
+      "pickRate": 3.2,
+      "winRate": 51.0,
+      "imgPath": "/images/champion/Shaco.jpg"
+   },
+   {
+      "id": "98",
+      "name": "Shen",
+      "banRate": 1.3,
+      "pickRate": 3.6,
+      "winRate": 46.9,
+      "imgPath": "/images/champion/Shen.jpg"
+   },
+   {
+      "id": "102",
+      "name": "Shyvana",
+      "banRate": 1.5,
+      "pickRate": 2.5,
+      "winRate": 50.9,
+      "imgPath": "/images/champion/Shyvana.jpg"
+   },
+   {
+      "id": "27",
+      "name": "Singed",
+      "banRate": 0.3,
+      "pickRate": 2.4,
+      "winRate": 51.6,
+      "imgPath": "/images/champion/Singed.jpg"
+   },
+   {
+      "id": "14",
+      "name": "Sion",
+      "banRate": 0.2,
+      "pickRate": 3.6,
+      "winRate": 50.7,
+      "imgPath": "/images/champion/Sion.jpg"
+   },
+   {
+      "id": "15",
+      "name": "Sivir",
+      "banRate": 0.2,
+      "pickRate": 3.5,
+      "winRate": 50.0,
+      "imgPath": "/images/champion/Sivir.jpg"
+   },
+   {
+      "id": "72",
+      "name": "Skarner",
+      "banRate": 0.1,
+      "pickRate": 0.6,
+      "winRate": 50.7,
+      "imgPath": "/images/champion/Skarner.jpg"
+   },
+   {
+      "id": "37",
+      "name": "Sona",
+      "banRate": 0.1,
+      "pickRate": 2.7,
+      "winRate": 50.8,
+      "imgPath": "/images/champion/Sona.jpg"
+   },
+   {
+      "id": "16",
+      "name": "Soraka",
+      "banRate": 5.4,
+      "pickRate": 4.8,
+      "winRate": 52.9,
+      "imgPath": "/images/champion/Soraka.jpg"
+   },
+   {
+      "id": "50",
+      "name": "Swain",
+      "banRate": 1.2,
+      "pickRate": 1.2,
+      "winRate": 49.6,
+      "imgPath": "/images/champion/Swain.jpg"
+   },
+   {
+      "id": "517",
+      "name": "Sylas",
+      "banRate": 8.9,
+      "pickRate": 3.0,
+      "winRate": 47.3,
+      "imgPath": "/images/champion/Sylas.jpg"
+   },
+   {
+      "id": "134",
+      "name": "Syndra",
+      "banRate": 14.0,
+      "pickRate": 6.5,
+      "winRate": 48.6,
+      "imgPath": "/images/champion/Syndra.jpg"
+   },
+   {
+      "id": "223",
+      "name": "TahmKench",
+      "banRate": 0.2,
+      "pickRate": 0.5,
+      "winRate": 45.0,
+      "imgPath": "/images/champion/TahmKench.jpg"
+   },
+   {
+      "id": "163",
+      "name": "Taliyah",
+      "banRate": 0.0,
+      "pickRate": 0.3,
+      "winRate": 51.4,
+      "imgPath": "/images/champion/Taliyah.jpg"
+   },
+   {
+      "id": "91",
+      "name": "Talon",
+      "banRate": 3.4,
+      "pickRate": 4.0,
+      "winRate": 50.5,
+      "imgPath": "/images/champion/Talon.jpg"
+   },
+   {
+      "id": "44",
+      "name": "Taric",
+      "banRate": 0.8,
+      "pickRate": 2.6,
+      "winRate": 51.2,
+      "imgPath": "/images/champion/Taric.jpg"
+   },
+   {
+      "id": "17",
+      "name": "Teemo",
+      "banRate": 1.8,
+      "pickRate": 1.9,
+      "winRate": 48.5,
+      "imgPath": "/images/champion/Teemo.jpg"
+   },
+   {
+      "id": "412",
+      "name": "Thresh",
+      "banRate": 10.6,
+      "pickRate": 19.4,
+      "winRate": 48.7,
+      "imgPath": "/images/champion/Thresh.jpg"
+   },
+   {
+      "id": "18",
+      "name": "Tristana",
+      "banRate": 0.9,
+      "pickRate": 6.4,
+      "winRate": 48.8,
+      "imgPath": "/images/champion/Tristana.jpg"
+   },
+   {
+      "id": "48",
+      "name": "Trundle",
+      "banRate": 1.1,
+      "pickRate": 2.6,
+      "winRate": 51.0,
+      "imgPath": "/images/champion/Trundle.jpg"
+   },
+   {
+      "id": "23",
+      "name": "Tryndamere",
+      "banRate": 6.9,
+      "pickRate": 5.1,
+      "winRate": 50.1,
+      "imgPath": "/images/champion/Tryndamere.jpg"
+   },
+   {
+      "id": "4",
+      "name": "TwistedFate",
+      "banRate": 0.4,
+      "pickRate": 5.9,
+      "winRate": 49.0,
+      "imgPath": "/images/champion/TwistedFate.jpg"
+   },
+   {
+      "id": "29",
+      "name": "Twitch",
+      "banRate": 0.9,
+      "pickRate": 2.9,
+      "winRate": 49.4,
+      "imgPath": "/images/champion/Twitch.jpg"
+   },
+   {
+      "id": "77",
+      "name": "Udyr",
+      "banRate": 0.2,
+      "pickRate": 1.7,
+      "winRate": 51.3,
+      "imgPath": "/images/champion/Udyr.jpg"
+   },
+   {
+      "id": "6",
+      "name": "Urgot",
+      "banRate": 2.3,
+      "pickRate": 5.7,
+      "winRate": 51.7,
+      "imgPath": "/images/champion/Urgot.jpg"
+   },
+   {
+      "id": "110",
+      "name": "Varus",
+      "banRate": 7.0,
+      "pickRate": 11.4,
+      "winRate": 50.5,
+      "imgPath": "/images/champion/Varus.jpg"
+   },
+   {
+      "id": "67",
+      "name": "Vayne",
+      "banRate": 15.0,
+      "pickRate": 9.3,
+      "winRate": 49.8,
+      "imgPath": "/images/champion/Vayne.jpg"
+   },
+   {
+      "id": "45",
+      "name": "Veigar",
+      "banRate": 0.9,
+      "pickRate": 1.6,
+      "winRate": 48.6,
+      "imgPath": "/images/champion/Veigar.jpg"
+   },
+   {
+      "id": "161",
+      "name": "Velkoz",
+      "banRate": 1.0,
+      "pickRate": 3.8,
+      "winRate": 51.1,
+      "imgPath": "/images/champion/Velkoz.jpg"
+   },
+   {
+      "id": "254",
+      "name": "Vi",
+      "banRate": 0.3,
+      "pickRate": 3.1,
+      "winRate": 49.8,
+      "imgPath": "/images/champion/Vi.jpg"
+   },
+   {
+      "id": "112",
+      "name": "Viktor",
+      "banRate": 0.2,
+      "pickRate": 1.6,
+      "winRate": 47.8,
+      "imgPath": "/images/champion/Viktor.jpg"
+   },
+   {
+      "id": "8",
+      "name": "Vladimir",
+      "banRate": 24.0,
+      "pickRate": 5.3,
+      "winRate": 48.9,
+      "imgPath": "/images/champion/Vladimir.jpg"
+   },
+   {
+      "id": "106",
+      "name": "Volibear",
+      "banRate": 16.6,
+      "pickRate": 6.3,
+      "winRate": 42.2,
+      "imgPath": "/images/champion/Volibear.jpg"
+   },
+   {
+      "id": "19",
+      "name": "Warwick",
+      "banRate": 1.7,
+      "pickRate": 4.7,
+      "winRate": 51.3,
+      "imgPath": "/images/champion/Warwick.jpg"
+   },
+   {
+      "id": "498",
+      "name": "Xayah",
+      "banRate": 0.4,
+      "pickRate": 5.4,
+      "winRate": 48.3,
+      "imgPath": "/images/champion/Xayah.jpg"
+   },
+   {
+      "id": "101",
+      "name": "Xerath",
+      "banRate": 1.0,
+      "pickRate": 2.8,
+      "winRate": 49.1,
+      "imgPath": "/images/champion/Xerath.jpg"
+   },
+   {
+      "id": "5",
+      "name": "XinZhao",
+      "banRate": 0.1,
+      "pickRate": 1.9,
+      "winRate": 49.9,
+      "imgPath": "/images/champion/XinZhao.jpg"
+   },
+   {
+      "id": "157",
+      "name": "Yasuo",
+      "banRate": 46.3,
+      "pickRate": 5.7,
+      "winRate": 50.1,
+      "imgPath": "/images/champion/Yasuo.jpg"
+   },
+   {
+      "id": "83",
+      "name": "Yorick",
+      "banRate": 0.6,
+      "pickRate": 1.8,
+      "winRate": 49.9,
+      "imgPath": "/images/champion/Yorick.jpg"
+   },
+   {
+      "id": "350",
+      "name": "Yuumi",
+      "banRate": 96.6,
+      "pickRate": 12.3,
+      "winRate": 49.9,
+      "imgPath": "/images/champion/Yuumi.jpg"
+   },
+   {
+      "id": "154",
+      "name": "Zac",
+      "banRate": 12.1,
+      "pickRate": 2.9,
+      "winRate": 51.2,
+      "imgPath": "/images/champion/Zac.jpg"
+   },
+   {
+      "id": "238",
+      "name": "Zed",
+      "banRate": 30.8,
+      "pickRate": 9.0,
+      "winRate": 49.6,
+      "imgPath": "/images/champion/Zed.jpg"
+   },
+   {
+      "id": "115",
+      "name": "Ziggs",
+      "banRate": 0.1,
+      "pickRate": 1.1,
+      "winRate": 50.4,
+      "imgPath": "/images/champion/Ziggs.jpg"
+   },
+   {
+      "id": "26",
+      "name": "Zilean",
+      "banRate": 0.7,
+      "pickRate": 1.9,
+      "winRate": 51.0,
+      "imgPath": "/images/champion/Zilean.jpg"
+   },
+   {
+      "id": "142",
+      "name": "Zoe",
+      "banRate": 3.1,
+      "pickRate": 4.1,
+      "winRate": 48.3,
+      "imgPath": "/images/champion/Zoe.jpg"
+   },
+   {
+      "id": "143",
+      "name": "Zyra",
+      "banRate": 1.5,
+      "pickRate": 4.2,
+      "winRate": 50.3,
+      "imgPath": "/images/champion/Zyra.jpg"
+   }
 ]

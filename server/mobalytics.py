@@ -15,9 +15,19 @@ with open('../dataDragon/itemIds.json') as file5:
     itemList = json.load(file5)
 with open('../dataDragon/shardIds.json') as file6:
     shardList = json.load(file6)
+with open('../dataDragon/summonerIds.json') as file7:
+    spellList = json.load(file7)
 
 def getSpells(spellIds):
-    return [spellIds[0][0], spellIds[1][0]]
+    spells = []
+    print(spellIds)
+    spell1 = spellList[str(spellIds[0])]
+    spell2 = spellList[str(spellIds[1])]
+    print(spell1)
+    print(spell2)
+    spells.append(spell1)
+    spells.append(spell2)
+    return spells
 
 def getRunes(runeIds, style, substyle):
     runes = {}
@@ -72,12 +82,28 @@ def getItems(itemIds):
             itemsList.append(name)
     return itemsList
 
+def getSkills(order, customSkills):
+    skills = []
+    print(order)
+    skillMap = {'Q':1, 'W':2, 'E':3}
+    for skill in order:
+        print(skill)
+        skillIndex = skillMap[skill]
+        print(skillIndex)
+        name = customSkills[skillIndex]['name']
+        imgPath = 'images/spell/' + customSkills[skillIndex]['image'] + '.jpg'
+        skills.append({'name':name, 'imgPath':imgPath})
+    return skills
+
 def cleanStats(body, key):
     roles = []
     # {ad: x, ap: y}
     damageSplit = body['data']['champion']['damageType']
     name = body['data']['champion']['name']
+    champName = champList[str(key)]
+    champImgPath = '/images/champion/' + champName + '.jpg'
     champId = key
+    customSkills =  body['data']['customSkills']
     # "the Mouth of the Abyss"
     title = body['data']['champion']['title']
     # {early: 3, mid: 2, late: 1} where 3 is worst, 1 is best
@@ -102,12 +128,16 @@ def cleanStats(body, key):
             buildName = build['name']
             runes = getRunes(build['perks']['ids'], build['perks']['style'], build['perks']['subStyle'])
             spells = getSpells(build['spells'])
-            build = {'items':cleanItems, 'name': buildName, 'runes': runes, 'spells':spells}
+            print(build['skills'])
+            skills = getSkills(build['skills']['prioritisation'], customSkills)
+            #@TODO GET SKILLS
+            build = {'items':cleanItems, 'name': buildName, 
+            'runes': runes, 'spells':spells, 'skills':skills}
             builds.append(build)
         info = {'banRate': banRate, 'lane':lane, 'pickRate':pickRate, 
         'winRate':winRate, 'builds':builds}
         roles.append(info)
-    champDict = {'id':key, 'name':name, 'roles': roles}
+    champDict = {'id':key, 'name':name, 'roles': roles, 'imgPath':champImgPath}
             #https://api.mobalytics.gg/lol/champions/v1/meta?name=kogmaw
             #https://app.mobalytics.gg/lol/champions/kogmaw/build
     return champDict
@@ -115,6 +145,7 @@ def cleanStats(body, key):
 def getMobalytics():
     buildList = []
     stats = []
+    idx = 0
     for key, value in champList.items():
         url = f'https://api.mobalytics.gg/lol/champions/v1/meta?name={value}'
         resp = requests.get(url)
@@ -123,7 +154,24 @@ def getMobalytics():
             body = resp.json()
             builds = cleanStats(body, key)
             buildList.append(builds)
-            stats.append(champList[key])
+            champName = champList[str(key)]
+            champImgPath = '/images/champion/' + champName + '.jpg'
+            banRate = 0.0
+            pickRate = 0.0
+            winRate = 0.0
+            lanes = []
+            for role in builds['roles']:
+                banRate += float(role['banRate'][:-1])
+                pickRate += float(role["pickRate"][:-1])
+                winRate += float(role["winRate"][:-1])
+                lanes.append(role['lane'])
+            banRate = round(banRate/len(builds['roles']),1)
+            pickRate = round(pickRate/len(builds['roles']),1)
+            winRate = round(winRate/len(builds['roles']),1)
+            stat = {'id':key, 'idx':idx, 'name':champName, 'banRate':banRate, 'lanes': lanes,
+            'pickRate':pickRate, 'winRate':winRate, 'imgPath':champImgPath}
+            stats.append(stat)
+            idx += 1
             #print(body)
         else:
             print(resp)

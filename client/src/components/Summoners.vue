@@ -104,8 +104,8 @@ button.sort
       </li>
       <li class="nav-item ml-auto">
         <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='getSummoners()'>
-      Refresh
-    </button>
+          Refresh
+        </button>
       </li>
     </ul>
     <div class="tab-content py-3 flex-container" id="myTabContent">
