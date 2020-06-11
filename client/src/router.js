@@ -14,7 +14,6 @@ export default new Router({
     {
       path: '/',
       component: Home,
-      redirect: '/summoners',
       children: [
         { path: 'summoners', component: Summoners, name: 'Home' },
         { path: 'builds', component: Builds },

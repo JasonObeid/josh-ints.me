@@ -28,6 +28,8 @@ padding-top:0%; }
   grid-template-areas: "bld-Header" "bld-Role" "bld-RuneHeader" "bld-Runes"
   "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Early" "bld-Core" "bld-Late" "Situational";
   align-items:center;
+  align-self:center;
+  vertical-align: middle;
 }
 
 .bld-Header { grid-area: bld-Header; }
@@ -85,6 +87,10 @@ td
   padding: 5px;
   align-items: left;
   text-align: left;
+}
+.runeName {
+  text-align: left;
+  vertical-align: middle;
 }
 </style>
 <template>
@@ -193,33 +199,75 @@ td
           <b-row>
             <b-col>
               <b-row>
-                <b-col><img  :src='build.runes.primaryBranch.keystone.imgPath' width='64px'></b-col>
+                <b-col>
+                  <img  :src='build.runes.primaryBranch.keystone.imgPath' width='64px'>
+                </b-col>
+                <b-col class="runeName">
+                  <a>{{ build.runes.primaryBranch.keystone.name }}</a>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.primaryBranch.perk1.imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.primaryBranch.perk1.imgPath'>
+                </b-col>
+                <b-col class="runeName">
+                  <a>{{ build.runes.primaryBranch.perk1.name }}</a>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.primaryBranch.perk2.imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.primaryBranch.perk2.imgPath'>
+                </b-col>
+                <b-col class="runeName">
+                  <a>{{ build.runes.primaryBranch.perk2.name }}</a>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.primaryBranch.perk3.imgPath'></b-col>
+                <b-col>
+                  <img :src='build.runes.primaryBranch.perk3.imgPath'>
+                </b-col>
+                <b-col class="runeName">
+                  <a>{{ build.runes.primaryBranch.perk3.name }}</a>
+                </b-col>
               </b-row>
             </b-col>
             <b-col>
               <b-row>
-                <b-col><img  :src='build.runes.secondaryBranch.perk0.imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.secondaryBranch.perk0.imgPath'>
+                </b-col>
+                <b-col class="runeName">
+                  <a>{{ build.runes.secondaryBranch.perk0.name }}</a>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.secondaryBranch.perk1.imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.secondaryBranch.perk1.imgPath'
+                ></b-col>
+                <b-col class="runeName">
+                  <a>{{ build.runes.secondaryBranch.perk1.name }}</a>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.auxillary[0].imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.auxillary[0].imgPath'>
+                </b-col>
+                <b-col>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.auxillary[1].imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.auxillary[1].imgPath'>
+                </b-col>
+                <b-col>
+                </b-col>
               </b-row>
               <b-row>
-                <b-col><img  :src='build.runes.auxillary[2].imgPath'></b-col>
+                <b-col>
+                  <img  :src='build.runes.auxillary[2].imgPath'>
+                </b-col>
+                <b-col>
+                </b-col>
               </b-row>
             </b-col>
           </b-row>
@@ -253,24 +301,48 @@ td
         <div class="bld-ItemHeader"><h4>Items</h4></div>
         <div class="items">
           <div class="Early">
-            <a>Early</a>
-            <img v-for="(item, index) in build.items.general.start"
-            :key="index" :src='item.imgPath' class='items'>
+            <b-row>
+                <b-col cols='2'>
+                  <a>Early</a>
+                </b-col>
+                <b-col>
+                  <img v-for="(item, index) in build.items.general.start"
+                  :key="index" :src='item.imgPath' class='items'>
+                </b-col>
+            </b-row>
           </div>
           <div class="Core">
-            <a>Core</a>
-            <img v-for="(item, index) in build.items.general.core"
-            :key="index" :src='item.imgPath' class='items'>
+            <b-row>
+              <b-col cols='2'>
+                  <a>Core</a>
+              </b-col>
+              <b-col>
+                <img v-for="(item, index) in build.items.general.core"
+                :key="index" :src='item.imgPath' class='items'>
+              </b-col>
+            </b-row>
           </div>
           <div class="Late">
-            <a>Late</a>
-            <img v-for="(item, index) in build.items.general.full"
-            :key="index" :src='item.imgPath' class='items'>
+            <b-row>
+              <b-col cols='2'>
+                  <a>Late</a>
+              </b-col>
+              <b-col>
+                <img v-for="(item, index) in build.items.general.full"
+                :key="index" :src='item.imgPath' class='items'>
+              </b-col>
+            </b-row>
           </div>
           <div class="Situational">
-            <a>Situational</a>
-            <img v-for="(item, index) in build.items.situational"
-            :key="index" :src='item.imgPath' class='items'>
+            <b-row>
+              <b-col cols='2'>
+                  <a>Situational</a>
+              </b-col>
+              <b-col>
+                <img v-for="(item, index) in build.items.situational"
+                :key="index" :src='item.imgPath' class='items'>
+              </b-col>
+            </b-row>
           </div>
         </div>
       </div>
@@ -282,8 +354,8 @@ td
 import axios from 'axios';
 
 
-// const localhost = '/api';
-const localhost = 'http://localhost:5000';
+const localhost = '/api';
+// const localhost = 'http://localhost:5000';
 
 export default {
   data() {
@@ -397,7 +469,7 @@ export default {
           this.allChampions = res.data.stats;
           this.builds = res.data.builds;
           // eslint-disable-next-line prefer-destructuring
-          this.selected = this.builds[1];
+          this.selected = this.builds[31];
           // eslint-disable-next-line prefer-destructuring
           this.selectedRole = this.selected.roles[0];
           // eslint-disable-next-line prefer-destructuring
