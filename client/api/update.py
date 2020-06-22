@@ -165,9 +165,9 @@ def getMobalytics():
             idx += 1
         else:
             print(resp)
-    with open('./builds.json', 'w') as json_file1:
+    with open('./dataDragon/builds.json', 'w') as json_file1:
         json.dump(buildList, json_file1, indent=3)
-    with open('./stats.json', 'w') as json_file2:
+    with open('./dataDragon/stats.json', 'w') as json_file2:
         json.dump(stats, json_file2, indent=3)
 
 getMobalytics()

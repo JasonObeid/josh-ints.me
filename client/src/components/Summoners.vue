@@ -329,8 +329,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-// const localhost = '/api';
-const localhost = 'http://localhost:5000';
+const localhost = '/api';
+// const localhost = 'http://localhost:5000';
 
 export default {
   data() {
