@@ -144,10 +144,16 @@ td
           </template>
           <!-- Optional default data cell scoped slot -->
           <template v-slot:cell(lanes)="filtered">
-            <a v-for="lane in filtered.item.lanes" :key='lane'>
-              <img :src="'/images/lanes/'+lane+'.png'" class='champIcon'
+            <b-row>
+              <b-col>
+                 <b-button v-for="lane in filtered.item.lanes" :key='lane'
+                 @click="changeSelectedWithRole(filtered.item.idx, lane)"
+                  class="btn btn-light btn-sm">
+                    <img :src="'/images/lanes/'+lane+'.png'" class='champIcon'
                     :alt="filtered.item.name" width='24px'>
-            </a>
+                </b-button>
+              </b-col>
+            </b-row>
           </template>
       </b-table>
     </div>
@@ -278,7 +284,8 @@ td
             <b-col>
               {{ build.skills[0].name }}
               <br>
-              <img :src="'images/spell/'+ build.skills[0].imgPath">
+              <a>{{ build.skills[0].button }}</a>
+              <img :src="build.skills[0].imgPath">
             </b-col>
             <b-col>
               <b-icon icon='arrow-right'></b-icon>
@@ -286,7 +293,8 @@ td
             <b-col>
               {{ build.skills[1].name }}
               <br>
-              <img :src="'images/spell/'+ build.skills[1].imgPath">
+              <a>{{ build.skills[1].button }}</a>
+              <img :src="build.skills[1].imgPath">
             </b-col>
             <b-col>
               <b-icon icon='arrow-right'></b-icon>
@@ -294,7 +302,8 @@ td
             <b-col>
               {{ build.skills[2].name }}
               <br>
-              <img :src="'images/spell/'+ build.skills[2].imgPath">
+              <a>{{ build.skills[2].button }}</a>
+              <img :src="build.skills[2].imgPath">
             </b-col>
           </b-row>
         </div>
@@ -354,8 +363,8 @@ td
 import axios from 'axios';
 
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000';
 
 export default {
   data() {
@@ -431,7 +440,6 @@ export default {
   },
   methods: {
     chooseBuild(role) {
-      console.log('here');
       // eslint-disable-next-line prefer-destructuring
       this.build = role.builds[0];
     },
@@ -458,8 +466,23 @@ export default {
       this.selectedRole = this.selected.roles[0];
       // eslint-disable-next-line prefer-destructuring
       this.build = this.selected.roles[0].builds[0];
-      console.log(JSON.stringify(this.build));
       // console.log(JSON.stringify(this.selected));
+    },
+    changeSelectedWithRole(index, lane) {
+      // eslint-disable-next-line radix
+      const idx = parseInt(index);
+      for (let i = 0; i < this.builds[idx].roles.length; i += 1) {
+        const role = this.builds[idx].roles[i];
+        if (role.lane === lane) {
+          this.selected = this.builds[idx];
+          this.activeItem = role.lane;
+          // eslint-disable-next-line prefer-destructuring
+          this.selectedRole = role;
+          // eslint-disable-next-line prefer-destructuring
+          this.build = role.builds[0];
+          // console.log(JSON.stringify(this.selected));
+        }
+      }
     },
     getBuilds() {
       const path = `${localhost}/builds`;

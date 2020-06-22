@@ -366,13 +366,13 @@ SUMMONERS = [
     {
         'id': '',
         'summId': '',
-        'name': 'Sodhi',
+        'name': 'hal0r0cks',
         'history': [],
         'startIndex': 0,
         'endIndex': 10,
         'matchInfo': [],
         'rank': ''
-    }
+    },
 ]
 
 with open('api/dataDragon/champIds.json') as file1:

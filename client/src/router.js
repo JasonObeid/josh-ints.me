@@ -14,9 +14,10 @@ export default new Router({
     {
       path: '/',
       component: Home,
+      redirect: '/builds',
       children: [
-        { path: 'summoners', component: Summoners, name: 'Home' },
-        { path: 'builds', component: Builds },
+        { path: 'summoners', component: Summoners },
+        { path: 'builds', component: Builds, name: 'Home' },
       ],
     },
   ],

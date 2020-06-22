@@ -5,26 +5,23 @@ import csv
 import json
 from statistics import mean, mode
 
-with open('../dataDragon/champIds.json') as file1:
+with open('./dataDragon/champIds.json') as file1:
     champList = json.load(file1)
-with open('../dataDragon/branchIds.json') as file3:
+with open('./dataDragon/branchIds.json') as file3:
     branchList = json.load(file3)
-with open('../dataDragon/runeIds.json') as file4:
+with open('./dataDragon/runeIds.json') as file4:
     runeList = json.load(file4)
-with open('../dataDragon/itemIds.json') as file5:
+with open('./dataDragon/itemIds.json') as file5:
     itemList = json.load(file5)
-with open('../dataDragon/shardIds.json') as file6:
+with open('./dataDragon/shardIds.json') as file6:
     shardList = json.load(file6)
-with open('../dataDragon/summonerIds.json') as file7:
+with open('./dataDragon/summonerIds.json') as file7:
     spellList = json.load(file7)
 
 def getSpells(spellIds):
     spells = []
-    print(spellIds)
     spell1 = spellList[str(spellIds[0])]
     spell2 = spellList[str(spellIds[1])]
-    print(spell1)
-    print(spell2)
     spells.append(spell1)
     spells.append(spell2)
     return spells
@@ -59,7 +56,6 @@ def getRunes(runeIds, style, substyle):
 def getItemsTrinket(itemIds, trinketId):
     items = {}
     itemsList = []
-    print(itemIds)
     if trinketId != 0:
         trinketName = itemList[str(trinketId)]
     else:
@@ -84,15 +80,12 @@ def getItems(itemIds):
 
 def getSkills(order, customSkills):
     skills = []
-    print(order)
     skillMap = {'Q':1, 'W':2, 'E':3}
     for skill in order:
-        print(skill)
         skillIndex = skillMap[skill]
-        print(skillIndex)
         name = customSkills[skillIndex]['name']
         imgPath = 'images/spell/' + customSkills[skillIndex]['image'] + '.jpg'
-        skills.append({'name':name, 'imgPath':imgPath})
+        skills.append({'name':name, 'imgPath':imgPath, 'button':skill})
     return skills
 
 def cleanStats(body, key):
@@ -128,9 +121,7 @@ def cleanStats(body, key):
             buildName = build['name']
             runes = getRunes(build['perks']['ids'], build['perks']['style'], build['perks']['subStyle'])
             spells = getSpells(build['spells'])
-            print(build['skills'])
             skills = getSkills(build['skills']['prioritisation'], customSkills)
-            #@TODO GET SKILLS
             build = {'items':cleanItems, 'name': buildName, 
             'runes': runes, 'spells':spells, 'skills':skills}
             builds.append(build)
@@ -172,7 +163,6 @@ def getMobalytics():
             'pickRate':pickRate, 'winRate':winRate, 'imgPath':champImgPath}
             stats.append(stat)
             idx += 1
-            #print(body)
         else:
             print(resp)
     with open('./builds.json', 'w') as json_file1:
