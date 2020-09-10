@@ -24,9 +24,9 @@ cache = Cache(app)
 # enable CORS.
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-with open('api/builds.json') as file7:
+with open('./api/dataDragon/builds.json') as file7:
     builds = json.load(file7)
-with open('api/stats.json') as file8:
+with open('./api/dataDragon/stats.json') as file8:
     stats = json.load(file8)
 
 response_object = {'status': 'success', 'message':''}
