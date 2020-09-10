@@ -24,15 +24,15 @@ cache = Cache(app)
 # enable CORS.
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-with open('./api/builds.json') as file7:
+with open('./builds.json') as file7:
     builds = json.load(file7)
-with open('./api/stats.json') as file8:
+with open('./stats.json') as file8:
     stats = json.load(file8)
 
 response_object = {'status': 'success', 'message':''}
 @app.route('/api/builds', methods=['GET'])
 def get_builds():
-    response_object['message'] = 'Summoner added!'
+    response_object['message'] = 'Got the builds/stats!'
     response_object['builds'] = builds
     response_object['stats'] = stats
     # response_object['champs'] = champList
