@@ -27,19 +27,16 @@
 .bld-grid-container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 0.25fr 0.5fr 0.25fr 1fr 0.25fr 0.25fr repeat(5, 0.25fr);
+  grid-template-rows: 0.5fr 0.25fr 1fr 0.25fr 0.25fr repeat(5, 0.25fr);
   gap: 10px 1px;
   grid-template-areas:
-    "bld-Header" "bld-Role" "bld-RuneHeader" "bld-Runes"
+    "bld-Role" "bld-RuneHeader" "bld-Runes"
     "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Early" "bld-Core" "bld-Late" "Situational";
   align-items: center;
   align-self: center;
   vertical-align: middle;
 }
 
-.bld-Header {
-  grid-area: bld-Header;
-}
 
 .bld-Role {
   grid-area: bld-Role;
@@ -140,7 +137,9 @@ td {
         </b-col>
       </b-row>
       <br />
-      <b-form-input v-model="searchText" type="text" placeholder="Filter by Name"></b-form-input>
+      <b-form-input v-model="searchText" type="search"
+      placeholder="Filter by Name" autofocus="true">
+      </b-form-input>
       <br />
       <b-table
         small
@@ -199,9 +198,6 @@ td {
     </div>
     <div class="build">
       <div class="bld-grid-container">
-        <div class="bld-Header">
-          <h1>{{ selected.name }}</h1>
-        </div>
         <div class="bld-Role">
           <b-row>
             <b-col>
