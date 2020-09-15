@@ -387,7 +387,10 @@ with open('api/dataDragon/itemIds.json') as file5:
   itemList = json.load(file5)
 with open('api/dataDragon/summonerIds.json') as file6:
   spellList = json.load(file6)
-
+with open('./api/dataDragon/builds.json') as file7:
+    builds = json.load(file7)
+with open('./api/dataDragon/stats.json') as file8:
+    stats = json.load(file8)
 
 def useAPI():
     for summoner in SUMMONERS:
@@ -456,3 +459,16 @@ def get_more_matches_summoner(summoner_id, post_data):
     matchInfo = getMatch(history, accId)
     update_summoner(summoner_id, history, startIndex, endIndex, matchInfo)
     return 'Summoner updated!'
+
+
+response_object = {'status': 'success', 'message':''}
+@app.route('/api/builds', methods=['GET'])
+def get_builds():
+    response_object['message'] = 'Got the builds/stats!'
+    response_object['builds'] = builds
+    response_object['stats'] = stats
+    # response_object['champs'] = champList
+    return jsonify(response_object)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
