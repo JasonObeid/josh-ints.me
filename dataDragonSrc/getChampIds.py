@@ -10,7 +10,7 @@ def mapIds():
             champKey = x['data'][champ]['key']
             champMap[champKey] = champ
     #print(champMap)
-    with open('../client/api/dataDragon/champIds.json', 'w') as json_file:
+    with open('../src/api/dataDragon/champIds.json', 'w') as json_file:
         json.dump(champMap, json_file)
 
 

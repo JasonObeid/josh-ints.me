@@ -29,11 +29,11 @@ def mapIds():
                     runeDict[runeId] = {'name': runeName, 'imgPath': imgPath}
             #print(runeDict)
         #print(branchDict)
-    with open('../client/api/dataDragon/runeIds.json', 'w') as json_file1:
+    with open('../src/api/dataDragon/runeIds.json', 'w') as json_file1:
         json.dump(runeDict, json_file1)
-    with open('../client/api/dataDragon/branchIds.json', 'w') as json_file2:
+    with open('../src/api/dataDragon/branchIds.json', 'w') as json_file2:
         json.dump(branchDict, json_file2)
-    with open('../client/api/dataDragon/shardIds.json', 'w') as json_file3:
+    with open('../src/api/dataDragon/shardIds.json', 'w') as json_file3:
         json.dump(ShardDict, json_file3)
         
 mapIds()

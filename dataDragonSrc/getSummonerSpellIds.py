@@ -11,7 +11,7 @@ def mapIds():
             imgPath = f"images/spells/{img}"
             summonerDict[idx] = {'name':name,'imgPath':imgPath}
         print(summonerDict)
-    with open('../client/api/dataDragon/summonerIds.json', 'w') as json_file:
+    with open('../src/api/dataDragon/summonerIds.json', 'w') as json_file:
         json.dump(summonerDict, json_file)
 
 
