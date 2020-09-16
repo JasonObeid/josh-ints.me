@@ -41,7 +41,7 @@ SUMMONERS = [
     {
         'id': '',
         'summId': '',
-        'name': 'hal0r0cks',
+        'name': 'sodhi',
         'history': [],
         'startIndex': 0,
         'endIndex': 10,
@@ -79,16 +79,12 @@ def useAPI():
         summoner['matchInfo'] = getMatch(history, accountId)
         summoner['rank'] = getRank(summonerId)
 
-try:
-    useAPI()
-except Exception as ex:
-    print("Exception: " + str(ex))
 
 #'/<path:path>') means path plus passes path as parameter
 #you can have multiple routes for one method
-response_object = {'status': 'success', 'message':''}
 @app.route('/api/summoners', methods=['GET', 'POST'])
 def all_summoners():
+    response_object = {'status': 'success', 'message':''}
     if request.method == 'POST':
         post_data = request.get_json()
         accId, summId = getIds(post_data.get('name'))
@@ -120,7 +116,7 @@ def all_summoners():
 
 @app.route('/api/summoners/<summoner_id>', methods=['GET', 'PUT', 'DELETE'])
 def single_summoner(summoner_id):
-    response_object['status'] = 'success'
+    response_object = {'status': 'success', 'message':''}
     if request.method == 'GET':
         response_object['message'] = f'hello there, {summoner_id}'
     if request.method == 'PUT':
@@ -135,19 +131,18 @@ def single_summoner(summoner_id):
     return jsonify(response_object)
 
 
-response_object = {'status': 'success', 'message':''}
 @app.route('/api/builds', methods=['GET'])
 def get_builds():
+    response_object = {'status': 'success'}
     response_object['message'] = 'Got the builds/stats!'
     response_object['builds'] = builds
     response_object['stats'] = stats
-    # response_object['champs'] = champList
     return jsonify(response_object)
 
 
-response_object = {'status': 'success', 'message':''}
 @app.route('/api/update', methods=['GET'])
 def refresh_builds():
+    response_object = {'status': 'success'}
     buildList, stats = update.getMobalytics()
     response_object['message'] = 'Builds refreshed!'
     response_object['builds'] = buildList
@@ -475,4 +470,8 @@ def get_more_matches_summoner(summoner_id, post_data):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    try:
+        useAPI()
+        app.run(host='0.0.0.0')
+    except Exception as ex:
+        print("Exception: " + str(ex))
