@@ -79,11 +79,7 @@ button.sort
 <template>
   <div class="flex-container">
     <div class="head">
-      <a>
-        <alert :message=message v-if="showMessage">
-          <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
-        </alert>
-      </a>
+      <a><alert :message=message v-if="showMessage"></alert></a>
     </div>
      <ul class="nav nav-tabs" width='90%'>
       <li class="nav-item" v-for="(summoner, index) in summoners"
@@ -108,6 +104,7 @@ button.sort
       <li class="nav-item ml-auto">
         <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='getSummoners()'>
           Refresh
+          <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
         </button>
       </li>
     </ul>
