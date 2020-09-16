@@ -140,7 +140,11 @@ td {
       <b-form-input v-model="searchText" type="search"
       placeholder="Filter by Name" autofocus="true">
       </b-form-input>
-      <br />
+      <br/>
+      <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='updateBuilds()'>
+          Update
+      <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
+      </button>
       <b-table
         small
         :fields="fields"
@@ -467,6 +471,7 @@ export default {
       allChampions: [],
       builds: [],
       activeItem: '',
+      showUpdate: false,
     };
   },
   computed: {
@@ -563,13 +568,15 @@ export default {
         }
       }
     },
-    refreshBuilds() {
+    updateBuilds() {
       const path = `${localhost}/update`;
       console.log('loading...');
+      this.showUpdate = true;
       axios
         .get(path)
         .then((res) => {
           console.log(res);
+          this.showUpdate = false;
           this.allChampions = res.data.stats;
           this.builds = res.data.builds;
           // eslint-disable-next-line prefer-destructuring
@@ -583,7 +590,6 @@ export default {
           // eslint-disable-next-line
           console.error(error);
         });
-      this.getBuilds();
     },
     getBuilds() {
       const path = `${localhost}/builds`;

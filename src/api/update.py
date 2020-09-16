@@ -4,43 +4,18 @@ from collections import Counter
 import csv
 import json
 from statistics import mean, mode
-import json
-import requests
-from flask import Flask, jsonify, request, send_from_directory
-from flask_caching import Cache
-from flask_cors import CORS
 
-config = {
-    "DEBUG": True,          # some Flask specific configs
-    "CACHE_TYPE": "simple",  # Flask-Caching related configs
-    "CACHE_DEFAULT_TIMEOUT": 300
-}
-
-# configuration
-DEBUG = True
-
-# instantiate the app
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-# enable caching
-app.config.from_mapping(config)
-cache = Cache(app)
-
-# enable CORS.
-CORS(app, resources={r'/*': {'origins': '*'}})
-
-with open('./api/dataDragon/champIds.json') as file1:
+with open('dataDragon/champIds.json') as file1:
     champList = json.load(file1)
-with open('./api/dataDragon/branchIds.json') as file3:
+with open('dataDragon/branchIds.json') as file3:
     branchList = json.load(file3)
-with open('./api/dataDragon/runeIds.json') as file4:
+with open('dataDragon/runeIds.json') as file4:
     runeList = json.load(file4)
-with open('./api/dataDragon/itemIds.json') as file5:
+with open('dataDragon/itemIds.json') as file5:
     itemList = json.load(file5)
-with open('./api/dataDragon/shardIds.json') as file6:
+with open('dataDragon/shardIds.json') as file6:
     shardList = json.load(file6)
-with open('./api/dataDragon/summonerIds.json') as file7:
+with open('dataDragon/summonerIds.json') as file7:
     spellList = json.load(file7)
 
 def getSpells(spellIds):
@@ -190,22 +165,8 @@ def getMobalytics():
             idx += 1
         else:
             print(resp)
-    with open('./api/dataDragon/builds.json', 'w') as json_file1:
+    with open('dataDragon/builds.json', 'w') as json_file1:
         json.dump(buildList, json_file1, separators=(',', ':'))
-    with open('./api/dataDragon/stats.json', 'w') as json_file2:
+    with open('dataDragon/stats.json', 'w') as json_file2:
         json.dump(stats, json_file2, separators=(',', ':'))
     return buildList, stats
-
-
-response_object = {'status': 'success', 'message':''}
-@app.route('/api/update', methods=['GET'])
-def refresh_builds():
-    buildList, stats = getMobalytics()
-    response_object['message'] = 'Builds refreshed!'
-    response_object['builds'] = buildList
-    response_object['stats'] = stats
-    return jsonify(response_object)
-
-
-if __name__ == '__main__':
-    buildList, stats = getMobalytics()

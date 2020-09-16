@@ -14,6 +14,8 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
 
+import update as update
+
 config = {
     "DEBUG": True,          # some Flask specific configs
     "CACHE_TYPE": "simple",  # Flask-Caching related configs
@@ -34,6 +36,53 @@ cache = Cache(app)
 # enable CORS.
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+#starting summoners
+SUMMONERS = [
+    {
+        'id': '',
+        'summId': '',
+        'name': 'hal0r0cks',
+        'history': [],
+        'startIndex': 0,
+        'endIndex': 10,
+        'matchInfo': [],
+        'rank': ''
+    },
+]
+
+api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
+
+with open('dataDragon/champIds.json') as file1:
+    champList = json.load(file1)
+with open('dataDragon/queueIds.json') as file2:
+    queueList = json.load(file2)
+with open('dataDragon/branchIds.json') as file3:
+    branchList = json.load(file3)
+with open('dataDragon/runeIds.json') as file4:
+    runeList = json.load(file4)
+with open('dataDragon/itemIds.json') as file5:
+    itemList = json.load(file5)
+with open('dataDragon/summonerIds.json') as file6:
+    spellList = json.load(file6)
+with open('dataDragon/builds.json') as file7:
+    builds = json.load(file7)
+with open('dataDragon/stats.json') as file8:
+    stats = json.load(file8)
+
+def useAPI():
+    for summoner in SUMMONERS:
+        accountId, summonerId = getIds(summoner['name'])
+        history = getHistory(accountId)
+        summoner['id'] = accountId
+        summoner['summId'] = summonerId
+        summoner['history'] = history
+        summoner['matchInfo'] = getMatch(history, accountId)
+        summoner['rank'] = getRank(summonerId)
+
+try:
+    useAPI()
+except Exception as ex:
+    print("Exception: " + str(ex))
 
 #'/<path:path>') means path plus passes path as parameter
 #you can have multiple routes for one method
@@ -86,8 +135,26 @@ def single_summoner(summoner_id):
     return jsonify(response_object)
 
 
-api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
-#fix date sort, check march dates
+response_object = {'status': 'success', 'message':''}
+@app.route('/api/builds', methods=['GET'])
+def get_builds():
+    response_object['message'] = 'Got the builds/stats!'
+    response_object['builds'] = builds
+    response_object['stats'] = stats
+    # response_object['champs'] = champList
+    return jsonify(response_object)
+
+
+response_object = {'status': 'success', 'message':''}
+@app.route('/api/update', methods=['GET'])
+def refresh_builds():
+    buildList, stats = update.getMobalytics()
+    response_object['message'] = 'Builds refreshed!'
+    response_object['builds'] = buildList
+    response_object['stats'] = stats
+    return jsonify(response_object)
+
+
 def getChampInfo(champId):
     champName = champList[str(champId)]
     champImgPath = '/images/champion/' + champName + '.jpg'
@@ -361,60 +428,6 @@ def getRank(summId):
     return 'Summoner not found', 'error'
 
 
-#starting summoners
-SUMMONERS = [
-    {
-        'id': '',
-        'summId': '',
-        'name': 'hal0r0cks',
-        'history': [],
-        'startIndex': 0,
-        'endIndex': 10,
-        'matchInfo': [],
-        'rank': ''
-    },
-]
-
-with open('dataDragon/champIds.json') as file1:
-  champList = json.load(file1)
-with open('dataDragon/queueIds.json') as file2:
-  queueList = json.load(file2)
-with open('dataDragon/branchIds.json') as file3:
-  branchList = json.load(file3)
-with open('dataDragon/runeIds.json') as file4:
-  runeList = json.load(file4)
-with open('dataDragon/itemIds.json') as file5:
-  itemList = json.load(file5)
-with open('dataDragon/summonerIds.json') as file6:
-  spellList = json.load(file6)
-with open('dataDragon/builds.json') as file7:
-    builds = json.load(file7)
-with open('dataDragon/stats.json') as file8:
-    stats = json.load(file8)
-
-def useAPI():
-    for summoner in SUMMONERS:
-        accountId, summonerId = getIds(summoner['name'])
-        history = getHistory(accountId)
-        summoner['id'] = accountId
-        summoner['summId'] = summonerId
-        summoner['history'] = history
-        summoner['matchInfo'] = getMatch(history, accountId)
-        summoner['rank'] = getRank(summonerId)
-
-try:
-    useAPI()
-except Exception as ex:
-    print("Exception: " + str(ex))
-
-
-# configuration
-DEBUG = True
-
-# enable CORS.
-CORS(app, resources={r'/*': {'origins': '*'}})
-
-
 def remove_summoner(summoner_id):
     for summoner in SUMMONERS:
         if summoner['id'] == summoner_id:
@@ -460,15 +473,6 @@ def get_more_matches_summoner(summoner_id, post_data):
     update_summoner(summoner_id, history, startIndex, endIndex, matchInfo)
     return 'Summoner updated!'
 
-
-response_object = {'status': 'success', 'message':''}
-@app.route('/api/builds', methods=['GET'])
-def get_builds():
-    response_object['message'] = 'Got the builds/stats!'
-    response_object['builds'] = builds
-    response_object['stats'] = stats
-    # response_object['champs'] = champList
-    return jsonify(response_object)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
