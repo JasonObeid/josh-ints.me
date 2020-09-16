@@ -69,33 +69,33 @@ with open('dataDragon/builds.json') as file7:
 with open('dataDragon/stats.json') as file8:
     stats = json.load(file8)
 
-def useAPI():
-    for summoner in SUMMONERS:
-        accountId, summonerId = getIds(summoner['name'])
-        history = getHistory(accountId)
-        summoner['id'] = accountId
-        summoner['summId'] = summonerId
-        summoner['history'] = history
-        summoner['matchInfo'] = getMatch(history, accountId)
-        summoner['rank'] = getRank(summonerId)
+for summoner in SUMMONERS:
+    accountId, summonerId = getIds(summoner['name'])
+    history = getHistory(accountId)
+    summoner['id'] = accountId
+    summoner['summId'] = summonerId
+    summoner['history'] = history
+    summoner['matchInfo'] = getMatch(history, accountId)
+    summoner['rank'] = getRank(summonerId)
 
+summonersResponse = {'status': 'success', 'message':''}
+buildsResponse = {'status': 'success', 'message':''}
 
 #'/<path:path>') means path plus passes path as parameter
 #you can have multiple routes for one method
 @app.route('/api/summoners', methods=['GET', 'POST'])
 def all_summoners():
-    response_object = {'status': 'success', 'message':''}
     if request.method == 'POST':
         post_data = request.get_json()
         accId, summId = getIds(post_data.get('name'))
         if(accId == 'Summoner not found'):
-            response_object['status'] = 'failure'
-            response_object['message'] = accId
+            summonersResponse['status'] = 'failure'
+            summonersResponse['message'] = accId
         else:
             history = getHistory(accId)
             if(history == 'Match history not found'):
-                response_object['status'] = 'failure'
-                response_object['message'] = history
+                summonersResponse['status'] = 'failure'
+                summonersResponse['message'] = history
             else:
                 SUMMONERS.append({
                     'id': accId,
@@ -107,47 +107,44 @@ def all_summoners():
                     'endIndex': 10,
                     'rank': getRank(summId)
                 })
-                response_object['message'] = 'Summoner added!'
+                summonersResponse['message'] = 'Summoner added!'
     else:
-        #response_object['message'] = 'Summoner added!'
-        response_object['summoners'] = SUMMONERS
-    return jsonify(response_object)
+        #summonersResponse['message'] = 'Summoner added!'
+        summonersResponse['summoners'] = SUMMONERS
+    return jsonify(summonersResponse)
 
 
 @app.route('/api/summoners/<summoner_id>', methods=['GET', 'PUT', 'DELETE'])
 def single_summoner(summoner_id):
-    response_object = {'status': 'success', 'message':''}
     if request.method == 'GET':
-        response_object['message'] = f'hello there, {summoner_id}'
+        summonersResponse['message'] = f'hello there, {summoner_id}'
     if request.method == 'PUT':
         post_data = request.get_json()
         if(len(post_data) > 1):
-            response_object['message'] = get_more_matches_summoner(summoner_id, post_data)
+            summonersResponse['message'] = get_more_matches_summoner(summoner_id, post_data)
         else:
-            response_object['message'] = replace_summoner(summoner_id, post_data)
+            summonersResponse['message'] = replace_summoner(summoner_id, post_data)
     if request.method == 'DELETE':
         remove_summoner(summoner_id)
-        response_object['message'] = 'Summoner removed!'
-    return jsonify(response_object)
+        summonersResponse['message'] = 'Summoner removed!'
+    return jsonify(summonersResponse)
 
 
 @app.route('/api/builds', methods=['GET'])
 def get_builds():
-    response_object = {'status': 'success'}
-    response_object['message'] = 'Got the builds/stats!'
-    response_object['builds'] = builds
-    response_object['stats'] = stats
-    return jsonify(response_object)
+    buildsResponse['message'] = 'Got the builds/stats!'
+    buildsResponse['builds'] = builds
+    buildsResponse['stats'] = stats
+    return jsonify(buildsResponse)
 
 
 @app.route('/api/update', methods=['GET'])
 def refresh_builds():
-    response_object = {'status': 'success'}
     buildList, stats = update.getMobalytics()
-    response_object['message'] = 'Builds refreshed!'
-    response_object['builds'] = buildList
-    response_object['stats'] = stats
-    return jsonify(response_object)
+    buildsResponse['message'] = 'Builds refreshed!'
+    buildsResponse['builds'] = buildList
+    buildsResponse['stats'] = stats
+    return jsonify(buildsResponse)
 
 
 def getChampInfo(champId):
@@ -471,7 +468,6 @@ def get_more_matches_summoner(summoner_id, post_data):
 
 if __name__ == "__main__":
     try:
-        useAPI()
         app.run(host='0.0.0.0')
     except Exception as ex:
         print("Exception: " + str(ex))
