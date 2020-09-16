@@ -18,7 +18,7 @@ with open('dataDragon/shardIds.json') as file6:
 with open('dataDragon/summonerIds.json') as file7:
     spellList = json.load(file7)
 
-def getSpells(spellIds):
+def getSpells2(spellIds):
     spells = []
     spell1 = spellList[str(spellIds[0])]
     spell2 = spellList[str(spellIds[1])]
@@ -26,7 +26,7 @@ def getSpells(spellIds):
     spells.append(spell2)
     return spells
 
-def getRunes(runeIds, style, substyle):
+def getRunes2(runeIds, style, substyle):
     runes = {}
     primary = branchList[str(style)]
     secondary = branchList[str(substyle)]
@@ -69,7 +69,7 @@ def getItemsTrinket(itemIds, trinketId):
     items['trinket'] = trinketName
     return items
 
-def getItems(itemIds):
+def getItems2(itemIds):
     itemsList = []
     for item in itemIds:
         if(item != 0):
@@ -77,7 +77,7 @@ def getItems(itemIds):
             itemsList.append(name)
     return itemsList
 
-def getSkills(order, customSkills):
+def getSkills2(order, customSkills):
     skills = []
     skillMap = {'Q':1, 'W':2, 'E':3}
     for skill in order:
@@ -111,16 +111,16 @@ def cleanStats(body, key):
             cleanItems = {}
             items = build['items']
             cleanItems['general'] = {
-                'start': getItems(items['general']['start']),
-                'early': getItems(items['general']['early']),
-                'core': getItems(items['general']['core']),
-                'full': getItems(items['general']['full'])
+                'start': getItems2(items['general']['start']),
+                'early': getItems2(items['general']['early']),
+                'core': getItems2(items['general']['core']),
+                'full': getItems2(items['general']['full'])
             }
-            cleanItems['situational'] = getItems(items['situational'][0]['build'])
+            cleanItems['situational'] = getItems2(items['situational'][0]['build'])
             buildName = build['name']
-            runes = getRunes(build['perks']['ids'], build['perks']['style'], build['perks']['subStyle'])
-            spells = getSpells(build['spells'])
-            skills = getSkills(build['skills']['prioritisation'], customSkills)
+            runes = getRunes2(build['perks']['ids'], build['perks']['style'], build['perks']['subStyle'])
+            spells = getSpells2(build['spells'])
+            skills = getSkills2(build['skills']['prioritisation'], customSkills)
             build = {'items':cleanItems, 'name': buildName, 
             'runes': runes, 'spells':spells, 'skills':skills}
             builds.append(build)
