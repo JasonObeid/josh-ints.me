@@ -609,6 +609,18 @@ def single_summoner(summoner_id):
     return jsonify(summonersResponse)
 
 
+@app.route('/api/refresh', methods=['GET'])
+def refresh_summoners():
+    for summoner in SUMMONERS:
+        history = getHistory(summoner['id'])
+        summoner['history'] = history
+        summoner['matchInfo'] = getMatch(history, summoner['id'])
+        summoner['rank'] = getRank(summoner['summId'])
+    summonersResponse['message'] = 'Summoner added!'
+    summonersResponse['summoners'] = SUMMONERS
+    return jsonify(summonersResponse)
+
+
 @app.route('/api/builds', methods=['GET'])
 def get_builds():
     buildsResponse['message'] = 'Got the builds/stats!'
