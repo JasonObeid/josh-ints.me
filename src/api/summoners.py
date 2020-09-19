@@ -611,13 +611,19 @@ def single_summoner(summoner_id):
 
 @app.route('/api/refresh', methods=['GET'])
 def refresh_summoners():
+    newSummoners = []
     for summoner in SUMMONERS:
-        history = getHistory(summoner['id'])
-        summoner['history'] = history
-        summoner['matchInfo'] = getMatch(history, summoner['id'])
-        summoner['rank'] = getRank(summoner['summId'])
-    summonersResponse['message'] = 'Summoner added!'
-    summonersResponse['summoners'] = SUMMONERS
+        accountId = summoner['id']
+        name = summoner['name']
+        summonerId = summoner['summId']
+        history = getHistory(accountId)
+        matchInfo = getMatch(history, accountId)
+        rank = getRank(summonerId)
+        summoner = {'id':accountId, 'name':name, 'summId':summonerId, 
+                    'history':history, 'matchInfo':matchInfo, 'rank':rank}
+        newSummoners.append(summoner)
+    summonersResponse['message'] = 'Summoners refreshed!'
+    summonersResponse['summoners'] = newSummoners
     return jsonify(summonersResponse)
 
 

@@ -539,6 +539,7 @@ export default {
       } else {
         axios.get(path)
           .then((res) => {
+            console.log(res);
             console.log(res.data.summoners);
             console.log(res.data.message);
             this.message = res.data.message;
