@@ -333,6 +333,21 @@ def get_more_matches_summoner(summoner_id, post_data):
     return 'Summoner updated!'
 
 
+def refreshSummoners():
+    newSummoners = []
+    for summoner in SUMMONERS:
+        accountId = summoner['id']
+        name = summoner['name']
+        summonerId = summoner['summId']
+        history = getHistory(accountId)
+        matchInfo = getMatch(history, accountId)
+        rank = getRank(summonerId)
+        summoner = {'id':accountId, 'name':name, 'summId':summonerId, 
+                    'history':history, 'matchInfo':matchInfo, 'rank':rank}
+        newSummoners.append(summoner)
+    return newSummoners
+
+
 #For updating builds/stats
 def getSpells2(spellIds):
     spells = []
@@ -515,6 +530,7 @@ with open('dataDragon/shardIds.json') as file9:
     shardList = json.load(file9)
 
 #starting summoners
+global SUMMONERS 
 SUMMONERS = [
     {
         'id': '',
@@ -611,17 +627,7 @@ def single_summoner(summoner_id):
 
 @app.route('/api/refresh', methods=['GET'])
 def refresh_summoners():
-    newSummoners = []
-    for summoner in SUMMONERS:
-        accountId = summoner['id']
-        name = summoner['name']
-        summonerId = summoner['summId']
-        history = getHistory(accountId)
-        matchInfo = getMatch(history, accountId)
-        rank = getRank(summonerId)
-        summoner = {'id':accountId, 'name':name, 'summId':summonerId, 
-                    'history':history, 'matchInfo':matchInfo, 'rank':rank}
-        newSummoners.append(summoner)
+    newSummoners = refreshSummoners()
     summonersResponse['message'] = 'Summoners refreshed!'
     summonersResponse['summoners'] = newSummoners
     return jsonify(summonersResponse)
