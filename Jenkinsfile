@@ -17,19 +17,10 @@ pipeline {
       }
     }
 
-    stage('Production') {
-      when {
-        branch 'master'
-      }
-      steps {
-        sh 'sudo cp -r src/dist src/prod'
-      }
-    }
-
     stage('Deploy') {
       steps {
         sh '''sudo systemctl restart nginx
-        sudo systemctl restart josh'''
+sudo systemctl restart josh'''
       }
     }
 
