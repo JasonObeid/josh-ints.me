@@ -102,7 +102,8 @@ button.sort
         </a>
       </li>
       <li class="nav-item ml-auto">
-        <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='getSummoners()'>
+        <button type="button" class="btn btn-warning btn-sm"
+        id="refresh" @click='refreshSummoners()'>
           Refresh
           <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
         </button>
@@ -513,6 +514,7 @@ export default {
     },
     refreshSummoners(run = '1') {
       const path = `${localhost}/refresh`;
+      this.showRefresh = true;
       if (run === 'goTab0') {
         axios.get(path)
           .then((res) => {
@@ -539,7 +541,6 @@ export default {
       } else {
         axios.get(path)
           .then((res) => {
-            console.log(res);
             console.log(res.data.summoners);
             console.log(res.data.message);
             this.message = res.data.message;
@@ -550,6 +551,7 @@ export default {
             console.error(error);
           });
       }
+      this.showRefresh = false;
     },
     addSummoner(payload) {
       console.log(payload);

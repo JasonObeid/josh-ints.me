@@ -4,11 +4,11 @@ Description=uWSGI instance to serve myproject
 After=network.target
 
 [Service]
-User=chucktestacle
+User=*name*
 Group=www-data
 WorkingDirectory=/home/*name*/josh-ints.me/src/api
 Environment="PATH=/home/*name*/env/bin"
-ExecStart=/home/chucktestacle/env/bin/uwsgi --socket 127.0.0.1:3031 -w wsgi:app --master --processes 4 --threads 2 --stats 127.0.0.1:9191
+ExecStart=/home/*name*/env/bin/uwsgi --socket 127.0.0.1:3031 -w wsgi:app --master --processes 4 --threads 2 --stats 127.0.0.1:9191
 
 [Install]
 WantedBy=multi-user.target

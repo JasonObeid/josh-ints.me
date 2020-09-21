@@ -27,11 +27,11 @@
 .bld-grid-container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 0.5fr 0.25fr 1fr 0.25fr 0.25fr repeat(5, 0.25fr);
+  grid-template-rows: 0.5fr 0.25fr 1fr repeat(3, 0.25fr) 0.75fr;
   gap: 10px 1px;
   grid-template-areas:
     "bld-Role" "bld-RuneHeader" "bld-Runes"
-    "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Early" "bld-Core" "bld-Late" "Situational";
+    "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Items";
   align-items: center;
   align-self: center;
   vertical-align: middle;
@@ -65,20 +65,8 @@
   text-align: left;
 }
 
-.bld-Early {
-  grid-area: bld-Early;
-}
-
-.bld-Core {
-  grid-area: bld-Core;
-}
-
-.bld-Late {
-  grid-area: bld-Late;
-}
-
-.bld-Situational {
-  grid-area: bld-Situational;
+.bld-Items {
+  grid-area: bld-Items;
 }
 
 .champName {
@@ -137,15 +125,16 @@ td {
         </b-col>
       </b-row>
       <br>
-      <b-row>
-        <b-col cols="10">
+      <b-row style="align-items: center;">
+        <b-col cols="11">
           <b-form-input v-model="searchText" type="search"
-          placeholder="Filter by Name" autofocus="true">
+          placeholder="Filter by Name" autofocus>
           </b-form-input>
         </b-col>
         <b-col>
-          <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='updateBuilds()'>
-          Update
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+          id="refresh" @click='updateBuilds()'>
+            <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
           </button>
         </b-col>
@@ -153,12 +142,13 @@ td {
       <br>
       <b-table
         small
+        sticky-header="715px"
+        responsive="false"
         :fields="fields"
         :items="filtered"
-        style="vertical-align: middle;"
+        style="vertical-align: middle; overflow-x: hidden;"
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
-        responsive="sm"
       >
         <!-- A custom formatted column -->
         <template v-slot:cell(name)="filtered">
@@ -447,7 +437,7 @@ td {
 import axios from 'axios';
 
 const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = 'https:/www.josh-ints.me/api';
 
 export default {
   data() {
@@ -462,7 +452,7 @@ export default {
       sortBy: 'pickRate',
       sortDesc: true,
       fields: [
-        { key: 'name', label: 'name', sortable: true },
+        { key: 'name', label: 'Name', sortable: true },
         { key: 'banRate', label: 'Ban Rate', sortable: true },
         { key: 'pickRate', label: 'Pick Rate', sortable: true },
         { key: 'winRate', label: 'Win Rate', sortable: true },
