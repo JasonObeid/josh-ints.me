@@ -19,8 +19,7 @@ npm run build'''
 
     stage('Deploy') {
       steps {
-        sh '''sudo rm -r prod
-sudo cp -r dist prod
+        sh '''sudo cp -r dist prod
 sudo systemctl restart nginx
 sudo systemctl restart josh'''
       }
