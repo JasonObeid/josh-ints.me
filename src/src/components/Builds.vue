@@ -138,14 +138,14 @@ td {
       </b-row>
       <br>
       <b-row>
-        <b-col cols="10">
+        <b-col cols="11">
           <b-form-input v-model="searchText" type="search"
           placeholder="Filter by Name" autofocus="true">
           </b-form-input>
         </b-col>
         <b-col>
           <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='updateBuilds()'>
-          Update
+            Refresh
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
           </button>
         </b-col>
