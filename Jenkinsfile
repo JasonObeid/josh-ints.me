@@ -5,7 +5,7 @@ pipeline {
       steps {
         dir(path: 'src') {
           sh '''npm install
-npm run build'''
+          npm run build'''
         }
 
       }
@@ -17,14 +17,21 @@ npm run build'''
       }
     }
 
+    stage('Production') {
+      when {
+                branch 'master'
+            }
+            steps {
+                 sh '''sudo rm -r src/prod
+            sudo cp -r src/dist src/prod'''
+            }
+    }
+   
     stage('Deploy') {
       steps {
-        sh '''sudo rm -r src/prod
-sudo cp -r src/dist src/prod
-sudo systemctl restart nginx
-sudo systemctl restart josh'''
+        sh '''sudo systemctl restart nginx
+        sudo systemctl restart josh'''
       }
     }
-
   }
 }
