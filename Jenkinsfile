@@ -9,13 +9,14 @@ pipeline {
     stage('build') {
       steps {
         if (env.BRANCH_NAME == 'master') {
-            echo 'I only execute on the master branch'
+          sh 'cd src'
+          sh 'npm install'
+          sh 'npm run build'
         } else {
-            echo 'I execute elsewhere'
+          sh 'cd src'
+          sh 'npm install'
+          sh 'npm run build'
         }
-        sh 'ls -a'
-        sh 'npm install'
-        sh 'npm run build'
       }
     }
 
