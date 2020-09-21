@@ -125,15 +125,16 @@ td {
         </b-col>
       </b-row>
       <br>
-      <b-row>
+      <b-row style="align-items: center;">
         <b-col cols="11">
           <b-form-input v-model="searchText" type="search"
-          placeholder="Filter by Name" autofocus="true">
+          placeholder="Filter by Name" autofocus>
           </b-form-input>
         </b-col>
         <b-col>
-          <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='updateBuilds()'>
-            <b-icon icon="arrow-clockwise"></b-icon>
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+          id="refresh" @click='updateBuilds()'>
+            <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
           </button>
         </b-col>
@@ -141,13 +142,13 @@ td {
       <br>
       <b-table
         small
-        sticky-header
+        sticky-header="715px"
+        responsive="false"
         :fields="fields"
         :items="filtered"
-        style="vertical-align: middle;"
+        style="vertical-align: middle; overflow-x: hidden;"
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
-        responsive="sm"
       >
         <!-- A custom formatted column -->
         <template v-slot:cell(name)="filtered">
@@ -436,7 +437,7 @@ td {
 import axios from 'axios';
 
 const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = 'https:/www.josh-ints.me/api';
 
 export default {
   data() {
