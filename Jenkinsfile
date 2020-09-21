@@ -19,19 +19,19 @@ pipeline {
 
     stage('Production') {
       when {
-                branch 'master'
-            }
-            steps {
-                 sh '''sudo rm -r src/prod
-            sudo cp -r src/dist src/prod'''
-            }
+        branch 'master'
+      }
+      steps {
+        sh 'sudo cp -r src/dist src/prod'
+      }
     }
-   
+
     stage('Deploy') {
       steps {
         sh '''sudo systemctl restart nginx
         sudo systemctl restart josh'''
       }
     }
+
   }
 }
