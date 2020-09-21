@@ -27,11 +27,11 @@
 .bld-grid-container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 0.5fr 0.25fr 1fr 0.25fr 0.25fr repeat(5, 0.25fr);
+  grid-template-rows: 0.5fr 0.25fr 1fr repeat(3, 0.25fr) 0.75fr;
   gap: 10px 1px;
   grid-template-areas:
     "bld-Role" "bld-RuneHeader" "bld-Runes"
-    "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Early" "bld-Core" "bld-Late" "Situational";
+    "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Items";
   align-items: center;
   align-self: center;
   vertical-align: middle;
@@ -65,20 +65,8 @@
   text-align: left;
 }
 
-.bld-Early {
-  grid-area: bld-Early;
-}
-
-.bld-Core {
-  grid-area: bld-Core;
-}
-
-.bld-Late {
-  grid-area: bld-Late;
-}
-
-.bld-Situational {
-  grid-area: bld-Situational;
+.bld-Items {
+  grid-area: bld-Items;
 }
 
 .champName {
@@ -462,7 +450,7 @@ export default {
       sortBy: 'pickRate',
       sortDesc: true,
       fields: [
-        { key: 'name', label: 'name', sortable: true },
+        { key: 'name', label: 'Name', sortable: true },
         { key: 'banRate', label: 'Ban Rate', sortable: true },
         { key: 'pickRate', label: 'Pick Rate', sortable: true },
         { key: 'winRate', label: 'Win Rate', sortable: true },
