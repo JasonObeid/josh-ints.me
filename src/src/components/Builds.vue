@@ -133,7 +133,7 @@ td {
         </b-col>
         <b-col>
           <button type="button" class="btn btn-warning btn-sm" id="refresh" @click='updateBuilds()'>
-            Refresh
+            <b-icon icon="arrow-clockwise"></b-icon>
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
           </button>
         </b-col>
@@ -141,6 +141,7 @@ td {
       <br>
       <b-table
         small
+        sticky-header
         :fields="fields"
         :items="filtered"
         style="vertical-align: middle;"
