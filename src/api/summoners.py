@@ -14,10 +14,11 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_caching import Cache
 from flask_cors import CORS
 
+
 def getChampInfo(champId):
     champName = champList[str(champId)]
     champImgPath = '/images/champion/' + champName + '.jpg'
-    return {'champName':champName, 'champImgPath':champImgPath}
+    return {'champName': champName, 'champImgPath': champImgPath}
 
 
 def getQueueName(queueId):
@@ -39,9 +40,10 @@ def getIntScore(kills, deaths, assists, killsArr, deathsArr, assistsArr):
     normalizedDeaths = (deaths - min(deathsArr)) / deltaDeaths
     normalizedAssists = (assists - min(assistsArr)) / deltaAssists
     if(normalizedAssists != 0 or normalizedKills != 0):
-        intScore = round((normalizedDeaths / (normalizedKills + normalizedAssists)) * 100, 2)
+        intScore = round(
+            (normalizedDeaths / (normalizedKills + normalizedAssists)) * 100, 2)
     else:
-        intScore = random.randrange(20,400)
+        intScore = random.randrange(20, 400)
     return intScore
 
 
@@ -50,7 +52,7 @@ def getGameInfo(queueType, gameDuration):
         gameLength = (int(gameDuration) / 60)
     else:
         gameLength = 0
-    return {'queue':queueType, 'duration':gameLength}
+    return {'queue': queueType, 'duration': gameLength}
 
 
 def getRunes(player):
@@ -69,10 +71,12 @@ def getRunes(player):
     secondary1 = runeList[secondary1Id]
     primaryBranchId = str(player['perkPrimaryStyle'])
     primaryBranchName = branchList[primaryBranchId]
-    primaryBranch = {'keystone':keystone, 'perk1':primary1, 'perk2':primary2, 'perk3':primary3, 'name':primaryBranchName['name'], 'imgPath':primaryBranchName['imgPath']}
+    primaryBranch = {'keystone': keystone, 'perk1': primary1, 'perk2': primary2, 'perk3': primary3,
+                     'name': primaryBranchName['name'], 'imgPath': primaryBranchName['imgPath']}
     secondaryBranchId = str(player['perkSubStyle'])
     secondaryBranchName = branchList[secondaryBranchId]
-    secondaryBranch = {'perk0':secondary0, 'perk1':secondary1, 'name':secondaryBranchName['name'], 'imgPath':secondaryBranchName['imgPath']}
+    secondaryBranch = {'perk0': secondary0, 'perk1': secondary1,
+                       'name': secondaryBranchName['name'], 'imgPath': secondaryBranchName['imgPath']}
     runes['primaryBranch'] = primaryBranch
     runes['secondaryBranch'] = secondaryBranch
     return runes
@@ -81,22 +85,22 @@ def getRunes(player):
 def getItems(player):
     items = {}
     itemsList = []
-    itemIds = [player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5']]
-    trinketId = int(player['item6'])
-    trinketName = itemList[str(trinketId)]
+    itemIds = [player['item0'], player['item1'], player['item2'],
+               player['item3'], player['item4'], player['item5']]
+    trinketId = player['item6']
     if trinketId != 0:
         trinketName = itemList[str(trinketId)]
     else:
         trinketName = ''
     for item in itemIds:
-        if(int(item) != 0):
+        if item != 0:
             name = itemList[str(item)]
             itemsList.append(name)
     items['itemsList'] = itemsList
-    items['count'] = len(itemsList) #not including trinket
+    items['count'] = len(itemsList)  # not including trinket
     items['trinket'] = trinketName
     return items
-    
+
 
 def getSpells(player):
     spells = {}
@@ -113,15 +117,16 @@ def getStats(player, killsArr, deathsArr, assistsArr):
     assists = player['assists']
     win = player['win']
     cs = player['totalMinionsKilled']
-    intScore = getIntScore(kills, deaths, assists, killsArr, deathsArr, assistsArr)
+    intScore = getIntScore(kills, deaths, assists,
+                           killsArr, deathsArr, assistsArr)
     if(deaths != 0):
         kda = round((int(kills) + int(assists)) / int(deaths), 2)
         #deathsPerMin = round(int(deaths) / gameLength,2)
     else:
         kda = 'Perfect'
         #deathsPerMin = 'N/A'
-    stats = {'kills':kills, 'deaths':deaths, 'assists':assists, 'win':win, 
-    'creepScore':cs, 'kda':kda, 'intScore':intScore}
+    stats = {'kills': kills, 'deaths': deaths, 'assists': assists, 'win': win,
+             'creepScore': cs, 'kda': kda, 'intScore': intScore}
     return stats
 
 
@@ -140,7 +145,7 @@ def getParticipantId(participantIds, accId):
     for participant in participantIds:
         accountID = participant['player']['accountId']
         if (accountID == accId):
-            return  participant['participantId']
+            return participant['participantId']
 
 
 def getSummonersNames(particpants):
@@ -166,8 +171,8 @@ def getTeamInfo(players, summonerNames):
         teamSide = getTeamSide(teamId)
         champId = player['championId']
         championInfo = getChampInfo(champId)
-        summonerInfo = {'summonerName':summonerName, 'participantId':participantId,
-        'champName':championInfo['champName'], 'champImgPath':championInfo['champImgPath']}
+        summonerInfo = {'summonerName': summonerName, 'participantId': participantId,
+                        'champName': championInfo['champName'], 'champImgPath': championInfo['champImgPath']}
         damageTaken = int(player['stats']['totalDamageTaken'])
         damageDealt = int(player['stats']['totalDamageDealtToChampions'])
         if(teamSide == 'red'):
@@ -178,12 +183,12 @@ def getTeamInfo(players, summonerNames):
             blueTeamInfo.append(summonerInfo)
             blueDamageTaken[participantId] = damageTaken
             blueDamageDealt[participantId] = damageDealt
-    redTeamTank=max(redDamageTaken.items(), key=operator.itemgetter(1))[0]
-    redTeamDPS=max(redDamageDealt.items(), key=operator.itemgetter(1))[0]
-    blueTeamTank=max(blueDamageTaken.items(), key=operator.itemgetter(1))[0]
-    blueTeamDPS=max(blueDamageDealt.items(), key=operator.itemgetter(1))[0]
-    teamInfo = {'red':redTeamInfo, 'redTeamTankIndex':redTeamTank, 'redTeamDPSIndex':redTeamDPS, 
-                'blue':blueTeamInfo, 'blueTeamTankIndex':blueTeamTank, 'blueTeamDPSIndex':blueTeamDPS}
+    redTeamTank = max(redDamageTaken.items(), key=operator.itemgetter(1))[0]
+    redTeamDPS = max(redDamageDealt.items(), key=operator.itemgetter(1))[0]
+    blueTeamTank = max(blueDamageTaken.items(), key=operator.itemgetter(1))[0]
+    blueTeamDPS = max(blueDamageDealt.items(), key=operator.itemgetter(1))[0]
+    teamInfo = {'red': redTeamInfo, 'redTeamTankIndex': redTeamTank, 'redTeamDPSIndex': redTeamDPS,
+                'blue': blueTeamInfo, 'blueTeamTankIndex': blueTeamTank, 'blueTeamDPSIndex': blueTeamDPS}
     return teamInfo
 
 
@@ -196,7 +201,8 @@ def getTeamSide(teamNumber):
 
 def getMatchDate(unixTime):
     matchDate = datetime.datetime.utcfromtimestamp(unixTime/1000)
-    date = str(matchDate.month) + '/' + str(matchDate.day) + '/' + str(matchDate.year)[2:]
+    date = str(matchDate.month) + '/' + str(matchDate.day) + \
+        '/' + str(matchDate.year)[2:]
     return date
 
 
@@ -210,7 +216,8 @@ def getMatchDuration(gameDuration):
 
 
 def getIds(name):
-    url = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/'+ name +'?api_key=' + api_key
+    url = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + \
+        name + '?api_key=' + api_key
     resp = requests.get(url)
     code = resp.status_code
     if code == 200:
@@ -219,11 +226,13 @@ def getIds(name):
         summonerID = body['id']
         return accountID, summonerID
     return 'Summoner not found'
-    
+
 
 def getHistory(accId, startIndex=0, endIndex=10):
     gameArr = []
-    url = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accId + '?endIndex='+ str(endIndex) + '&beginIndex='+ str(startIndex) + '&api_key=' + api_key
+    url = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + accId + \
+        '?endIndex=' + str(endIndex) + '&beginIndex=' + \
+        str(startIndex) + '&api_key=' + api_key
     resp = requests.get(url)
     code = resp.status_code
     if code == 200:
@@ -239,7 +248,8 @@ def getMatch(matchIdArr, accId):
     matchArr = []
     respArr = []
     for matchId in matchIdArr:
-        url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + str(matchId) + '?api_key=' + api_key
+        url = 'https://na1.api.riotgames.com/lol/match/v4/matches/' + \
+            str(matchId) + '?api_key=' + api_key
         resp = requests.get(url).json()
         respArr.append(resp)
     for resp in respArr:
@@ -251,28 +261,30 @@ def getMatch(matchIdArr, accId):
         myParticipantId = getParticipantId(participants, accId)
         summonersNames = getSummonersNames(participants)
         queueType = getQueueName(resp['queueId'])
-        #create arrays of player stats
+        # create arrays of player stats
         killsArr, deathsArr, assistsArr = getAllStats(players)
-        #iterate and find chosen player stats
+        # iterate and find chosen player stats
         for player in players:
             if(player['participantId'] == myParticipantId):
                 teamInfo = getTeamInfo(players, summonersNames)
                 champInfo = getChampInfo(player['championId'])
-                stats = getStats(player['stats'], killsArr, deathsArr, assistsArr)
+                stats = getStats(
+                    player['stats'], killsArr, deathsArr, assistsArr)
                 runes = getRunes(player['stats'])
                 items = getItems(player['stats'])
                 spells = getSpells(player)
                 gameInfo = getGameInfo(queueType, resp['gameDuration'])
-                matchInfo = {'championInfo':champInfo, 'stats':stats, 'gameInfo':gameInfo, 
-                'teamInfo':teamInfo, 'runes':runes, 'items':items, 'spells':spells, 
-                'matchDate':matchDate, 'matchDuration':matchDuration}
+                matchInfo = {'championInfo': champInfo, 'stats': stats, 'gameInfo': gameInfo,
+                             'teamInfo': teamInfo, 'runes': runes, 'items': items, 'spells': spells,
+                             'matchDate': matchDate, 'matchDuration': matchDuration}
                 matchArr.append(matchInfo)
                 break
     return matchArr
 
 
 def getRank(summId):
-    url = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/'+ summId +'?api_key=' + api_key
+    url = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/' + \
+        summId + '?api_key=' + api_key
     resp = requests.get(url)
     code = resp.status_code
     if code == 200:
@@ -321,7 +333,7 @@ def replace_summoner(summoner_id, post_data):
         'rank': getRank(summId)
     })
     return 'Summoner updated!'
-    
+
 
 def get_more_matches_summoner(summoner_id, post_data):
     accId = post_data.get('id')
@@ -344,14 +356,14 @@ def refreshSummoners():
         rank = getRank(summonerId)
         startIndex = summoner['startIndex']
         endIndex = len(history)
-        summoner = {'id':accountId, 'name':name, 'summId':summonerId, 
-                    'history':history, 'matchInfo':matchInfo, 
-                    'startIndex':startIndex, 'endIndex':endIndex, 'rank':rank}
+        summoner = {'id': accountId, 'name': name, 'summId': summonerId,
+                    'history': history, 'matchInfo': matchInfo,
+                    'startIndex': startIndex, 'endIndex': endIndex, 'rank': rank}
         newSummoners.append(summoner)
     return newSummoners
 
 
-#For updating builds/stats
+# For updating builds/stats
 def getSpells2(spellIds):
     spells = []
     spell1 = spellList[str(spellIds[0])]
@@ -378,10 +390,11 @@ def getRunes2(runeIds, style, substyle):
     secondary1Id = str(runeIds[5])
     secondary1 = runeList[secondary1Id]
     primaryBranch = {'keystone': keystone, 'perk1': primary1, 'perk2': primary2, 'perk3': primary3,
-                    'name': primary['name'], 'imgPath': primary['imgPath']}
+                     'name': primary['name'], 'imgPath': primary['imgPath']}
     secondaryBranch = {'perk0': secondary0, 'perk1': secondary1,
-                    'name': secondary['name'], 'imgPath': secondary['imgPath']}
-    auxillary = [shardList[str(runeIds[6])], shardList[str(runeIds[7])], shardList[str(runeIds[8])]]
+                       'name': secondary['name'], 'imgPath': secondary['imgPath']}
+    auxillary = [shardList[str(runeIds[6])], shardList[str(
+        runeIds[7])], shardList[str(runeIds[8])]]
 
     runes['primaryBranch'] = primaryBranch
     runes['secondaryBranch'] = secondaryBranch
@@ -400,12 +413,12 @@ def getItems2(itemIds):
 
 def getSkills2(order, customSkills):
     skills = []
-    skillMap = {'Q':1, 'W':2, 'E':3}
+    skillMap = {'Q': 1, 'W': 2, 'E': 3}
     for skill in order:
         skillIndex = skillMap[skill]
         name = customSkills[skillIndex]['name']
         imgPath = 'images/spell/' + customSkills[skillIndex]['image'] + '.jpg'
-        skills.append({'name':name, 'imgPath':imgPath, 'button':skill})
+        skills.append({'name': name, 'imgPath': imgPath, 'button': skill})
     return skills
 
 
@@ -417,7 +430,7 @@ def cleanStats(body, key):
     champName = champList[str(key)]
     champImgPath = '/images/champion/' + champName + '.jpg'
     #champId = key
-    customSkills =  body['data']['customSkills']
+    customSkills = body['data']['customSkills']
     # "the Mouth of the Abyss"
     # title = body['data']['champion']['title']
     # {early: 3, mid: 2, late: 1} where 3 is worst, 1 is best
@@ -438,20 +451,24 @@ def cleanStats(body, key):
                 'core': getItems2(items['general']['core']),
                 'full': getItems2(items['general']['full'])
             }
-            cleanItems['situational'] = getItems2(items['situational'][0]['build'])
+            cleanItems['situational'] = getItems2(
+                items['situational'][0]['build'])
             buildName = build['name']
-            runes = getRunes2(build['perks']['ids'], build['perks']['style'], build['perks']['subStyle'])
+            runes = getRunes2(
+                build['perks']['ids'], build['perks']['style'], build['perks']['subStyle'])
             spells = getSpells2(build['spells'])
-            skills = getSkills2(build['skills']['prioritisation'], customSkills)
-            build = {'items':cleanItems, 'name': buildName, 
-            'runes': runes, 'spells':spells, 'skills':skills}
+            skills = getSkills2(
+                build['skills']['prioritisation'], customSkills)
+            build = {'items': cleanItems, 'name': buildName,
+                     'runes': runes, 'spells': spells, 'skills': skills}
             builds.append(build)
-        info = {'banRate': banRate, 'lane':lane, 'pickRate':pickRate, 
-        'winRate':winRate, 'builds':builds}
+        info = {'banRate': banRate, 'lane': lane, 'pickRate': pickRate,
+                'winRate': winRate, 'builds': builds}
         roles.append(info)
-    champDict = {'id':key, 'name':name, 'roles': roles, 'imgPath':champImgPath}
-            #https://api.mobalytics.gg/lol/champions/v1/meta?name=kogmaw
-            #https://app.mobalytics.gg/lol/champions/kogmaw/build
+    champDict = {'id': key, 'name': name,
+                 'roles': roles, 'imgPath': champImgPath}
+    # https://api.mobalytics.gg/lol/champions/v1/meta?name=kogmaw
+    # https://app.mobalytics.gg/lol/champions/kogmaw/build
     return champDict
 
 
@@ -478,11 +495,11 @@ def getMobalytics():
                 pickRate += float(role["pickRate"][:-1])
                 winRate += float(role["winRate"][:-1])
                 lanes.append(role['lane'])
-            banRate = round(banRate/len(builds['roles']),1)
-            pickRate = round(pickRate/len(builds['roles']),1)
-            winRate = round(winRate/len(builds['roles']),1)
-            stat = {'id':key, 'idx':idx, 'name':champName, 'banRate':banRate, 'lanes': lanes,
-            'pickRate':pickRate, 'winRate':winRate, 'imgPath':champImgPath}
+            banRate = round(banRate/len(builds['roles']), 1)
+            pickRate = round(pickRate/len(builds['roles']), 1)
+            winRate = round(winRate/len(builds['roles']), 1)
+            stat = {'id': key, 'idx': idx, 'name': champName, 'banRate': banRate, 'lanes': lanes,
+                    'pickRate': pickRate, 'winRate': winRate, 'imgPath': champImgPath}
             stats.append(stat)
             print(f'{champName} okay')
             idx += 1
@@ -493,6 +510,7 @@ def getMobalytics():
     with open('dataDragon/stats.json', 'w') as json_file2:
         json.dump(stats, json_file2, separators=(',', ':'))
     return buildList, stats
+
 
 api_key = 'RGAPI-56ed8c86-ec30-4a32-b24b-c898c8c20267'
 
@@ -515,8 +533,8 @@ with open('dataDragon/stats.json') as file8:
 with open('dataDragon/shardIds.json') as file9:
     shardList = json.load(file9)
 
-#starting summoners
-global SUMMONERS 
+# starting summoners
+global SUMMONERS
 SUMMONERS = [
     {
         'id': '',
@@ -539,8 +557,8 @@ for summoner in SUMMONERS:
     summoner['matchInfo'] = getMatch(history, accountId)
     summoner['rank'] = getRank(summonerId)
 
-summonersResponse = {'status': 'success', 'message':''}
-buildsResponse = {'status': 'success', 'message':''}
+summonersResponse = {'status': 'success', 'message': ''}
+buildsResponse = {'status': 'success', 'message': ''}
 
 config = {
     "DEBUG": True,          # some Flask specific configs
@@ -562,8 +580,10 @@ cache = Cache(app)
 # enable CORS.
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-#'/<path:path>') means path plus passes path as parameter
-#you can have multiple routes for one method
+# '/<path:path>') means path plus passes path as parameter
+# you can have multiple routes for one method
+
+
 @app.route('/api/summoners', methods=['GET', 'POST'])
 def all_summoners():
     if request.method == 'POST':
@@ -602,9 +622,11 @@ def single_summoner(summoner_id):
     if request.method == 'PUT':
         post_data = request.get_json()
         if(len(post_data) > 1):
-            summonersResponse['message'] = get_more_matches_summoner(summoner_id, post_data)
+            summonersResponse['message'] = get_more_matches_summoner(
+                summoner_id, post_data)
         else:
-            summonersResponse['message'] = replace_summoner(summoner_id, post_data)
+            summonersResponse['message'] = replace_summoner(
+                summoner_id, post_data)
     if request.method == 'DELETE':
         remove_summoner(summoner_id)
         summonersResponse['message'] = 'Summoner removed!'
@@ -634,6 +656,7 @@ def refresh_builds():
     buildsResponse['builds'] = buildList
     buildsResponse['stats'] = stats
     return jsonify(buildsResponse)
+
 
 """def getItemsTrinket(itemIds, trinketId):
     items = {}
