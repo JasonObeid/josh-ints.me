@@ -82,14 +82,14 @@ def getItems(player):
     items = {}
     itemsList = []
     itemIds = [player['item0'], player['item1'], player['item2'], player['item3'], player['item4'], player['item5']]
-    trinketId = player['item6']
+    trinketId = int(player['item6'])
     trinketName = itemList[str(trinketId)]
     if trinketId != 0:
         trinketName = itemList[str(trinketId)]
     else:
         trinketName = ''
     for item in itemIds:
-        if(item != 0):
+        if(int(item) != 0):
             name = itemList[str(item)]
             itemsList.append(name)
     items['itemsList'] = itemsList
@@ -389,23 +389,6 @@ def getRunes2(runeIds, style, substyle):
     return runes
 
 
-def getItemsTrinket(itemIds, trinketId):
-    items = {}
-    itemsList = []
-    if trinketId != 0:
-        trinketName = itemList[str(trinketId)]
-    else:
-        trinketName = ''
-    for item in itemIds:
-        if(item != 0):
-            name = itemList[str(item)]
-            itemsList.append(name)
-    items['itemsList'] = itemsList
-    items['count'] = len(itemsList)  # not including trinket
-    items['trinket'] = trinketName
-    return items
-
-
 def getItems2(itemIds):
     itemsList = []
     for item in itemIds:
@@ -652,6 +635,21 @@ def refresh_builds():
     buildsResponse['stats'] = stats
     return jsonify(buildsResponse)
 
+"""def getItemsTrinket(itemIds, trinketId):
+    items = {}
+    itemsList = []
+    if trinketId != 0:
+        trinketName = itemList[str(trinketId)]
+    else:
+        trinketName = ''
+    for item in itemIds:
+        if(item != 0):
+            name = itemList[str(item)]
+            itemsList.append(name)
+    items['itemsList'] = itemsList
+    items['count'] = len(itemsList)  # not including trinket
+    items['trinket'] = trinketName
+    return items"""
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
