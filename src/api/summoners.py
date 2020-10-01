@@ -586,6 +586,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 @app.route('/api/summoners', methods=['GET', 'POST'])
 def all_summoners():
+    global SUMMONERS
     if request.method == 'POST':
         post_data = request.get_json()
         accId, summId = getIds(post_data.get('name'))
@@ -635,7 +636,10 @@ def single_summoner(summoner_id):
 
 @app.route('/api/refresh', methods=['GET'])
 def refresh_summoners():
+    global SUMMONERS
+    print(SUMMONERS)
     SUMMONERS = refreshSummoners()
+    print(SUMMONERS)
     summonersResponse['message'] = 'Summoners refreshed!'
     summonersResponse['summoners'] = SUMMONERS
     return jsonify(summonersResponse)
