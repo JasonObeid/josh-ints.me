@@ -97,9 +97,9 @@ def getItems2(itemIds):
     return itemsList
 
 
-def getSkills2(order, customSkills):
+def getSkills2(order, customSkills)
     skills = []
-    skillMap = {'Q':1, 'W':2, 'E':3}
+    skillMap = {'Q':1, 'W':2, 'E':3, 'R':4}
     for skill in order:
         skillIndex = skillMap[skill]
         name = customSkills[skillIndex]['name']

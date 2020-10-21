@@ -636,7 +636,7 @@ def single_summoner(summoner_id):
     return jsonify(summonersResponse)
 
 
-@app.route('/api/refresh', methods=['GET'])
+@app.route('/api/refresh', methods=['POST'])
 def refresh_summoners():
     global SUMMONERS
     print(SUMMONERS)
