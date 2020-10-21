@@ -512,45 +512,22 @@ export default {
           });
       }
     },
-    refreshSummoners(run = '1') {
+    refreshSummoners() {
       const path = `${localhost}/refresh`;
+      this.message = 'Fetching...';
       this.showRefresh = true;
-      if (run === 'goTab0') {
-        axios.get(path)
-          .then((res) => {
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-            this.setActive(this.summoners[0].name);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      } else if (run === 'goTabSummoner') {
-        axios.get(path)
-          .then((res) => {
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-            const len = this.summoners.length;
-            this.setActive(this.summoners[len - 1].name);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      } else {
-        axios.get(path)
-          .then((res) => {
-            console.log(res.data.summoners);
-            console.log(res.data.message);
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      }
+      this.showMessage = true;
+      axios.post(path)
+        .then((res) => {
+          console.log(res);
+          this.message = res.data.message;
+          this.summoners = res.data.summoners;
+          this.setActive(this.summoners[0].name);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
       this.showRefresh = false;
     },
     addSummoner(payload) {

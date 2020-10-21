@@ -360,6 +360,8 @@ def refreshSummoners():
                     'history': history, 'matchInfo': matchInfo,
                     'startIndex': startIndex, 'endIndex': endIndex, 'rank': rank}
         newSummoners.append(summoner)
+    print('I refreshed')
+    print(newSummoners)
     return newSummoners
 
 
@@ -413,7 +415,7 @@ def getItems2(itemIds):
 
 def getSkills2(order, customSkills):
     skills = []
-    skillMap = {'Q': 1, 'W': 2, 'E': 3}
+    skillMap = {'Q': 1, 'W': 2, 'E': 3, 'R': 4}
     for skill in order:
         skillIndex = skillMap[skill]
         name = customSkills[skillIndex]['name']
@@ -586,6 +588,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 @app.route('/api/summoners', methods=['GET', 'POST'])
 def all_summoners():
+    global SUMMONERS
     if request.method == 'POST':
         post_data = request.get_json()
         accId, summId = getIds(post_data.get('name'))
@@ -633,9 +636,12 @@ def single_summoner(summoner_id):
     return jsonify(summonersResponse)
 
 
-@app.route('/api/refresh', methods=['GET'])
+@app.route('/api/refresh', methods=['POST'])
 def refresh_summoners():
+    global SUMMONERS
+    print(SUMMONERS)
     SUMMONERS = refreshSummoners()
+    print(SUMMONERS)
     summonersResponse['message'] = 'Summoners refreshed!'
     summonersResponse['summoners'] = SUMMONERS
     return jsonify(summonersResponse)
