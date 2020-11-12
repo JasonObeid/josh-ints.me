@@ -90,6 +90,7 @@ def getItemsTrinket(itemIds, trinketId):
 
 def getItems2(itemIds):
     itemsList = []
+    print(itemIds)
     for item in itemIds:
         if(item != 0):
             name = itemList[str(item)]
@@ -97,7 +98,7 @@ def getItems2(itemIds):
     return itemsList
 
 
-def getSkills2(order, customSkills)
+def getSkills2(order, customSkills):
     skills = []
     skillMap = {'Q':1, 'W':2, 'E':3, 'R':4}
     for skill in order:
