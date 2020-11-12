@@ -92,8 +92,11 @@ def getItems2(itemIds):
     itemsList = []
     print(itemIds)
     for item in itemIds:
-        if(item != 0):
+        if(item != 0 and str(item) in itemList.keys()):
             name = itemList[str(item)]
+            itemsList.append(name)
+        else:
+            name = str(item)
             itemsList.append(name)
     return itemsList
 

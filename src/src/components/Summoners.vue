@@ -167,11 +167,13 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList
                       .slice(0,match.items.count)" :key="index">
-                        <img :src="item.imgPath" :alt="item.name">
+                        <img :src="item.imgPath" :alt="item.name"
+                        v-b-tooltip.hover noninteractive :title="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
                         <img :src="match.items.trinket.imgPath"
-                        :alt="match.items.trinket.name">
+                        :alt="match.items.trinket.name"
+                        v-b-tooltip.hover noninteractive :title="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>
@@ -181,11 +183,13 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(0,3)"
                       :key="index">
-                        <img :src="item.imgPath" :alt="item.name">
+                        <img :src="item.imgPath" :alt="item.name"
+                        v-b-tooltip.hover noninteractive :title="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
                         <img :src="match.items.trinket.imgPath"
-                        :alt="match.items.trinket.name">
+                        :alt="match.items.trinket.name"
+                        v-b-tooltip.hover noninteractive :title="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>

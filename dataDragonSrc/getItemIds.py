@@ -15,7 +15,7 @@ def mapIds():
                 itemDict[itemId] = {'name':name,'imgPath':imgPath}
 
             for itemId in oldItemList['data']:
-                if itemId not in itemDict.keys()
+                if itemId not in itemDict.keys():
                     name = oldItemList['data'][itemId]['name']
                     img = f"{oldItemList['data'][itemId]['image']['full'][:-4]}.jpg"
                     imgPath = f"images/item/{img}"
