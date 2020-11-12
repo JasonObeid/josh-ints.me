@@ -195,7 +195,8 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(3)"
                       :key="index">
-                        <img :src="item.imgPath" :alt="item.name">
+                        <img :src="item.imgPath" :alt="item.name"
+                        v-b-tooltip.hover noninteractive :title="item.name">
                       </td>
                     </tr>
                   </div>
