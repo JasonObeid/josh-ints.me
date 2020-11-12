@@ -1,8 +1,8 @@
 import os
 from PIL import Image
 import glob
-path = 'spellOld'
-newPath = 'spell'
+path = 'src/public/images/item_old'
+newPath = 'src/public/images/item'
 for file in os.listdir(path):
     image = Image.open(f'{path}/{file}')
     new_image = image.resize((40, 40))
