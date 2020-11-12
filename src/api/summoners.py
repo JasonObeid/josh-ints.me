@@ -93,8 +93,11 @@ def getItems(player):
     else:
         trinketName = ''
     for item in itemIds:
-        if item != 0:
+        if item != 0 and str(item) in itemList.keys():
             name = itemList[str(item)]
+            itemsList.append(name)
+        else:
+            name = str(item)
             itemsList.append(name)
     items['itemsList'] = itemsList
     items['count'] = len(itemsList)  # not including trinket
@@ -407,8 +410,11 @@ def getRunes2(runeIds, style, substyle):
 def getItems2(itemIds):
     itemsList = []
     for item in itemIds:
-        if(item != 0):
+        if(item != 0 and str(item) in itemList.keys()):
             name = itemList[str(item)]
+            itemsList.append(name)
+        else:
+            name = str(item)
             itemsList.append(name)
     return itemsList
 
