@@ -18,14 +18,14 @@ def mapIds():
             branchList = branch['slots']
             branchName = branch['key']
             branchId = branch['id']
-            branchImgPath = "images/runes/" + branchName + '.png'
+            branchImgPath = f"images/{branch['icon']}"
             branchDict[branchId] = {'name': branchName, 'imgPath': branchImgPath}
             for x in branchList:
                 runeList = x['runes']
                 for y in runeList:
                     runeId = y['id']
                     runeName = y['key']
-                    imgPath = "images/runes/" + branchName + '/' + runeName + '/' + runeName + '.png'
+                    imgPath = f"images/{y['icon']}"
                     runeDict[runeId] = {'name': runeName, 'imgPath': imgPath}
             #print(runeDict)
         #print(branchDict)

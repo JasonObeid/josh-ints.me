@@ -74,6 +74,64 @@ button.sort
 {
   cursor: pointer;
 }
+
+.dropShadow {
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11),
+              0 4px 4px rgba(0,0,0,0.11),
+              0 6px 8px rgba(0,0,0,0.11),
+              0 8px 16px rgba(0,0,0,0.11);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.champIcon {
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11),
+              0 4px 4px rgba(0,0,0,0.11),
+              0 6px 8px rgba(0,0,0,0.11),
+              0 8px 16px rgba(0,0,0,0.11);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.champIcon:hover {
+  box-shadow: 0 2px 1px rgba(0,0,0,0.09),
+              0 4px 2px rgba(0,0,0,0.09),
+              0 8px 4px rgba(0,0,0,0.09),
+              0 16px 8px rgba(0,0,0,0.09),
+              0 32px 16px rgba(0,0,0,0.09);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.smallChampIcon {
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11),
+              0 4px 4px rgba(0,0,0,0.11),
+              0 6px 8px rgba(0,0,0,0.11),
+              0 8px 16px rgba(0,0,0,0.11);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.smallChampIcon:hover {
+  box-shadow: 0 2px 1px rgba(0,0,0,0.09),
+              0 4px 2px rgba(0,0,0,0.09),
+              0 8px 4px rgba(0,0,0,0.09),
+              0 16px 8px rgba(0,0,0,0.09),
+              0 32px 16px rgba(0,0,0,0.09);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.keystone {
+  border-radius: 50%;
+}
+
+.runeBranch {
+  border-radius: 50%;
+}
 </style>
 
 <template>
@@ -134,30 +192,33 @@ button.sort
                 </th>
               </tr>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
-                <td>
+                <td><router-link
+                :to="{ name: 'Home',
+                params: { champName: match.championInfo.champName.toLowerCase() } }">
                   <a class="champName">{{ match.championInfo.champName }}</a>
                   <br>
-                  <img :src="match.championInfo.champImgPath"
-                  :alt="match.championInfo.champName" class="champIcon">
+                  <img class="champIcon" :src="match.championInfo.champImgPath"
+                  :alt="match.championInfo.champName"></router-link>
                 </td>
                 <td>
                   <tr>
                     <td>
-                      <img :src="match.spells.spell1.imgPath"
+                      <img class="dropShadow" :src="match.spells.spell1.imgPath"
                       :alt="match.spells.spell1.name">
                     </td>
                     <td>
-                      <img :src="match.spells.spell2.imgPath"
+                      <img class="dropShadow" :src="match.spells.spell2.imgPath"
                       :alt="match.spells.spell2.name">
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <img :src="match.runes.primaryBranch.keystone.imgPath"
-                      :alt="match.runes.primaryBranch.keystone.name">
+                      <img class="keystone dropShadow"
+                      :src="match.runes.primaryBranch.keystone.imgPath"
+                      :alt="match.runes.primaryBranch.keystone.name" height="40px" width="auto">
                     </td>
                     <td>
-                      <img :src="match.runes.secondaryBranch.imgPath"
+                      <img class="runeBranch dropShadow" :src="match.runes.secondaryBranch.imgPath"
                       :alt="match.runes.secondaryBranch.name" height="25px" width="auto">
                     </td>
                   </tr>
@@ -167,11 +228,11 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList
                       .slice(0,match.items.count)" :key="index">
-                        <img :src="item.imgPath" :alt="item.name"
+                        <img class="dropShadow" :src="item.imgPath" :alt="item.name"
                         v-b-tooltip.hover noninteractive :title="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
-                        <img :src="match.items.trinket.imgPath"
+                        <img class="dropShadow" :src="match.items.trinket.imgPath"
                         :alt="match.items.trinket.name"
                         v-b-tooltip.hover noninteractive :title="match.items.trinket.name">
                       </td>
@@ -183,11 +244,11 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(0,3)"
                       :key="index">
-                        <img :src="item.imgPath" :alt="item.name"
+                        <img class="dropShadow" :src="item.imgPath" :alt="item.name"
                         v-b-tooltip.hover noninteractive :title="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
-                        <img :src="match.items.trinket.imgPath"
+                        <img class="dropShadow" :src="match.items.trinket.imgPath"
                         :alt="match.items.trinket.name"
                         v-b-tooltip.hover noninteractive :title="match.items.trinket.name">
                       </td>
@@ -195,7 +256,7 @@ button.sort
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(3)"
                       :key="index">
-                        <img :src="item.imgPath" :alt="item.name"
+                        <img class="dropShadow" :src="item.imgPath" :alt="item.name"
                         v-b-tooltip.hover noninteractive :title="item.name">
                       </td>
                     </tr>
@@ -217,8 +278,12 @@ button.sort
                 <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
                   <div class="teams" v-for="(player, index) in match.teamInfo.blue" :key="index">
-                    <img :src="player.champImgPath" width="20px" height="auto"
-                    :alt="player.champName">
+                    <router-link :to="{ name: 'Home',
+                    params: { champName: player.champName.toLowerCase() } }">
+                      <img class="smallChampIcon"
+                      :src="player.champImgPath" width="20px" height="auto"
+                      :alt="player.champName">
+                    </router-link>
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
                     v-b-tooltip.hover noninteractive title="Carried">
@@ -279,8 +344,12 @@ button.sort
                          {{ player.summonerName }}
                        </b-button>
                     </a>
-                    <img :src="player.champImgPath" width="20px" height="auto"
-                    :alt="player.champName">
+                    <router-link :to="{ name: 'Home',
+                    params: { champName: player.champName.toLowerCase() } }">
+                      <img class="smallChampIcon"
+                      :src="player.champImgPath" width="20px" height="auto"
+                      :alt="player.champName">
+                    </router-link>
                   </div>
                 </td>
                 <td align="middle">
@@ -335,8 +404,8 @@ button.sort
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {

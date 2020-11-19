@@ -216,7 +216,7 @@ td {
                   <b-col>
                      <img
                       :src="build.spells[1].imgPath"
-                      :alt="build.spells[0].name"
+                      :alt="build.spells[1].name"
                       style="padding: 5%"
                     />
                   </b-col>
@@ -436,8 +436,8 @@ td {
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'https:/www.josh-ints.me/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
@@ -466,10 +466,13 @@ export default {
       searchText: '',
       allChampions: [],
       builds: [],
+      indexMap: [],
       activeItem: '',
       showUpdate: false,
+      champName: '',
     };
   },
+  props: ['test'],
   computed: {
     filtered() {
       const buttonStates = this.btnStates;
@@ -592,11 +595,13 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           this.allChampions = res.data.stats;
           this.builds = res.data.builds;
+          this.indexMap = res.data.indexMap;
           // eslint-disable-next-line prefer-destructuring
           this.selected = this.builds[31];
+          console.log(this.selected);
           // eslint-disable-next-line prefer-destructuring
           this.selectedRole = this.selected.roles[0];
           // eslint-disable-next-line prefer-destructuring
@@ -610,6 +615,20 @@ export default {
   },
   created() {
     this.getBuilds();
+  },
+  watch: {
+    $route(to, from) {
+      console.log(from);
+      console.log(to.params.champName);
+      if (to.params.champName !== undefined
+          && to.params.champName !== 'all') {
+        if (to.params.champName !== this.champName) {
+          this.champName = to.params.champName.toLowerCase();
+          const champIndex = this.indexMap[this.champName];
+          this.changeSelected(champIndex);
+        }
+      }
+    },
   },
 };
 </script>

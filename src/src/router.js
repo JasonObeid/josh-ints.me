@@ -17,7 +17,11 @@ export default new Router({
       redirect: '/builds',
       children: [
         { path: 'summoners', component: Summoners },
-        { path: 'builds', component: Builds, name: 'Home' },
+        {
+          path: 'builds/:champName',
+          component: Builds,
+          name: 'Home',
+        },
       ],
     },
   ],
