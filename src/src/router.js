@@ -18,7 +18,7 @@ export default new Router({
       children: [
         { path: 'summoners', component: Summoners },
         {
-          path: 'builds/:champName',
+          path: 'builds',
           component: Builds,
           name: 'Home',
         },

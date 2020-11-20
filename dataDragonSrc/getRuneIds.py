@@ -15,6 +15,7 @@ def mapIds():
         runeList = json.loads(x)
         branchDict = {}
         for branch in runeList:
+            print(branch)
             branchList = branch['slots']
             branchName = branch['key']
             branchId = branch['id']

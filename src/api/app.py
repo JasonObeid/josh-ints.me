@@ -505,17 +505,17 @@ def getMobalytics():
                     pickRate += float(role["pickRate"][:-1])
                     winRate += float(role["winRate"][:-1])
                     lanes.append(role['lane'])
-                banRate = round(banRate/len(builds['roles']), 1)
-                pickRate = round(pickRate/len(builds['roles']), 1)
-                winRate = round(winRate/len(builds['roles']), 1)
-                stat = {'id': key, 'idx': idx, 'name': champName, 'banRate': banRate, 'lanes': lanes,
-                        'pickRate': pickRate, 'winRate': winRate, 'imgPath': champImgPath}
+                banRate = round(banRate/len(builds['roles']),1)
+                pickRate = round(pickRate/len(builds['roles']),1)
+                winRate = round(winRate/len(builds['roles']),1)
+                stat = {'id':key, 'idx':idx, 'name':champName, 'banRate':banRate, 'lanes': lanes,
+                'pickRate':pickRate, 'winRate':winRate, 'imgPath':champImgPath}
                 stats.append(stat)
                 indexMap[champName.lower()] = idx
                 print(f'{champName} okay')
                 idx += 1
             except Exception as err:
-                print("error",champList[str(key)])
+                print("err", champList[str(key)])
         else:
             print(resp)
     with open('dataDragon/builds.json', 'w') as json_file1:
@@ -549,7 +549,7 @@ with open('dataDragon/shardIds.json') as file9:
     shardList = json.load(file9)
 with open('dataDragon/indexMap.json') as file10:
     indexMap = json.load(file10)
-print(indexMap)
+
 # starting summoners
 global SUMMONERS
 SUMMONERS = [

@@ -2,13 +2,16 @@
 img.champIcon {
   border-radius: 50%;
 }
+img {
+  border-radius: 20%;
+}
 .flex-container
 {
   vertical-align:middle;
   align-items:center;
   text-align:center;
   white-space: nowrap;
-  padding: 1%;
+  padding: 1% 0;
 }
 div.teams
 {
@@ -21,6 +24,7 @@ div.teams
 }
 .champName
 {
+  color: #212529;
   vertical-align: top;
 }
 .trinket
@@ -80,9 +84,7 @@ button.sort
               0 2px 2px rgba(0,0,0,0.11),
               0 4px 4px rgba(0,0,0,0.11),
               0 6px 8px rgba(0,0,0,0.11),
-              0 8px 16px rgba(0,0,0,0.11);
-  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+              0 8px 16px rgba(0,0,0,0.11)
 }
 
 .champIcon {
@@ -132,6 +134,18 @@ button.sort
 .runeBranch {
   border-radius: 50%;
 }
+
+button {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+button:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
 </style>
 
 <template>
@@ -139,7 +153,7 @@ button.sort
     <div class="head">
       <a><alert :message=message v-if="showMessage"></alert></a>
     </div>
-     <ul class="nav nav-tabs" width='90%'>
+     <ul class="nav nav-tabs" width='90%' style="padding-left: 1%;">
       <li class="nav-item" v-for="(summoner, index) in summoners"
       :key="index" :title="summoner.name">
         <button class="nav-link" @click.prevent="setActive(summoner.name)"
@@ -170,7 +184,7 @@ button.sort
     <div class="tab-content py-3 flex-container" id="myTabContent">
       <div v-for="summoner in summoners" :key="summoner.id"
       class="tab-pane fade" :class="{ 'active show': isActive(summoner.name) }" :id=(summoner.name)>
-        <table class="table" id="summonerTable">
+        <table class="table table-borderless table-striped border" id="summonerTable">
           <tbody>
               <tr align="center">
                 <th>Champion</th>
