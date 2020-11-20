@@ -13,14 +13,14 @@
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
     "core-js": "^2.6.11",
-    "serialize-javascript": ">=2.1.1",
+    "serialize-javascript": "^5.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^4.3.1",
+    "@vue/cli-service": "^4.5.9",
     "@vue/eslint-config-airbnb": "^4.0.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^5.16.0",

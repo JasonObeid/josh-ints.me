@@ -92,8 +92,11 @@ def getItems2(itemIds):
     itemsList = []
     print(itemIds)
     for item in itemIds:
-        if(item != 0):
+        if(item != 0 and str(item) in itemList.keys()):
             name = itemList[str(item)]
+            itemsList.append(name)
+        else:
+            name = str(item)
             itemsList.append(name)
     return itemsList
 
@@ -157,40 +160,47 @@ def cleanStats(body, key):
 def getMobalytics():
     buildList = []
     stats = []
+    indexMap = {}
     idx = 0
     for key, value in champList.items():
         url = f'https://api.mobalytics.gg/lol/champions/v1/meta?name={value}'
         resp = requests.get(url)
         code = resp.status_code
         if code == 200:
-            body = resp.json()
-            builds = cleanStats(body, key)
-            buildList.append(builds)
-            champName = champList[str(key)]
-            champImgPath = '/images/champion/' + champName + '.jpg'
-            banRate = 0.0
-            pickRate = 0.0
-            winRate = 0.0
-            lanes = []
-            for role in builds['roles']:
-                banRate += float(role['banRate'][:-1])
-                pickRate += float(role["pickRate"][:-1])
-                winRate += float(role["winRate"][:-1])
-                lanes.append(role['lane'])
-            banRate = round(banRate/len(builds['roles']),1)
-            pickRate = round(pickRate/len(builds['roles']),1)
-            winRate = round(winRate/len(builds['roles']),1)
-            stat = {'id':key, 'idx':idx, 'name':champName, 'banRate':banRate, 'lanes': lanes,
-            'pickRate':pickRate, 'winRate':winRate, 'imgPath':champImgPath}
-            stats.append(stat)
-            print(f'{champName} okay')
-            idx += 1
+            try:
+                body = resp.json()
+                builds = cleanStats(body, key)
+                buildList.append(builds)
+                champName = champList[str(key)]
+                champImgPath = '/images/champion/' + champName + '.jpg'
+                banRate = 0.0
+                pickRate = 0.0
+                winRate = 0.0
+                lanes = []
+                for role in builds['roles']:
+                    banRate += float(role['banRate'][:-1])
+                    pickRate += float(role["pickRate"][:-1])
+                    winRate += float(role["winRate"][:-1])
+                    lanes.append(role['lane'])
+                banRate = round(banRate/len(builds['roles']),1)
+                pickRate = round(pickRate/len(builds['roles']),1)
+                winRate = round(winRate/len(builds['roles']),1)
+                stat = {'id':key, 'idx':idx, 'name':champName, 'banRate':banRate, 'lanes': lanes,
+                'pickRate':pickRate, 'winRate':winRate, 'imgPath':champImgPath}
+                stats.append(stat)
+                indexMap[champName.lower()] = idx
+                print(f'{champName} okay')
+                idx += 1
+            except Exception as err:
+                print("error",champList[str(key)])
         else:
             print(resp)
     with open('dataDragon/builds.json', 'w') as json_file1:
         json.dump(buildList, json_file1, separators=(',', ':'))
     with open('dataDragon/stats.json', 'w') as json_file2:
         json.dump(stats, json_file2, separators=(',', ':'))
+    with open('dataDragon/indexMap.json', 'w') as json_file3:
+        json.dump(indexMap, json_file3, separators=(',', ':'))
     return buildList, stats
 
 

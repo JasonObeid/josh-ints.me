@@ -4,18 +4,21 @@
   align-items: top;
   text-align: center;
   white-space: nowrap;
-  padding: 1%;
+  padding: 1% 1% 0 1%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 1fr;
   grid-column-gap: 15px;
   grid-row-gap: 10px;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .stats {
   grid-area: 1 / 1 / 2 / 2;
   vertical-align: top;
 }
+
 .build {
   grid-area: 1 / 2 / 2 / 3;
   vertical-align: top;
@@ -36,7 +39,6 @@
   align-self: center;
   vertical-align: middle;
 }
-
 
 .bld-Role {
   grid-area: bld-Role;
@@ -69,53 +71,91 @@
   grid-area: bld-Items;
 }
 
+table {
+  vertical-align: middle;
+}
+
 .champName {
   align-items: left;
   text-align: left;
   vertical-align: middle;
 }
 
-.champIcon {
-  margin-right: 10%;
-  margin-left: 0%;
-  border-radius: 50%;
-}
-
-td {
-  vertical-align: middle;
+img {
+  border-radius: 20%;
 }
 
 .sort {
   cursor: pointer;
 }
 
-.roles {
-  margin-right: 0.05rem;
-  margin-left: 0.05rem;
-}
-.champText {
-  margin-right: 10%;
-}
-.items {
-  padding: 5px;
-  align-items: left;
+.itemContainer {
   text-align: left;
 }
+
+.itemRow {
+  margin-bottom: 10px;
+}
+
+.items {
+  align-items: left;
+  text-align: left;
+  margin: 0 10px 0 20px;
+}
+
 .runeName {
   text-align: left;
   vertical-align: middle;
 }
-.container {
-  position: relative;
-  text-align: center;
-  color: white;
+
+.filterShadow {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
+.filterShadow:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+button {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+button:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.dropShadow {
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11),
+              0 4px 4px rgba(0,0,0,0.11),
+              0 6px 8px rgba(0,0,0,0.11),
+              0 8px 16px rgba(0,0,0,0.11)
+}
+
+
+.runes {
+  border-radius: 50%;
+}
+
+.refresh {
+  border-radius: 50%;
+  padding: 4px 6px;
+}
+
 </style>
 <template>
   <div class="parent">
     <div class="stats">
-      <b-row>
-        <b-col class="roles" v-for="(btn, idx) in buttons" :key="idx">
+      <b-row align-v="center" align-h="center">
+        <b-col v-for="(btn, idx) in buttons" :key="idx">
           <b-button
             :pressed.sync="btn.state"
             variant="outline-info"
@@ -123,48 +163,52 @@ td {
             block
           >{{ btn.caption }}</b-button>
         </b-col>
-      </b-row>
-      <br>
-      <b-row style="align-items: center;">
-        <b-col cols="11">
-          <b-form-input v-model="searchText" type="search"
-          placeholder="Filter by Name" autofocus>
-          </b-form-input>
-        </b-col>
-        <b-col>
-          <button type="button" class="btn btn-outline-secondary btn-sm"
+        <b-col cols="1">
+          <b-button variant="outline-secondary" size="sm" class="refresh"
           id="refresh" @click='updateBuilds()'>
             <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
-          </button>
+          </b-button>
         </b-col>
       </b-row>
       <br>
-      <b-table
-        small
+      <b-row align-v="center" align-h="center">
+        <b-col>
+          <b-form-input v-model="searchText" type="search"
+          placeholder="Filter by Name" autofocus class=filterShadow>
+          </b-form-input>
+        </b-col>
+      </b-row>
+      <br>
+      <b-table striped
+        small no-border-collapse
         sticky-header="715px"
         responsive="false"
         :fields="fields"
         :items="filtered"
-        style="vertical-align: middle; overflow-x: hidden;"
+        style="overflow-x: hidden; "
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
       >
         <!-- A custom formatted column -->
         <template v-slot:cell(name)="filtered">
-          <div class="champName">
-            <b-button
+          <div style="text-align: left;">
+            <b-button block
               @click="changeSelected(filtered.item.idx)"
-              class="btn btn-light btn-sm"
-              style="background-color: #e2e2e2b8; color: black;"
+              variant="light" size="sm" class="champName"
             >
-              <img
-                :src="filtered.item.imgPath"
-                class="champIcon"
-                :alt="filtered.item.name"
-                width="32px"
-              />
-              <a class="champText">{{ filtered.item.name }}</a>
+                <b-row align-v="center" align-h="start" no-gutters>
+                  <b-col>
+                    <img
+                      :src="filtered.item.imgPath"
+                      :alt="filtered.item.name"
+                      width="32px"
+                    />
+                  </b-col>
+                  <b-col>
+                    {{ filtered.item.name }}
+                  </b-col>
+                </b-row>
             </b-button>
           </div>
         </template>
@@ -182,11 +226,10 @@ td {
                 v-for="lane in filtered.item.lanes"
                 :key="lane"
                 @click="changeSelectedWithRole(filtered.item.idx, lane)"
-                class="btn btn-light btn-sm"
+                variant="light" size="sm"
               >
                 <img
                   :src="'/images/lanes/'+lane+'.png'"
-                  class="champIcon"
                   :alt="filtered.item.name"
                   width="24px"
                 />
@@ -199,33 +242,31 @@ td {
     <div class="build">
       <div class="bld-grid-container">
         <div class="bld-Role">
-          <b-row>
-            <b-col>
-              <b-row>
-                <b-col>
-                  <img :src="selected.imgPath" />
+          <b-row align-v="center" align-h="center">
+            <b-col cols="5">
+              <b-row align-v="center" align-h="center">
+                <b-col cols="7" >
+                  <img :src="selected.imgPath" class="dropShadow"/>
                 </b-col>
-                <b-col style="align-self:left;">
-                  <b-col>
-                    <img
+                <b-col cols="5">
+                  <b-col style="padding: 10%;">
+                    <img class="dropShadow"
                       :src="build.spells[0].imgPath"
                       :alt="build.spells[0].name"
-                      style="padding: 5%"
                     />
                   </b-col>
-                  <b-col>
-                     <img
+                  <b-col style="padding: 10%;">
+                     <img class="dropShadow"
                       :src="build.spells[1].imgPath"
-                      :alt="build.spells[0].name"
-                      style="padding: 5%"
+                      :alt="build.spells[1].name"
                     />
                   </b-col>
                 </b-col>
               </b-row>
             </b-col>
-            <b-col>
-              <b-row>
-                <b-col>
+            <b-col cols="7">
+              <b-row align-v="center" align-h="center">
+                <b-col cols="4">
                   <b-form-select v-model="selectedRole">
                     <b-form-select-option
                       v-for="(role, index) in selected.roles"
@@ -235,7 +276,7 @@ td {
                     >{{ role.lane }}</b-form-select-option>
                   </b-form-select>
                 </b-col>
-                <b-col>
+                <b-col cols="8">
                   <b-form-group>
                     <b-form-radio
                       v-for="(buildOpt, index) in selectedRole.builds"
@@ -244,7 +285,9 @@ td {
                       name="some-radios"
                       :value="buildOpt"
                       :text="buildOpt.name"
-                    >{{ buildOpt.name }}</b-form-radio>
+                    >
+                      {{ buildOpt.name }}
+                    </b-form-radio>
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -257,33 +300,37 @@ td {
         <div class="bld-Runes">
           <b-row>
             <b-col>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.primaryBranch.keystone.imgPath" width="64px" />
+                  <img :src="build.runes.primaryBranch.keystone.imgPath"
+                  class="runes dropShadow" width="64px" />
                 </b-col>
                 <b-col class="runeName">
                   <a>{{ build.runes.primaryBranch.keystone.name }}</a>
                 </b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.primaryBranch.perk1.imgPath" />
+                  <img :src="build.runes.primaryBranch.perk1.imgPath"
+                  class="runes dropShadow"  height="40px" width="auto"/>
                 </b-col>
                 <b-col class="runeName">
                   <a>{{ build.runes.primaryBranch.perk1.name }}</a>
                 </b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.primaryBranch.perk2.imgPath" />
+                  <img :src="build.runes.primaryBranch.perk2.imgPath"
+                  class="runes" height="40px" width="auto"/>
                 </b-col>
                 <b-col class="runeName">
                   <a>{{ build.runes.primaryBranch.perk2.name }}</a>
                 </b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.primaryBranch.perk3.imgPath" />
+                  <img :src="build.runes.primaryBranch.perk3.imgPath"
+                  class="runes dropShadow" height="40px" width="auto"/>
                 </b-col>
                 <b-col class="runeName">
                   <a>{{ build.runes.primaryBranch.perk3.name }}</a>
@@ -291,37 +338,42 @@ td {
               </b-row>
             </b-col>
             <b-col>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.secondaryBranch.perk0.imgPath" />
+                  <img :src="build.runes.secondaryBranch.perk0.imgPath"
+                  class="runes dropShadow" height="40px" width="auto"/>
                 </b-col>
                 <b-col class="runeName">
                   <a>{{ build.runes.secondaryBranch.perk0.name }}</a>
                 </b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.secondaryBranch.perk1.imgPath" />
+                  <img :src="build.runes.secondaryBranch.perk1.imgPath"
+                  class="runes dropShadow" height="40px" width="auto"/>
                 </b-col>
                 <b-col class="runeName">
                   <a>{{ build.runes.secondaryBranch.perk1.name }}</a>
                 </b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.auxillary[0].imgPath" />
+                  <img :src="build.runes.auxillary[0].imgPath"
+                  class="runes dropShadow" height="30px" width="auto"/>
                 </b-col>
                 <b-col></b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.auxillary[1].imgPath" />
+                  <img :src="build.runes.auxillary[1].imgPath"
+                  class="runes dropShadow" height="30px" width="auto"/>
                 </b-col>
                 <b-col></b-col>
               </b-row>
-              <b-row>
+              <b-row align-v="center" align-h="center">
                 <b-col>
-                  <img :src="build.runes.auxillary[2].imgPath" />
+                  <img :src="build.runes.auxillary[2].imgPath"
+                  class="runes dropShadow" height="30px" width="auto"/>
                 </b-col>
                 <b-col></b-col>
               </b-row>
@@ -332,59 +384,58 @@ td {
           <h4>Skills</h4>
         </div>
         <div class="bld-Skills">
-          <b-row>
+          <b-row align-v="center" align-h="center">
             <b-col>
               {{ build.skills[0].name }}
               <br />
-              <div class="centered">{{ build.skills[0].button }}</div>
-              <img :src="build.skills[0].imgPath" />
+              <div>{{ build.skills[0].button }}</div>
+              <img :src="build.skills[0].imgPath" class="dropShadow"/>
             </b-col>
             <b-col>
-              <div class="centered">
+              <div>
                 <b-icon icon="arrow-right"></b-icon>
               </div>
             </b-col>
             <b-col>
               {{ build.skills[1].name }}
               <br />
-              <div class="centered">{{ build.skills[1].button }}</div>
-              <img :src="build.skills[1].imgPath" />
+              <div>{{ build.skills[1].button }}</div>
+              <img :src="build.skills[1].imgPath" class="dropShadow"/>
             </b-col>
             <b-col>
-              <div class="centered">
+              <div>
                 <b-icon icon="arrow-right"></b-icon>
               </div>
             </b-col>
             <b-col>
               {{ build.skills[2].name }}
               <br />
-              <div class="centered">{{ build.skills[2].button }}</div>
-              <img :src="build.skills[2].imgPath" />
+              <div>{{ build.skills[2].button }}</div>
+              <img :src="build.skills[2].imgPath" class="dropShadow"/>
             </b-col>
           </b-row>
         </div>
         <div class="bld-ItemHeader">
           <h4>Items</h4>
         </div>
-        <div class="items">
+        <div class="itemContainer">
           <div class="Early">
-            <b-row>
-              <b-col cols="2">
+            <b-row no-gutters class="itemRow">
+              <b-col cols="1" style="text-align: right;">
                 <a>Early</a>
               </b-col>
               <b-col>
                 <img
                   v-for="(item, index) in build.items.general.start"
-                  :key="index"
-                  :src="item.imgPath"
-                  class="items"
+                  :key="index" :src="item.imgPath" class="items dropShadow"
+                  v-b-tooltip.hover noninteractive :title="item.name"
                 />
               </b-col>
             </b-row>
           </div>
           <div class="Core">
-            <b-row>
-              <b-col cols="2">
+            <b-row no-gutters class="itemRow">
+              <b-col cols="1" style="text-align: right;">
                 <a>Core</a>
               </b-col>
               <b-col>
@@ -392,14 +443,15 @@ td {
                   v-for="(item, index) in build.items.general.core"
                   :key="index"
                   :src="item.imgPath"
-                  class="items"
+                  class="items dropShadow"
+                  v-b-tooltip.hover noninteractive :title="item.name"
                 />
               </b-col>
             </b-row>
           </div>
           <div class="Late">
-            <b-row>
-              <b-col cols="2">
+            <b-row no-gutters class="itemRow">
+              <b-col cols="1" style="text-align: right;">
                 <a>Late</a>
               </b-col>
               <b-col>
@@ -407,14 +459,15 @@ td {
                   v-for="(item, index) in build.items.general.full"
                   :key="index"
                   :src="item.imgPath"
-                  class="items"
+                  class="items dropShadow"
+                  v-b-tooltip.hover noninteractive :title="item.name"
                 />
               </b-col>
             </b-row>
           </div>
           <div class="Situational">
-            <b-row>
-              <b-col cols="2">
+            <b-row no-gutters class="itemRow">
+              <b-col cols="1" style="text-align: right;">
                 <a>Situational</a>
               </b-col>
               <b-col>
@@ -422,7 +475,8 @@ td {
                   v-for="(item, index) in build.items.situational"
                   :key="index"
                   :src="item.imgPath"
-                  class="items"
+                  class="items dropShadow"
+                  v-b-tooltip.hover noninteractive :title="item.name"
                 />
               </b-col>
             </b-row>
@@ -436,8 +490,8 @@ td {
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'https:/www.josh-ints.me/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
@@ -466,10 +520,13 @@ export default {
       searchText: '',
       allChampions: [],
       builds: [],
+      indexMap: [],
       activeItem: '',
       showUpdate: false,
+      champName: '',
     };
   },
+  props: ['test'],
   computed: {
     filtered() {
       const buttonStates = this.btnStates;
@@ -592,15 +649,19 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           this.allChampions = res.data.stats;
           this.builds = res.data.builds;
-          // eslint-disable-next-line prefer-destructuring
-          this.selected = this.builds[31];
-          // eslint-disable-next-line prefer-destructuring
-          this.selectedRole = this.selected.roles[0];
-          // eslint-disable-next-line prefer-destructuring
-          this.build = this.selected.roles[0].builds[0];
+          this.indexMap = res.data.indexMap;
+          if (this.champName === '') {
+            // eslint-disable-next-line prefer-destructuring
+            this.selected = this.builds[31];
+            console.log(this.selected);
+            // eslint-disable-next-line prefer-destructuring
+            this.selectedRole = this.selected.roles[0];
+            // eslint-disable-next-line prefer-destructuring
+            this.build = this.selected.roles[0].builds[0];
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -610,6 +671,20 @@ export default {
   },
   created() {
     this.getBuilds();
+  },
+  watch: {
+    $route(to) {
+      if (to.path === '/builds') {
+        console.log(to.params.champName);
+        if (to.params.champName !== undefined) {
+          if (to.params.champName !== this.champName) {
+            this.champName = to.params.champName.toLowerCase();
+            const champIndex = this.indexMap[this.champName];
+            this.changeSelected(champIndex);
+          }
+        }
+      }
+    },
   },
 };
 </script>
