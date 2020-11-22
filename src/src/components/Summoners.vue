@@ -438,9 +438,8 @@ button:hover {
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-// const localhost = '/api';
-const localhost = 'http://localhost:5000/api';
-// add pause + transitions to repaint
+const localhost = '/api';
+// const localhost = 'http://localhost:5000/api';
 export default {
   data() {
     return {
