@@ -50,7 +50,7 @@
 .bld-grid-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px 1px;
+  gap: 10px 0px;
   grid-template-areas:
     "bld-Role" "bld-RuneHeader" "bld-Runes"
     "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Items";
@@ -167,8 +167,21 @@ button:hover {
   border-radius: 50%;
   padding: 4px 6px;
 }
+.shardRow {
+  margin: 0.3% 0px;
+}
 .runeRow {
-  padding: 5px 5px;
+  margin: 2% 0px;
+}
+.runeRowHeader {
+  text-align: left;
+  padding: 2% 5%;
+  border-radius: 6px;
+  background-color: #f2f2f2;
+}
+.runeRowGroup {
+  margin: 3% 0;
+  border-radius: 6px;
 }
 </style>
 <template>
@@ -323,28 +336,28 @@ button:hover {
           <b-row>
               <b-col>
                 <div class="primary-container">
-                  <div>
+                  <div class="runeRowHeader">
                     <b-row no-gutters align-v="center" align-h="center">
                       <b-col cols="3">
                         <img :src="build.runes.primaryBranch.imgPath"
-                        class="runes dropShadow activeRune" width="36px"/>
+                        class="runes dropShadow activeRune" width="32px"/>
                       </b-col>
                       <b-col cols="9">
                         {{ build.runes.primaryBranch.name }}
                       </b-col>
                     </b-row>
                   </div>
-                  <div>
+                  <div class="runeRowGroup">
                     <b-row no-gutters align-v="center" align-h="center" class="runeRow">
                       <b-col v-for="rune in runeMap[build.runes.primaryBranch.id].runeRows[0]"
                       :key="rune.name">
                         <img :src="rune.imgPath"
-                        class="runes dropShadow" width="52px"
+                        class="runes dropShadow" width="64px"
                         :class="{ 'activeRune': isActiveRune(rune.id) }"/>
                       </b-col>
                     </b-row>
                   </div>
-                  <div>
+                  <div class="runeRowGroup">
                     <b-row no-gutters align-v="center" align-h="center" class="runeRow"
                     v-for="runeRow in runeMap[build.runes.primaryBranch.id].runeRows.slice(1)"
                     :key="runeRow.name">
@@ -359,18 +372,18 @@ button:hover {
               </b-col>
               <b-col>
                 <div class="secondary-container">
-                  <div>
+                  <div class="runeRowHeader">
                     <b-row no-gutters align-v="center" align-h="center">
                       <b-col cols="3">
                         <img :src="build.runes.secondaryBranch.imgPath"
-                        class="runes dropShadow activeRune" width="36px"/>
+                        class="runes dropShadow activeRune" width="32px"/>
                       </b-col>
                       <b-col cols="9">
                         {{ build.runes.secondaryBranch.name }}
                       </b-col>
                     </b-row>
                   </div>
-                  <div>
+                  <div class="runeRowGroup">
                     <b-row no-gutters align-v="center" align-h="center" class="runeRow"
                     v-for="runeRow in runeMap[build.runes.secondaryBranch.id].runeRows.slice(1)"
                     :key="runeRow.name">
@@ -381,8 +394,8 @@ button:hover {
                       </b-col>
                     </b-row>
                   </div>
-                  <div>
-                    <b-row no-gutters align-v="center" align-h="center" class="runeRow"
+                  <div class="runeRowGroup">
+                    <b-row no-gutters align-v="center" align-h="center" class="shardRow"
                     v-for="(auxRow, rowIndex) in shardMap" :key="rowIndex">
                       <b-col v-for="(shard, colIndex) in auxRow" :key="colIndex">
                         <img :src="shard.imgPath"
@@ -399,7 +412,7 @@ button:hover {
           <h4>Skills</h4>
         </div>
         <div class="bld-Skills">
-          <b-row align-v="center" align-h="center">
+          <b-row align-v="center" align-h="center" style="padding-bottom: 1%">
             <b-col>
               {{ build.skills[0].name }}
               <br />
@@ -435,7 +448,7 @@ button:hover {
         </div>
         <div class="itemContainer">
           <div class="Early">
-            <b-row no-gutters class="itemRow">
+            <b-row align-v="center" no-gutters class="itemRow">
               <b-col cols="1" style="text-align: right">
                 Early
               </b-col>
@@ -451,7 +464,7 @@ button:hover {
             </b-row>
           </div>
           <div class="Core">
-            <b-row no-gutters class="itemRow">
+            <b-row align-v="center" no-gutters class="itemRow">
               <b-col cols="1" style="text-align: right">
                 Core
               </b-col>
@@ -469,7 +482,7 @@ button:hover {
             </b-row>
           </div>
           <div class="Late">
-            <b-row no-gutters class="itemRow">
+            <b-row align-v="center" no-gutters class="itemRow">
               <b-col cols="1" style="text-align: right">
                 Late
               </b-col>
@@ -485,7 +498,7 @@ button:hover {
             </b-row>
           </div>
           <div class="Situational">
-            <b-row no-gutters class="itemRow">
+            <b-row align-v="center" no-gutters class="itemRow">
               <b-col cols="1" style="text-align: right">
                 Situational
               </b-col>
