@@ -1,4 +1,18 @@
 <style scoped>
+
+.fade-enter-active, .fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.25s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.25s;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+
 img.champIcon {
   border-radius: 50%;
 }
@@ -149,6 +163,7 @@ button:hover {
 </style>
 
 <template>
+<transition name="fade" mode="out-in">
   <div class="flex-container">
     <div class="head">
       <a><alert :message=message v-if="showMessage"></alert></a>
@@ -156,8 +171,8 @@ button:hover {
      <ul class="nav nav-tabs" width='90%' style="padding-left: 1%;">
       <li class="nav-item" v-for="(summoner, index) in summoners"
       :key="index" :title="summoner.name">
-        <button class="nav-link" @click.prevent="setActive(summoner.name)"
-        :class="{ active: isActive(summoner.name) }">
+        <button class="nav-link" @click.prevent="setActiveTab(summoner.name)"
+        :class="{ active: isActiveTab(summoner.name) }">
           <a>{{ summoner.name }} | </a>
           <a>{{ summoner.rank }}</a>
           <b-button size='sm' @click=onDeleteSummoner(summoner)
@@ -183,7 +198,8 @@ button:hover {
     </ul>
     <div class="tab-content py-3 flex-container" id="myTabContent">
       <div v-for="summoner in summoners" :key="summoner.id"
-      class="tab-pane fade" :class="{ 'active show': isActive(summoner.name) }" :id=(summoner.name)>
+      class="tab-pane fade" :id=(summoner.name)
+      :class="{ 'active show': isActiveTab(summoner.name) }">
         <table class="table table-borderless table-striped border" id="summonerTable">
           <tbody>
               <tr align="center">
@@ -232,7 +248,8 @@ button:hover {
                       :alt="match.runes.primaryBranch.keystone.name" height="40px" width="auto">
                     </td>
                     <td>
-                      <img class="runeBranch dropShadow" :src="match.runes.secondaryBranch.imgPath"
+                      <img class="runeBranch dropShadow"
+                      :src="match.runes.secondaryBranch.imgPath"
                       :alt="match.runes.secondaryBranch.name" height="25px" width="auto">
                     </td>
                   </tr>
@@ -243,12 +260,13 @@ button:hover {
                       <td v-for="(item, index) in match.items.itemsList
                       .slice(0,match.items.count)" :key="index">
                         <img class="dropShadow" :src="item.imgPath" :alt="item.name"
-                        v-b-tooltip.hover noninteractive :title="item.name">
+                        v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
                         <img class="dropShadow" :src="match.items.trinket.imgPath"
                         :alt="match.items.trinket.name"
-                        v-b-tooltip.hover noninteractive :title="match.items.trinket.name">
+                        v-b-tooltip.hover = "{ variant: 'secondary' }"
+                        :title="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>
@@ -259,19 +277,20 @@ button:hover {
                       <td v-for="(item, index) in match.items.itemsList.slice(0,3)"
                       :key="index">
                         <img class="dropShadow" :src="item.imgPath" :alt="item.name"
-                        v-b-tooltip.hover noninteractive :title="item.name">
+                        v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
                       </td>
                       <td rowspan="2" class="trinket">
                         <img class="dropShadow" :src="match.items.trinket.imgPath"
                         :alt="match.items.trinket.name"
-                        v-b-tooltip.hover noninteractive :title="match.items.trinket.name">
+                        v-b-tooltip.hover = "{ variant: 'secondary' }"
+                        :title="match.items.trinket.name">
                       </td>
                     </tr>
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(3)"
                       :key="index">
                         <img class="dropShadow" :src="item.imgPath" :alt="item.name"
-                        v-b-tooltip.hover noninteractive :title="item.name">
+                        v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
                       </td>
                     </tr>
                   </div>
@@ -300,31 +319,31 @@ button:hover {
                     </router-link>
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
-                    v-b-tooltip.hover noninteractive title="Carried">
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                    v-b-tooltip.hover.left = "{ variant: 'secondary' }" title="Carried">
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="carry">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamDPSIndex"
-                    v-b-tooltip.hover noninteractive title="Team damage btw">
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                    v-b-tooltip.hover.left = "{ variant: 'secondary' }" title="Team dmg">
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="damage">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamTankIndex "
-                    v-b-tooltip.hover noninteractive title="Team tank btw">
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                    v-b-tooltip.hover.left = "{ variant: 'secondary' }" title="Team tank">
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="tank">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <a v-else>
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="light">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                   </div>
                 </td>
@@ -332,31 +351,31 @@ button:hover {
                   <div class="teams" v-for="(player, index) in match.teamInfo.red" :key="index">
                     <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
                     player.participantId === match.teamInfo.redTeamDPSIndex"
-                    v-b-tooltip.hover noninteractive title="Carried">
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                    v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Carried">
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="carry">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamDPSIndex"
-                     v-b-tooltip.hover noninteractive title="Team damage btw">
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                    v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Team dmg">
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="damage">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamTankIndex "
-                     v-b-tooltip.hover noninteractive title="Team tank btw">
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                    v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Team tank">
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="tank">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <a v-else>
-                       <b-button size='sm' @click=addTeammate(player.summonerName)
+                      <b-button size='sm' @click=addTeammate(player.summonerName)
                         variant="light">
-                         {{ player.summonerName }}
-                       </b-button>
+                        {{ player.summonerName }}
+                      </b-button>
                     </a>
                     <router-link :to="{ name: 'Home',
                     params: { champName: player.champName.toLowerCase() } }">
@@ -412,6 +431,7 @@ button:hover {
       </b-form>
     </b-modal>
   </div>
+</transition>
 </template>
 
 <script>
@@ -420,7 +440,6 @@ import Alert from './Alert.vue';
 
 const localhost = '/api';
 // const localhost = 'http://localhost:5000/api';
-
 export default {
   data() {
     return {
@@ -548,10 +567,10 @@ export default {
       this.dateSortCount += 1;
       this.setSortIcons(this.dateSortCount, 'date');
     },
-    isActive(menuItem) {
+    isActiveTab(menuItem) {
       return this.activeItem === menuItem;
     },
-    setActive(menuItem) {
+    setActiveTab(menuItem) {
       this.activeItem = menuItem;
     },
     winLoss(game) {
@@ -560,42 +579,27 @@ export default {
       }
       return 'Loss';
     },
-    getSummoners(run = '1') {
+    getSummoners(run = 'goTab0') {
       const path = `${localhost}/summoners`;
-      // console.log(this.summoners[0]);
-      if (run === 'goTab0') {
-        axios.get(path)
-          .then((res) => {
-            this.message = res.data.message;
-            this.summoners = res.data.summoners;
-            this.setActive(this.summoners[0].name);
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      } else if (run === 'goTabSummoner') {
+      if (run === 'goTabSummoner') {
         axios.get(path)
           .then((res) => {
             this.message = res.data.message;
             this.summoners = res.data.summoners;
             const len = this.summoners.length;
-            this.setActive(this.summoners[len - 1].name);
+            this.setActiveTab(this.summoners[len - 1].name);
           })
           .catch((error) => {
-            // eslint-disable-next-line
             console.error(error);
           });
       } else {
         axios.get(path)
           .then((res) => {
-            console.log(res.data.summoners);
-            console.log(res.data.message);
             this.message = res.data.message;
             this.summoners = res.data.summoners;
+            this.setActiveTab(this.summoners[0].name);
           })
           .catch((error) => {
-            // eslint-disable-next-line
             console.error(error);
           });
       }
@@ -605,37 +609,34 @@ export default {
       this.message = 'Fetching...';
       this.showRefresh = true;
       this.showMessage = true;
-      axios.post(path)
+      axios.put(path)
         .then((res) => {
           console.log(res);
           this.message = res.data.message;
           this.summoners = res.data.summoners;
-          this.setActive(this.summoners[0].name);
+          this.setActiveTab(this.summoners[0].name);
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.error(error);
         });
       this.showRefresh = false;
     },
     addSummoner(payload) {
-      console.log(payload);
       const path = `${localhost}/summoners`;
       this.message = 'Fetching...';
       this.showRefresh = true;
       this.showMessage = true;
-      axios.post(path, payload)
-        .then(() => {
-          console.log(payload);
-          this.getSummoners(payload.code);
-          this.showMessage = true;
+      this.summoners.push({ name: payload.name });
+      this.setActiveTab(payload.name);
+      axios.put(path, payload)
+        .then((res) => {
+          const len = this.summoners.length;
+          this.summoners[len - 1] = res.data.summoners;
+          this.showMessage = false;
           this.showRefresh = false;
-          this.isActive(payload.name);
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.log(error);
-          this.getSummoners();
         });
     },
     initForm() {
@@ -645,11 +646,17 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       this.$refs.addSummonerModal.hide();
-      const payload = {
-        name: this.addSummonerForm.name,
-        code: 'goTabSummoner',
-      };
-      this.addSummoner(payload);
+      const { name } = this.addSummonerForm;
+      const found = this.checkForSummoner(name);
+      if (!found) {
+        const payload = {
+          name,
+          code: 'goTabSummoner',
+        };
+        this.addSummoner(payload);
+      } else {
+        this.setActiveTab(name);
+      }
       this.initForm();
     },
     onReset(evt) {
@@ -660,32 +667,6 @@ export default {
     editSummoner(summoner) {
       this.editForm = summoner;
     },
-    onSubmitUpdate(evt) {
-      evt.preventDefault();
-      this.$refs.editSummonerModal.hide();
-      const payload = {
-        name: this.editForm.name,
-      };
-      this.updateSummoner(payload, this.editForm.id);
-    },
-    updateSummoner(payload, summonerID) {
-      const path = `${localhost}/summoners/${summonerID}`;
-      this.message = 'Fetching...';
-      this.showRefresh = true;
-      this.showMessage = true;
-      axios.put(path, payload)
-        .then(() => {
-          this.getSummoners();
-          this.message = 'Summoner updated!';
-          this.showMessage = true;
-          this.showRefresh = false;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.getSummoners();
-        });
-    },
     onResetUpdate(evt) {
       evt.preventDefault();
       this.$refs.editSummonerModal.hide();
@@ -694,16 +675,23 @@ export default {
     },
     removeSummoner(summonerID) {
       const path = `${localhost}/summoners/${summonerID}`;
+      this.showRefresh = true;
       axios.delete(path)
         .then(() => {
-          this.getSummoners('goTab0');
           this.message = 'Summoner removed!';
           this.showMessage = true;
+          for (let i = 0; i < this.summoners.length; i += 1) {
+            if (this.summoners[i].id === summonerID) {
+              this.summoners.pop(i);
+            }
+          }
+          this.showRefresh = false;
+          this.showMessage = false;
+          this.setActiveTab(this.summoners[0].name);
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getSummoners();
         });
     },
     onDeleteSummoner(summoner) {
@@ -716,6 +704,13 @@ export default {
         endIndex: summoner.endIndex + 10,
       };
       this.updateSummoner(payload, summoner.id);
+    },
+    checkForSummoner(name) {
+      let exists = false;
+      for (let i = 0; i < this.summoners.length; i += 1) {
+        if (this.summoners[i].name === name) { exists = true; }
+      }
+      return exists;
     },
   },
   created() {
