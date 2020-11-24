@@ -1,4 +1,5 @@
 <style scoped>
+
 .fade-enter-active, .fade-leave-active {
   transition-property: opacity;
   transition-duration: 0.25s;
@@ -183,11 +184,25 @@ button:hover {
   margin: 3% 0;
   border-radius: 6px;
 }
+#statsTable::-webkit-scrollbar {
+    width: 8px;
+    background-color: #F5F5F5;
+}
+
+#statsTable::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(104, 140, 240, 0.3);
+  }
+
+#statsTable::-webkit-scrollbar-thumb {
+    background-color: lightblue;
+    outline: 1px solid slategrey;
+}
+
 </style>
 <template>
 <transition name="fade" mode="out-in">
   <div class="parent">
-    <div class="stats" id="statsContainer">
+    <div class="stats" ref="statsContainer">
       <b-row align-v="center" align-h="center">
         <b-col v-for="(btn, idx) in buttons" :key="idx">
           <b-button
@@ -198,8 +213,8 @@ button:hover {
           >{{ btn.caption }}</b-button>
         </b-col>
         <b-col cols="1">
-          <b-button variant="outline-secondary" size="sm" class="refresh"
-          id="refresh" @click='updateBuilds()'>
+          <b-button size="sm" class="refresh" ref="refresh" @click='updateBuilds()'
+          :variant="getInverseVariant">
             <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
           </b-button>
@@ -208,13 +223,14 @@ button:hover {
       <br>
       <b-row align-v="center" align-h="center">
         <b-col>
-          <b-form-input v-model="searchText" type="search"
-          placeholder="Filter by Name" autofocus class=filterShadow>
+          <b-form-input v-model="searchText" type="search" ref="filterBox"
+          placeholder="Filter by Name" autofocus class=filterShadow
+          :class="{ 'text-white bg-dark': darkMode}">
           </b-form-input>
         </b-col>
       </b-row>
       <br>
-      <b-table striped
+      <b-table striped ref="statsTable"
         small no-border-collapse
         sticky-header="715px"
         responsive="false"
@@ -223,26 +239,21 @@ button:hover {
         style="overflow-x: hidden; "
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
+        :dark="darkMode"
       >
         <!-- A custom formatted column -->
         <template v-slot:cell(name)="filtered">
           <div style="text-align: left;">
-            <b-button block
-              @click="changeSelected(filtered.item.idx)"
-              variant="light" size="sm" class="champName"
-            >
-                <b-row align-v="center" align-h="start" no-gutters>
-                  <b-col>
-                    <img
-                      :src="filtered.item.imgPath"
-                      :alt="filtered.item.name"
-                      width="32px"
-                    />
-                  </b-col>
-                  <b-col>
-                    {{ filtered.item.name }}
-                  </b-col>
-                </b-row>
+            <b-button block @click="changeSelected(filtered.item.idx)"
+            size="sm" class="champName champBtn"
+            :class="{ 'btn-secondary': darkMode, 'btn-light': !darkMode}">
+              <b-row align-v="center" align-h="start" no-gutters>
+                <b-col>
+                  <img :src="filtered.item.imgPath" :alt="filtered.item.name" width="32px"
+                  style="margin-right: 10%;"/>
+                  {{ filtered.item.name }}
+                </b-col>
+              </b-row>
             </b-button>
           </div>
         </template>
@@ -254,26 +265,20 @@ button:hover {
         <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
         <!-- Optional default data cell scoped slot -->
         <template v-slot:cell(lanes)="filtered">
-          <b-row>
-            <b-col>
-              <b-button
-                v-for="lane in filtered.item.lanes"
-                :key="lane"
-                @click="changeSelectedWithRole(filtered.item.idx, lane)"
-                variant="light" size="sm"
-              >
-                <img
-                  :src="'/images/lanes/'+lane+'.png'"
-                  :alt="filtered.item.name"
-                  width="24px"
-                />
+         <b-row no-gutters>
+            <b-col v-for="lane in filtered.item.lanes" :key="lane">
+              <b-button @click="changeSelectedWithRole(filtered.item.idx, lane)"
+                size="sm" class="roleBtn"
+                :class="{ 'btn-secondary': darkMode, 'btn-light': !darkMode}">
+                <img :src="'/images/lanes/'+lane+'.png'"
+                  :alt="filtered.item.name" width="24px"/>
               </b-button>
             </b-col>
           </b-row>
         </template>
       </b-table>
     </div>
-    <div class="build" id="buildContainer">
+    <div class="build" ref="buildContainer">
       <div class="bld-grid-container">
         <div class="bld-Role">
             <b-row align-v="center" align-h="center">
@@ -302,7 +307,8 @@ button:hover {
               <b-col cols="7">
                 <b-row align-v="center" align-h="center">
                   <b-col cols="4">
-                    <b-form-select v-model="selectedRole">
+                    <b-form-select v-model="selectedRole" ref="laneDropdown"
+                    :class="{ 'text-white bg-dark': darkMode}">
                       <b-form-select-option
                         v-for="(role, index) in selected.roles"
                         :key="index"
@@ -312,7 +318,7 @@ button:hover {
                     </b-form-select>
                   </b-col>
                   <b-col cols="8">
-                    <b-form-group>
+                    <b-form-group ref="roleRadio">
                       <b-form-radio
                         v-for="(buildOpt, index) in selectedRole.builds"
                         :key="index"
@@ -336,7 +342,8 @@ button:hover {
           <b-row>
               <b-col>
                 <div class="primary-container">
-                  <div class="runeRowHeader">
+                  <div class="runeRowHeader" ref="primaryRuneHeader"
+                  :class="{ 'bg-dark': darkMode}">
                     <b-row no-gutters align-v="center" align-h="center">
                       <b-col cols="3">
                         <img :src="build.runes.primaryBranch.imgPath"
@@ -372,7 +379,8 @@ button:hover {
               </b-col>
               <b-col>
                 <div class="secondary-container">
-                  <div class="runeRowHeader">
+                  <div class="runeRowHeader" ref="secondaryRuneHeader"
+                  :class="{ 'bg-dark': darkMode}">
                     <b-row no-gutters align-v="center" align-h="center">
                       <b-col cols="3">
                         <img :src="build.runes.secondaryBranch.imgPath"
@@ -399,7 +407,7 @@ button:hover {
                     v-for="(auxRow, rowIndex) in shardMap" :key="rowIndex">
                       <b-col v-for="(shard, colIndex) in auxRow" :key="colIndex">
                         <img :src="shard.imgPath"
-                        class="runes dropShadow" height="24px" width="auto" :id="shard.id"
+                        class="runes dropShadow" height="24px" width="auto" :ref="shard.id"
                         :class="{ 'activeRune': isActiveShard(shard.id, rowIndex) }"/>
                       </b-col>
                     </b-row>
@@ -525,18 +533,18 @@ button:hover {
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
     return {
       buttons: [
-        { caption: 'top', state: true },
-        { caption: 'jungle', state: true },
-        { caption: 'mid', state: true },
-        { caption: 'adc', state: true },
-        { caption: 'support', state: true },
+        { caption: 'Top', state: true },
+        { caption: 'Jungle', state: true },
+        { caption: 'Mid', state: true },
+        { caption: 'ADC', state: true },
+        { caption: 'Support', state: true },
       ],
       sortBy: 'pickRate',
       sortDesc: true,
@@ -566,6 +574,24 @@ export default {
     };
   },
   computed: {
+    getVariant() {
+      if (this.darkMode === true) {
+        return 'outline-dark';
+      }
+      return 'outline-light';
+    },
+    getInverseVariant() {
+      if (this.darkMode === true) {
+        return 'outline-light';
+      }
+      return 'outline-dark';
+    },
+    currentRouteName() {
+      return this.$route.name;
+    },
+    darkMode() {
+      return this.$store.state.darkMode;
+    },
     filtered() {
       const buttonStates = this.btnStates;
       if (buttonStates.includes(null) && this.searchText !== '') {
@@ -737,20 +763,6 @@ export default {
   },
   created() {
     this.getBuilds();
-  },
-  watch: {
-    $route(to) {
-      if (to.path === '/builds') {
-        console.log(to.params.champName);
-        if (to.params.champName !== undefined) {
-          if (to.params.champName !== this.champName) {
-            this.champName = to.params.champName.toLowerCase();
-            const champIndex = this.indexMap[this.champName];
-            this.changeSelected(champIndex);
-          }
-        }
-      }
-    },
   },
 };
 </script>

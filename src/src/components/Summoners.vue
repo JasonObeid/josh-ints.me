@@ -38,25 +38,85 @@ div.teams
 }
 .champName
 {
-  color: #212529;
   vertical-align: top;
 }
 .trinket
 {
   vertical-align: middle;
 }
+
 .btn-carry
 {
   background-color: #f2e0ff;
 }
+.btn-carry:hover
+{
+  background-color: #d19af9;
+}
+
 .btn-damage
 {
   background-color: #ffc4c9;
 }
+.btn-damage:hover
+{
+  background-color: #ea737d;
+}
+
 .btn-tank
 {
   background-color: #e0f3ff;
 }
+.btn-tank:hover
+{
+  background-color: #7ec6f3;
+}
+
+.btn-darkCarry
+{
+  background-color: #946bb1;
+}
+.btn-darkCarry:hover
+{
+  background-color: #af8dc7;
+}
+
+.btn-darkDamage
+{
+  background-color: #9c4c53;
+}
+.btn-darkDamage:hover
+{
+  background-color: #bb434d;
+}
+
+.btn-darkTank
+{
+  background-color: #3777a0;
+}
+.btn-darkTank:hover
+{
+  background-color: #3592cc;
+}
+
+.btn-darkTeam
+{
+  background-color: #646464 !important;
+}
+.btn-darkTeam:hover
+{
+  background-color: #808080 !important;
+}
+
+.btn-lightTeam
+{
+  background-color: #d3d3d3;
+}
+.btn-lightTeam:hover
+{
+  background-color: #c5c5c5;
+}
+
 .blueTeam
 {
   text-align: left;
@@ -74,19 +134,33 @@ button.sort
 }
 .win
 {
-  background-color: #c2f0c2ad;
+  background-color: #c2f0c2a8;
 }
 .loss
 {
   background-color: #ff9999a8;
 }
+
+.winDark
+{
+  background-color: #2f5d2fab;
+}
+.lossDark
+{
+  background-color: #bb3333ab;
+}
+
+.nav-tabsDark {
+  border-bottom: 1px solid #545658;
+}
+
 .table td
 {
   vertical-align: middle;
 }
 .summonerTab
 {
-  margin-left: 5%;
+  margin-left: 15px;
 }
 .sort
 {
@@ -160,6 +234,42 @@ button:hover {
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
+.darkMode {
+  background-color: #535a61;
+  color: white;
+}
+.modal-open body {
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+  -ms-filter: blur(1px);
+  filter: blur(5px) grayscale(90%);
+  -webkit-filter: blur(5px) grayscale(90%);
+}
+
+.nav-linkDark {
+  border-color: #414344 !important;
+  background-color: #2c3136 !important;
+  color: #fdfdfd !important;
+}
+.nav-linkDark:hover {
+  border-color: #424446 !important;
+  background-color: #3a3e42 !important;
+  color: #fdfdfd !important;
+}
+.nav-linkDark:focus {
+    border-color: #252525 !important;
+}
+.nav-linkDark-active {
+  border-color: #424446 !important;
+  background-color: #3a3e42 !important;
+  color: #fdfdfd !important;
+}
+.nav-linkDark-active:hover {
+  border-color: #424446 !important;
+  background-color: #3a3e42 !important;
+  color: #fdfdfd !important;
+}
 </style>
 
 <template>
@@ -168,64 +278,73 @@ button:hover {
     <div class="head">
       <a><alert :message=message v-if="showMessage"></alert></a>
     </div>
-     <ul class="nav nav-tabs" width='90%' style="padding-left: 1%;">
-      <li class="nav-item" v-for="(summoner, index) in summoners"
-      :key="index" :title="summoner.name">
-        <button class="nav-link" @click.prevent="setActiveTab(summoner.name)"
-        :class="{ active: isActiveTab(summoner.name) }">
+     <ul class="nav nav-tabs" width='90%' style="padding-left: 1%;" ref="summonerTab"
+      :class="{ 'nav-tabsDark': darkMode }">
+      <li v-for="(summoner, index) in summoners"
+      :key="index" :title="summoner.name"
+      :class="{ 'nav-linkDark': darkMode}">
+        <b-button :variant="getTabVariant" class="summonerTabs nav-link"
+        @click.prevent="setActiveTab(summoner.name)"
+        :class="{ 'active': isActiveTab(summoner.name),
+        'nav-linkDark': darkMode,
+        'nav-linkDark-active': darkMode && isActiveTab(summoner.name)}">
           <a>{{ summoner.name }} | </a>
           <a>{{ summoner.rank }}</a>
-          <b-button size='sm' @click=onDeleteSummoner(summoner)
+          <b-button size='sm' @click="onDeleteSummoner(summoner)"
           variant="outline-danger" class="summonerTab">
             x
           </b-button>
-        </button>
+        </b-button>
       </li>
       <li class="nav-item">
-        <a class="nav-link">
-          <b-button variant="outline-primary" size='sm' v-b-modal.summoner-modal>
+        <a class="nav-link" :class="{ 'nav-linkDark': darkMode}">
+          <b-button variant="outline-primary" size='sm' v-b-modal.addSummonerModal>
             +
           </b-button>
         </a>
       </li>
       <li class="nav-item ml-auto">
         <button type="button" class="btn btn-warning btn-sm"
-        id="refresh" @click='refreshSummoners()'>
+        ref="refresh" @click='refreshSummoners()' style="margin-right: 2rem">
           Refresh
           <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
         </button>
       </li>
     </ul>
-    <div class="tab-content py-3 flex-container" id="myTabContent">
-      <div v-for="summoner in summoners" :key="summoner.id"
-      class="tab-pane fade" :id=(summoner.name)
+    <div class="tab-content py-3" ref="myTabContent">
+      <div v-for="(summoner, index) in summoners" :key="index"
+      class="tab-pane fade" :ref=(summoner.name)
       :class="{ 'active show': isActiveTab(summoner.name) }">
-        <table class="table table-borderless table-striped border" id="summonerTable">
+        <table class="table table-borderless table-striped summonerTable"
+        :class="{ 'table-dark text-white': darkMode }">
+          <thead>
+            <tr align="center">
+              <th>Champion</th>
+              <th>Runes</th>
+              <th>Items</th>
+              <th>W/L</th>
+              <th>Score</th>
+              <th>KDA</th>
+              <th>CS</th>
+              <th class="sort" @click='sortByInt(summoner)'>
+                Int Score
+                <b-icon :icon="intSortIcon"></b-icon>
+              </th>
+              <th>Blue Team</th>
+              <th>Red Team</th>
+              <th class="sort" @click='sortByDate(summoner)'>
+                Date
+                <b-icon :icon="dateSortIcon"></b-icon>
+              </th>
+            </tr>
+          </thead>
           <tbody>
-              <tr align="center">
-                <th>Champion</th>
-                <th>Runes</th>
-                <th>Items</th>
-                <th>W/L</th>
-                <th>Score</th>
-                <th>KDA</th>
-                <th>CS</th>
-                <th class="sort" @click='sortByInt(summoner)'>
-                  Int Score
-                  <b-icon :icon="intSortIcon"></b-icon>
-                </th>
-                <th>Blue Team</th>
-                <th>Red Team</th>
-                <th class="sort" @click='sortByDate(summoner)'>
-                  Date
-                  <b-icon :icon="dateSortIcon"></b-icon>
-                </th>
-              </tr>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
                 <td><router-link
                 :to="{ name: 'Home',
                 params: { champName: match.championInfo.champName.toLowerCase() } }">
-                  <a class="champName">{{ match.championInfo.champName }}</a>
+                  <a class="champName"
+                  :class="{'text-white' : darkMode}">{{ match.championInfo.champName }}</a>
                   <br>
                   <img class="champIcon" :src="match.championInfo.champImgPath"
                   :alt="match.championInfo.champName"></router-link>
@@ -259,8 +378,14 @@ button:hover {
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList
                       .slice(0,match.items.count)" :key="index">
-                        <img class="dropShadow" :src="item.imgPath" :alt="item.name"
-                        v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
+                        <div v-if="item !== '0'">
+                          <img class="dropShadow" :src="item.imgPath" :alt="item.name"
+                          v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
+                        </div>
+                        <div v-else>
+                          <svg width="40" height="40"><rect width="40"
+                          height="40" style="opacity: 0"></rect></svg>
+                        </div>
                       </td>
                       <td rowspan="2" class="trinket">
                         <img class="dropShadow" :src="match.items.trinket.imgPath"
@@ -276,8 +401,14 @@ button:hover {
                     <tr>
                       <td v-for="(item, index) in match.items.itemsList.slice(0,3)"
                       :key="index">
-                        <img class="dropShadow" :src="item.imgPath" :alt="item.name"
-                        v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
+                        <div v-if="item !== '0'">
+                          <img class="dropShadow" :src="item.imgPath" :alt="item.name"
+                          v-b-tooltip.hover = "{ variant: 'secondary' }" :title="item.name">
+                        </div>
+                        <div v-else>
+                          <svg width="40" height="40"><rect width="40"
+                          height="40" style="opacity: 0"></rect></svg>
+                        </div>
                       </td>
                       <td rowspan="2" class="trinket">
                         <img class="dropShadow" :src="match.items.trinket.imgPath"
@@ -295,11 +426,13 @@ button:hover {
                     </tr>
                   </div>
                 </td>
-                <td v-if="match.stats.win == true" class="win">
+                <td v-if="match.stats.win == true" class="win"
+                :class="{ 'winDark': darkMode }">
                   <p>{{ winLoss(match.stats.win) + ': ' }}</p>
                   <a>{{ match.gameInfo.queue}}</a>
                 </td>
-                <td v-else class="loss">
+                <td v-else class="loss"
+                :class="{ 'lossDark': darkMode }">
                   <p>{{ winLoss(match.stats.win) + ': ' }}</p>
                   <a>{{ match.gameInfo.queue}}</a>
                 </td>
@@ -310,7 +443,8 @@ button:hover {
                 <td class="trinket">{{ match.stats.creepScore }}</td>
                 <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
-                  <div class="teams" v-for="(player, index) in match.teamInfo.blue" :key="index">
+                  <div class="teams" v-for="(player, index)
+                  in match.teamInfo.blue" :key="index">
                     <router-link :to="{ name: 'Home',
                     params: { champName: player.champName.toLowerCase() } }">
                       <img class="smallChampIcon"
@@ -320,30 +454,34 @@ button:hover {
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
                     player.participantId === match.teamInfo.blueTeamDPSIndex"
                     v-b-tooltip.hover.left = "{ variant: 'secondary' }" title="Carried">
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="carry">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        class="btn btn-sm teammateBtn btn-carry"
+                        :class="{ 'btn-darkCarry text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamDPSIndex"
                     v-b-tooltip.hover.left = "{ variant: 'secondary' }" title="Team dmg">
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="damage">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        class="btn btn-sm teammateBtn btn-damage"
+                        :class="{ 'btn-darkDamage text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.blueTeamTankIndex "
                     v-b-tooltip.hover.left = "{ variant: 'secondary' }" title="Team tank">
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="tank">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        variant="tank" class="btn btn-sm teammateBtn btn-tank"
+                        :class="{ 'btn-darkTank text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <a v-else>
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="light">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        class="btn btn-sm teammateBtn btn-lightTeam"
+                        :class="{ 'btn-darkTeam text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                   </div>
                 </td>
@@ -352,30 +490,34 @@ button:hover {
                     <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
                     player.participantId === match.teamInfo.redTeamDPSIndex"
                     v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Carried">
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="carry">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        class="btn btn-sm teammateBtn btn-carry"
+                        :class="{ 'btn-darkCarry text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamDPSIndex"
                     v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Team dmg">
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="damage">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        class="btn btn-sm teammateBtn btn-damage"
+                        :class="{ 'btn-darkDamage text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <a v-else-if="player.participantId === match.teamInfo.redTeamTankIndex "
                     v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Team tank">
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="tank">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                      class="teammateBtn btn btn-sm teammateBtn btn-tank"
+                        :class="{ 'btn-darkTank text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <a v-else>
-                      <b-button size='sm' @click=addTeammate(player.summonerName)
-                        variant="light">
+                      <button type="button" @click=addTeammate(player.summonerName)
+                        class="btn btn-sm teammateBtn btn-lightTeam"
+                        :class="{ 'btn-darkTeam text-white': darkMode }">
                         {{ player.summonerName }}
-                      </b-button>
+                      </button>
                     </a>
                     <router-link :to="{ name: 'Home',
                     params: { champName: player.champName.toLowerCase() } }">
@@ -406,22 +548,16 @@ button:hover {
         </table>
       </div>
     </div>
-    <b-modal ref="addSummonerModal"
-            id="summoner-modal"
-            title="Add a new summoner"
-            hide-footer
-            @shown="focusInput()">
+    <b-modal ref="addSummonerModal" id="addSummonerModal"
+      title="Add a new summoner" hide-footer :header-bg-variant="getVariant"
+      :header-text-variant="getInverseVariant" :body-bg-variant="getVariant"
+      :body-text-variant="getInverseVariant" @shown="focusInput()">
       <b-form @submit="onSubmit" @reset="onReset" class="w-100">
-        <b-form-group id="form-name-group"
-                      label="Summoner:"
-                      label-for="form-name-input">
-            <b-form-input id="form-name-input"
-                          ref="addSummoner"
-                          type="text"
-                          v-model="addSummonerForm.name"
-                          required
-                          autofocus
-                          placeholder="Enter summoner name">
+        <b-form-group ref="form-name-group"
+          label="Summoner:" label-for="addSummoner">
+            <b-form-input ref="addSummoner"
+              type="text" v-model="addSummonerForm.name" required
+              autofocus placeholder="Enter summoner name">
             </b-form-input>
           </b-form-group>
         <b-button-group>
@@ -438,8 +574,8 @@ button:hover {
 import axios from 'axios';
 import Alert from './Alert.vue';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 export default {
   data() {
     return {
@@ -467,12 +603,17 @@ export default {
     focusInput() {
       this.$refs.addSummoner.focus();
     },
-    addTeammate(summonerID) {
-      const payload = {
-        name: summonerID,
-        code: 'goTabSummoner',
-      };
-      this.addSummoner(payload);
+    addTeammate(name) {
+      const found = this.checkForSummonerByName(name);
+      if (!found) {
+        const payload = {
+          name,
+          code: 'goTabSummoner',
+        };
+        this.addSummoner(payload);
+      } else {
+        this.setActiveTab(name);
+      }
     },
     setSortIcons(sortCount, type) {
       if (type === 'intScore') {
@@ -586,8 +727,8 @@ export default {
           .then((res) => {
             this.message = res.data.message;
             this.summoners = res.data.summoners;
-            const len = this.summoners.length;
-            this.setActiveTab(this.summoners[len - 1].name);
+            const len = this.summoners.length - 1;
+            this.setActiveTab(this.summoners[len].name);
           })
           .catch((error) => {
             console.error(error);
@@ -630,8 +771,11 @@ export default {
       this.setActiveTab(payload.name);
       axios.put(path, payload)
         .then((res) => {
-          const len = this.summoners.length;
-          this.summoners[len - 1] = res.data.summoners;
+          const index = this.summoners.length - 1;
+          this.$set(this.summoners, index, res.data.summoners);
+          // this.summoners.push(res.data.summoners);
+          // const len = this.summoners.length - 1;
+          // this.setActiveTab(this.summoners[len].name);
           this.showMessage = false;
           this.showRefresh = false;
         })
@@ -647,7 +791,7 @@ export default {
       evt.preventDefault();
       this.$refs.addSummonerModal.hide();
       const { name } = this.addSummonerForm;
-      const found = this.checkForSummoner(name);
+      const found = this.checkForSummonerByName(name);
       if (!found) {
         const payload = {
           name,
@@ -664,15 +808,6 @@ export default {
       this.$refs.addSummonerModal.hide();
       this.initForm();
     },
-    editSummoner(summoner) {
-      this.editForm = summoner;
-    },
-    onResetUpdate(evt) {
-      evt.preventDefault();
-      this.$refs.editSummonerModal.hide();
-      this.initForm();
-      this.getSummoners();
-    },
     removeSummoner(summonerID) {
       const path = `${localhost}/summoners/${summonerID}`;
       this.showRefresh = true;
@@ -687,7 +822,8 @@ export default {
           }
           this.showRefresh = false;
           this.showMessage = false;
-          this.setActiveTab(this.summoners[0].name);
+          const summonerCount = this.summoners.length - 1;
+          this.setActiveTab(this.summoners[summonerCount].name);
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -705,13 +841,69 @@ export default {
       };
       this.updateSummoner(payload, summoner.id);
     },
-    checkForSummoner(name) {
+    checkForSummonerByName(name) {
       let exists = false;
       for (let i = 0; i < this.summoners.length; i += 1) {
         if (this.summoners[i].name === name) { exists = true; }
       }
       return exists;
     },
+    /* checkForSummonerByID(id) {
+      let exists = false;
+      for (let i = 0; i < this.summoners.length; i += 1) {
+        if (this.summoners[i].id === id) { exists = true; }
+      }
+      return exists;
+    },
+    getNameByID(id) {
+      for (let i = 0; i < this.summoners.length; i += 1) {
+        if (this.summoners[i].id === id) {
+          return this.summoners[i].name;
+        }
+      }
+      return '';
+    }, */
+  },
+  computed: {
+    getTabVariant() {
+      if (this.darkMode === true) {
+        return 'light';
+      }
+      return 'light';
+    },
+    getVariant() {
+      if (this.darkMode === true) {
+        return 'dark';
+      }
+      return 'light';
+    },
+    getInverseVariant() {
+      if (this.darkMode === true) {
+        return 'light';
+      }
+      return 'dark';
+    },
+    currentRouteName() {
+      return this.$route.name;
+    },
+    darkMode() {
+      return this.$store.state.darkMode;
+    }, /*
+    cleanSummoners() {
+      // eslint-disable-next-line prefer-destructuring
+      const summoners = [];
+      // console.log(this.summoners);
+      for (let i = 0; i < summoners.length; i += 1) {
+        // console.log(this.summoners[i].id);
+        if (summoners.id !== undefined) {
+          console.log(summoners[i]);
+          console.log(summoners[i].id);
+          summoners.push(i);
+        }
+      }
+      console.log(summoners);
+      return this.summoners;
+    }, */
   },
   created() {
     this.getSummoners('goTab0');
