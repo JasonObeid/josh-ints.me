@@ -755,7 +755,7 @@ export default {
           console.log(res);
           this.message = res.data.message;
           this.summoners = res.data.summoners;
-          this.setActiveTab(this.summoners[0].name);
+          this.showMessage = false;
         })
         .catch((error) => {
           console.error(error);

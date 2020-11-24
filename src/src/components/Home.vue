@@ -1,4 +1,28 @@
 <style>
+html {
+  --scrollbarBG: #6c757d;
+  --thumbBG: #c1ccd1;
+}
+
+body {
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+
+div::-webkit-scrollbar {
+  width: 15px;
+}
+div {
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+div::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+div::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG) ;
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
+
 .bg-medium {
   background-color: #404850;
 }
@@ -73,10 +97,10 @@
 
         <b-nav-item v-if="darkMode" to="/builds" ref="buildsTab" class="nav-linkDark"
         exact exact-active-class="active nav-linkDark-active"
-        link-classes="nav-linkDark">Summoners</b-nav-item>
+        link-classes="nav-linkDark">Builds</b-nav-item>
 
         <b-nav-item v-else to="/builds" ref="buildsTab"
-        exact exact-active-class="active">Summoners</b-nav-item>
+        exact exact-active-class="active">Builds</b-nav-item>
       </b-nav>
     </b-card-header>
 
@@ -126,9 +150,11 @@ export default {
     toggleDarkMode() {
       this.$store.commit('toggle');
       if (this.$store.state.darkMode === true) {
+        document.getElementById('root').classList.add('bg-medium');
         this.darkModeIcon = 'moon';
       } else {
         this.darkModeIcon = 'sun';
+        document.getElementById('root').classList.remove('bg-medium');
       }
     },
   },
