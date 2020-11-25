@@ -1,11 +1,26 @@
 <style>
 html {
-  --scrollbarBG: #6c757d;
-  --thumbBG: #c1ccd1;
+  --scrollbarBG: #cccccc;
+  --thumbBG: #ffffff;
 }
 
 body {
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+
+div.dark::-webkit-scrollbar {
+  width: 15px;
+}
+div.dark {
+  scrollbar-color: var(#c0c0c0) var(#727272);
+}
+div.dark::-webkit-scrollbar-track {
+  background: var(#727272);
+}
+div.dark::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 6px;
+  border: 3px solid #727272;
 }
 
 div::-webkit-scrollbar {

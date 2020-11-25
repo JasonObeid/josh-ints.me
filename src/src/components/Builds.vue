@@ -224,6 +224,7 @@ button:hover {
         small no-border-collapse
         sticky-header="715px"
         responsive="false"
+        :class="{ 'dark': darkMode}"
         :fields="fields"
         :items="filtered"
         style="overflow-x: hidden; "
