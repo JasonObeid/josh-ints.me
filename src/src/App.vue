@@ -1,6 +1,6 @@
 <template>
   <div id="app" ref="app" class="bg-default noXOverflow"
-  :class="{'noOverflow': $route.path === '/builds'}">
+  :class="{'noYOverflow': $route.path === '/builds'}">
     <transition name="fade" mode="out-in">
       <router-view/>
     </transition>
