@@ -288,7 +288,7 @@ button:hover {
         <b-table ref="statsTable"
           small no-border-collapse
           borderless striped
-          sticky-header="664px"
+          sticky-header="688px"
           responsive="false"
           :class="{ 'dark': darkMode}"
           :fields="fields"
