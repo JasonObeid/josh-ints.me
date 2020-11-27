@@ -1,20 +1,19 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Pre-build') {
       steps {
         sh 'sudo git clean -fdx'
-        dir(path: 'src') {
-          sh '''npm install
-          npm run build'''
-        }
-
       }
     }
 
-    stage('Test') {
+    stage('Build') {
       steps {
-        echo 'test here'
+        dir(path: 'src') {
+          sh '''npm install
+npm run build'''
+        }
+
       }
     }
 
