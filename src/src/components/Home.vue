@@ -2,6 +2,19 @@
 html {
   --scrollbarBG: #cccccc;
   --thumbBG: #ffffff;
+  --light-gray: #edf0f5;
+  --medium-gray: #9CA3AF;
+  --dark-gray: #4B5563;
+  --background: #F3F4F6;
+  --brand: #d8c7a5;
+  --brand-dark: #4e4c32;
+  --brand-accent: #E0E7FF;
+  --brand-font: #4e3d1b;
+  font-size: 1rem;
+}
+
+.bg-default {
+  background-color: var(--background);
 }
 
 body {
@@ -12,10 +25,10 @@ div.dark::-webkit-scrollbar {
   width: 15px;
 }
 div.dark {
-  scrollbar-color: var(#c0c0c0) var(#727272);
+  scrollbar-color: #c0c0c0 #727272;
 }
 div.dark::-webkit-scrollbar-track {
-  background: var(#727272);
+  background: #727272;
 }
 div.dark::-webkit-scrollbar-thumb {
   background-color: #c0c0c0;
@@ -41,6 +54,10 @@ div::-webkit-scrollbar-thumb {
 .bg-medium {
   background-color: #404850;
 }
+button.bg-medium:hover {
+  background-color: #2c3238;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition-duration: 0.3s;
@@ -52,82 +69,101 @@ div::-webkit-scrollbar-thumb {
 .fade-leave-active {
   opacity: 0
 }
-.nav-linkDark {
-  border-color: #414344 !important;
-  background-color: #2c3136 !important;
-  color: #fdfdfd !important;
+button {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-.nav-linkDark:hover {
-  border-color: #424446 !important;
-  background-color: #3a3e42 !important;
-  color: #fdfdfd !important;
+
+button:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-.nav-linkDark-active {
-  border-color: #545658 !important;
-  background-color: #535a61 !important;
-  color: #fdfdfd !important;
+.navlink > a {
+  color: #000000ce !important;
+  border-bottom: transparent 3px solid;
 }
-.nav-linkDark-active:hover {
-  border-color: #545658 !important;
-  background-color: #535a61 !important;
-  color: #fdfdfd !important;
+.navlink:hover {
+  color: #000000 !important;
 }
-.nav-tabsDark {
-  border-bottom: 1px solid #545658 !important;
+a.navlink-active {
+  color: #000000 !important;
+  border-bottom: #4e3d1b 3px solid !important;
+}
+
+.navlink-dark > a {
+  color: #ffffffce !important;
+  border-bottom: transparent 3px solid;
+}
+a.navlink-dark:hover {
+  color: #ffffff !important;
+}
+a.navlink-dark-active {
+  color: #ffffff !important;
+  border-bottom: #8c7646 3px solid !important;
+}
+
+.navbar-Dark {
+  background-color: var(--brand-dark) !important;
+}
+.caps-spacing {
+  letter-spacing: 2px;
+}
+.navbar {
+  background-color: var(--brand);
+}
+.navBtn {
+  background-color: #ffffff3d !important;
+  border: transparent !important;
+  width: 10% !important;
+}
+.navBtnDark {
+  background-color: #6666663d !important;
+  border: transparent !important;
+  width: 10% !important;
 }
 </style>
 
 <template>
 <main id="home">
 <div>
-  <b-card title="Nav Bar" no-body style="
-  border: 0px;
-  background-color: inherit;">
-    <b-card-header header-tag="nav" ref="navHeader"
-    :class="{ 'navbar-dark bg-dark': darkMode }">
-      <b-nav card-header tabs justified
-      :class="{ 'nav-tabsDark': darkMode }">
-        <b-button v-b-toggle.settingSidebar ref="darkToggle"
-        :class="{ 'btn-secondary': darkMode, 'btn-light': !darkMode }">
-          <b-icon icon="three-dots-vertical"></b-icon>
-        </b-button>
-        <b-sidebar id="settingSidebar" title="Settings" shadow width="15%"
-        :bg-variant="getVariant" no-enforce-focus
-        :text-variant="getInverseVariant">
-          <div class="px-3 py-2">
-            <p>Squigie Mode:</p>
-            <b-button block :class="{ 'btn-light': darkMode, 'btn-dark': !darkMode }"
-            @click="toggleDarkMode()">
-              <b-icon :icon="darkModeIcon"></b-icon>
-            </b-button>
-          </div>
-        </b-sidebar>
+<b-navbar toggleable="lg" class="bg-medium d-flex" :class="{ 'navbar-Dark text-white': darkMode }">
+  <b-navbar-brand class="caps-spacing ml-5" :class="{ 'text-white': darkMode }">
+    JOSH-INTS.ME
+  </b-navbar-brand>
 
-        <b-nav-item v-if="darkMode" to="/summoners" ref="summonerTab" class="nav-linkDark"
-        exact exact-active-class="active nav-linkDark-active"
-        link-classes="nav-linkDark">Summoners</b-nav-item>
+  <b-navbar-nav align="center" class="m-auto w-100">
+    <button class="btn btn-light p-0 m-0 mx-2"
+    :class="{ 'navBtn': !darkMode, 'navBtnDark': darkMode}">
+      <b-nav-item to="/summoners" ref="summonerTab"
+      :class="{ 'navlink-dark': darkMode, 'navlink': !darkMode}"
+      exact :exact-active-class="getNavLink">Summoners</b-nav-item>
+    </button>
+    <button class="btn btn-light p-0 m-0 mx-2"
+    :class="{ 'navBtn': !darkMode, 'navBtnDark': darkMode}">
+      <b-nav-item to="/builds" ref="buildsTab"
+      :class="{ 'navlink-dark': darkMode, 'navlink': !darkMode}"
+      exact :exact-active-class="getNavLink">Builds</b-nav-item>
+    </button>
+  </b-navbar-nav>
 
-        <b-nav-item v-else to="/summoners" ref="summonerTab"
-        exact exact-active-class="active">Summoners</b-nav-item>
+  <b-button class="m-auto" :class="{ 'btn-light': !darkMode, 'btn-dark': darkMode }"
+  @click="toggleDarkMode()">
+    <b-icon :icon="darkModeIcon"></b-icon>
+  </b-button>
 
-        <b-nav-item v-if="darkMode" to="/builds" ref="buildsTab" class="nav-linkDark"
-        exact exact-active-class="active nav-linkDark-active"
-        link-classes="nav-linkDark">Builds</b-nav-item>
-
-        <b-nav-item v-else to="/builds" ref="buildsTab"
-        exact exact-active-class="active">Builds</b-nav-item>
-      </b-nav>
-    </b-card-header>
-
-    <b-card-body style="padding: 0px;" ref="activeContainer"
-    :class="{ 'text-white bg-medium': darkMode }">
+</b-navbar>
+  <b-row align-v="center" align-h="center" ref="activeContainer"
+  :class="{ 'text-white bg-medium': darkMode }" class="pb-2">
+    <b-col cols="9">
       <transition name="fade" mode="out-in">
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
       </transition>
-    </b-card-body>
-  </b-card>
+    </b-col>
+  </b-row>
 </div>
 </main>
 </template>
@@ -138,10 +174,21 @@ export default {
   name: 'Home',
   data() {
     return {
-      darkModeIcon: 'sun',
     };
   },
   computed: {
+    getNavLink() {
+      if (this.darkMode === true) {
+        return 'navlink-dark-active';
+      }
+      return 'navlink-active';
+    },
+    darkModeIcon() {
+      if (this.darkMode === true) {
+        return 'sun';
+      }
+      return 'moon';
+    },
     currentRouteName() {
       return this.$route.path;
     },
@@ -164,16 +211,18 @@ export default {
   methods: {
     toggleDarkMode() {
       this.$store.commit('toggle');
-      if (this.$store.state.darkMode === true) {
-        document.getElementById('root').classList.add('bg-medium');
-        this.darkModeIcon = 'moon';
-      } else {
-        this.darkModeIcon = 'sun';
-        document.getElementById('root').classList.remove('bg-medium');
-      }
     },
   },
   watch: {
+    darkMode() {
+      if (this.darkMode === true) {
+        document.getElementById('root').classList.add('bg-medium');
+        document.getElementById('root').classList.remove('bg-default');
+      } else {
+        document.getElementById('root').classList.remove('bg-medium');
+        document.getElementById('root').classList.add('bg-default');
+      }
+    },
     $route(to) {
       if (to.path === '/builds') {
         if (to.params.champName !== undefined) {

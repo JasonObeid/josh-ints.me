@@ -1,18 +1,4 @@
 <style scoped>
-
-.fade-enter-active, .fade-leave-active {
-  transition-property: opacity;
-  transition-duration: 0.25s;
-}
-
-.fade-enter-active {
-  transition-delay: 0.25s;
-}
-
-.fade-enter, .fade-leave-active {
-  opacity: 0
-}
-
 img.champIcon {
   border-radius: 50%;
 }
@@ -27,15 +13,7 @@ img {
   white-space: nowrap;
   padding: 1% 0;
 }
-div.teams
-{
-  padding-top: 2%;
-  padding-bottom: 2%;
-}
-.alert
-{
-  margin: .25rem 1.25rem;
-}
+
 .champName
 {
   vertical-align: top;
@@ -158,9 +136,14 @@ button.sort
 {
   vertical-align: middle;
 }
-.summonerTab
+
+.summonerTab-active
 {
-  margin-left: 15px;
+  border-bottom: 3px solid #000000b9 !important;
+}
+.summonerTab-inactive
+{
+  border-bottom: 3px solid transparent;
 }
 .sort
 {
@@ -223,13 +206,13 @@ button.sort
   border-radius: 50%;
 }
 
-button {
+.btn-sm {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-button:hover {
+.btn-sm:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -248,53 +231,64 @@ button:hover {
 }
 
 .nav-linkDark {
-  border-color: #414344 !important;
+  border-color: #414344;
   background-color: #2c3136 !important;
   color: #fdfdfd !important;
 }
 .nav-linkDark:hover {
-  border-color: #424446 !important;
+  border-top-color: #414344 !important;
+  border-right-color: #414344 !important;
+  border-left-color: #414344 !important;
   background-color: #3a3e42 !important;
   color: #fdfdfd !important;
 }
 .nav-linkDark:focus {
-    border-color: #252525 !important;
+  border-color: #252525;
 }
 .nav-linkDark-active {
-  border-color: #424446 !important;
+  border-top-color: #414344 !important;
+  border-right-color: #414344 !important;
+  border-left-color: #414344 !important;
   background-color: #3a3e42 !important;
   color: #fdfdfd !important;
 }
 .nav-linkDark-active:hover {
-  border-color: #424446 !important;
+  border-top-color: rgb(66, 68, 70) !important;
+  border-right-color: rgb(66, 68, 70) !important;
+  border-left-color: rgb(66, 68, 70) !important;
   background-color: #3a3e42 !important;
   color: #fdfdfd !important;
+}
+.nav-linkDark .summonerTab-active
+{
+  border-bottom: 3px solid #ffffff93 !important;
+}
+.nav-linkDark .summonerTab-inactive
+{
+  border-bottom: 3px solid #3a3e42;
 }
 </style>
 
 <template>
 <transition name="fade" mode="out-in">
   <div class="flex-container">
-    <div class="head">
-      <a><alert :message=message v-if="showMessage"></alert></a>
-    </div>
-     <ul class="nav nav-tabs" width='90%' style="padding-left: 1%;" ref="summonerTab"
+     <ul class="nav nav-tabs pl-2" width='100%' ref="summonerTab"
       :class="{ 'nav-tabsDark': darkMode }">
       <li v-for="(summoner, index) in summoners"
       :key="index" :title="summoner.name"
       :class="{ 'nav-linkDark': darkMode}">
-        <b-button :variant="getTabVariant" class="summonerTabs nav-link"
+        <button type="button" class="btn nav-link summonerTab-inactive"
         @click.prevent="setActiveTab(summoner.name)"
-        :class="{ 'active': isActiveTab(summoner.name),
+        :class="{ 'active summonerTab-active': isActiveTab(summoner.name),
         'nav-linkDark': darkMode,
         'nav-linkDark-active': darkMode && isActiveTab(summoner.name)}">
           <a>{{ summoner.name }} | </a>
           <a>{{ summoner.rank }}</a>
           <b-button size='sm' @click="onDeleteSummoner(summoner)"
-          variant="outline-danger" class="summonerTab">
+          variant="outline-danger" class="ml-3">
             x
           </b-button>
-        </b-button>
+        </button>
       </li>
       <li class="nav-item">
         <a class="nav-link" :class="{ 'nav-linkDark': darkMode}">
@@ -304,14 +298,15 @@ button:hover {
         </a>
       </li>
       <li class="nav-item ml-auto">
-        <button type="button" class="btn btn-warning btn-sm"
-        ref="refresh" @click='refreshSummoners()' style="margin-right: 2rem">
+        <button type="button" class="btn btn-secondary btn-sm"
+        ref="refresh" @click='refreshSummoners()'>
+          <b-icon icon="arrow-clockwise"></b-icon>
           Refresh
           <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
         </button>
       </li>
     </ul>
-    <div class="tab-content py-3" ref="myTabContent">
+    <div class="tab-content" ref="myTabContent">
       <div v-for="(summoner, index) in summoners" :key="index"
       class="tab-pane fade" :ref=(summoner.name)
       :class="{ 'active show': isActiveTab(summoner.name) }">
@@ -343,8 +338,9 @@ button:hover {
                 <td><router-link
                 :to="{ name: 'Home',
                 params: { champName: match.championInfo.champName.toLowerCase() } }">
-                  <a class="champName"
-                  :class="{'text-white' : darkMode}">{{ match.championInfo.champName }}</a>
+                  <span class="champName" :class="{'text-white' : darkMode}">
+                    {{ match.championInfo.champName }}
+                  </span>
                   <br>
                   <img class="champIcon" :src="match.championInfo.champImgPath"
                   :alt="match.championInfo.champName"></router-link>
@@ -443,7 +439,7 @@ button:hover {
                 <td class="trinket">{{ match.stats.creepScore }}</td>
                 <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
-                  <div class="teams" v-for="(player, index)
+                  <div class="my-1" v-for="(player, index)
                   in match.teamInfo.blue" :key="index">
                     <router-link :to="{ name: 'Home',
                     params: { champName: player.champName.toLowerCase() } }">
@@ -486,7 +482,7 @@ button:hover {
                   </div>
                 </td>
                 <td class='redTeam'>
-                  <div class="teams" v-for="(player, index) in match.teamInfo.red" :key="index">
+                  <div class="my-1" v-for="(player, index) in match.teamInfo.red" :key="index">
                     <a v-if="player.participantId === match.teamInfo.redTeamTankIndex &&
                     player.participantId === match.teamInfo.redTeamDPSIndex"
                     v-b-tooltip.right.hover = "{ variant: 'secondary' }" title="Carried">
@@ -535,10 +531,8 @@ button:hover {
               </tr>
               <tr v-if="summoners.length != 0">
                 <td colspan="11">
-                  <button
-                    type="button"
-                    class="btn btn-info btn-block"
-                    @click="getMoreMatches(summoner)">
+                  <button type="button" class="btn btn-secondary btn-block"
+                  @click="getMoreMatches(summoner)">
                       Load more
                       <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
                   </button>
@@ -572,7 +566,6 @@ button:hover {
 
 <script>
 import axios from 'axios';
-import Alert from './Alert.vue';
 
 const localhost = '/api';
 // const localhost = 'http://localhost:5000/api';
@@ -583,8 +576,6 @@ export default {
       addSummonerForm: {
         name: '',
       },
-      message: '',
-      showMessage: false,
       showRefresh: false,
       editForm: {
         name: '',
@@ -595,9 +586,6 @@ export default {
       intSortCount: 0,
       dateSortCount: 0,
     };
-  },
-  components: {
-    alert: Alert,
   },
   methods: {
     focusInput() {
@@ -725,7 +713,6 @@ export default {
       if (run === 'goTabSummoner') {
         axios.get(path)
           .then((res) => {
-            this.message = res.data.message;
             this.summoners = res.data.summoners;
             const len = this.summoners.length - 1;
             this.setActiveTab(this.summoners[len].name);
@@ -736,7 +723,6 @@ export default {
       } else {
         axios.get(path)
           .then((res) => {
-            this.message = res.data.message;
             this.summoners = res.data.summoners;
             this.setActiveTab(this.summoners[0].name);
           })
@@ -747,15 +733,11 @@ export default {
     },
     refreshSummoners() {
       const path = `${localhost}/refresh`;
-      this.message = 'Fetching...';
       this.showRefresh = true;
-      this.showMessage = true;
       axios.put(path)
         .then((res) => {
           console.log(res);
-          this.message = res.data.message;
           this.summoners = res.data.summoners;
-          this.showMessage = false;
         })
         .catch((error) => {
           console.error(error);
@@ -764,19 +746,13 @@ export default {
     },
     addSummoner(payload) {
       const path = `${localhost}/summoners`;
-      this.message = 'Fetching...';
       this.showRefresh = true;
-      this.showMessage = true;
       this.summoners.push({ name: payload.name });
       this.setActiveTab(payload.name);
       axios.put(path, payload)
         .then((res) => {
           const index = this.summoners.length - 1;
           this.$set(this.summoners, index, res.data.summoners);
-          // this.summoners.push(res.data.summoners);
-          // const len = this.summoners.length - 1;
-          // this.setActiveTab(this.summoners[len].name);
-          this.showMessage = false;
           this.showRefresh = false;
         })
         .catch((error) => {
@@ -813,15 +789,12 @@ export default {
       this.showRefresh = true;
       axios.delete(path)
         .then(() => {
-          this.message = 'Summoner removed!';
-          this.showMessage = true;
           for (let i = 0; i < this.summoners.length; i += 1) {
             if (this.summoners[i].id === summonerID) {
               this.summoners.pop(i);
             }
           }
           this.showRefresh = false;
-          this.showMessage = false;
           const summonerCount = this.summoners.length - 1;
           this.setActiveTab(this.summoners[summonerCount].name);
         })
