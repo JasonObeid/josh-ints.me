@@ -1,4 +1,5 @@
 <style scoped>
+
 .fade-enter-active, .fade-leave-active {
   transition-property: opacity;
   transition-duration: 0.25s;
@@ -16,41 +17,26 @@
   align-items: top;
   text-align: center;
   white-space: nowrap;
-  padding: 1% 1% 0 1%;
+  padding: 10px 0px 0px 0px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 2fr 1.5fr;
   grid-template-rows: 1fr;
-  grid-column-gap: 15px;
-  grid-row-gap: 10px;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  column-gap: 50px;
+  row-gap: 0px;
 }
 
 .stats {
   grid-area: 1 / 1 / 2 / 2;
-  vertical-align: top;
 }
 
 .build {
   grid-area: 1 / 2 / 2 / 3;
-  vertical-align: top;
-  padding-left: 6%;
-  padding-right: 3%;
-  padding-top: 0%;
-  transition: all 0.5s;
-  -webkit-transition: all 0.5s;
-  opacity: 1;
-}
-.build.loading {
-  transition: all 0.5s;
-  -webkit-transition: all 0.5s;
-  opacity: 0;
 }
 
 .bld-grid-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px 0px;
+  gap: 0px 0px;
   grid-template-areas:
     "bld-Role" "bld-RuneHeader" "bld-Runes"
     "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Items";
@@ -59,35 +45,71 @@
   vertical-align: middle;
 }
 
-.bld-Role {
+div.bld-Role {
   grid-area: bld-Role;
+  font-weight: 100;
+  background-color: white;
+  padding: 5px 10px 10px 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11)
 }
 
 .bld-RuneHeader {
   grid-area: bld-RuneHeader;
   text-align: left;
+  font-weight: bold;
 }
 
-.bld-Runes {
+div.bld-Runes {
   grid-area: bld-Runes;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11)
 }
 
 .bld-SkillHeader {
   grid-area: bld-SkillHeader;
   text-align: left;
+  font-weight: bold;
 }
 
-.bld-Skills {
+div.bld-Skills {
   grid-area: bld-Skills;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11)
 }
 
 .bld-ItemHeader {
   grid-area: bld-ItemHeader;
   text-align: left;
+  font-weight: bold;
 }
 
-.bld-Items {
+div.bld-Items {
+  text-align: left;
   grid-area: bld-Items;
+  background-color: white;
+  padding: 7px 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11)
+}
+div.tableBorder {
+  background-color: white;
+  padding: 7px 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+              0 2px 2px rgba(0,0,0,0.11)
+}
+table > tbody > tr > td {
+    font-size: 8px !important;
+    vertical-align: middle !important;
 }
 
 table {
@@ -103,29 +125,28 @@ table {
 img {
   border-radius: 20%;
 }
-
+.bigChampImg {
+  height: 80px;
+  width: auto;
+}
 .sort {
   cursor: pointer;
 }
 
-.itemContainer {
-  text-align: left;
-}
-
 .items {
-  align-items: left;
   text-align: left;
-  margin: 10px 10px 0 20px;
 }
 
 .filterShadow {
+  border: 0px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border-radius: 0 5px 5px 0;
 }
 
 .filterShadow:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -167,118 +188,167 @@ button:hover {
   border-radius: 50%;
   padding: 4px 6px;
 }
-.shardRow {
-  margin: 0.3% 0px;
-}
-.runeRow {
-  margin: 2% 0px;
-}
 .runeRowHeader {
   text-align: left;
   padding: 2% 5%;
-  border-radius: 6px;
-  background-color: #f2f2f2;
+  border-radius: 10px;
+  background-color: var(--light-gray);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
 .runeRowGroup {
   margin: 3% 0;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
-.darkSelect {
-  background: #343a40 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='white' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right .75rem center/8px 10px !important;
+.svgAlign {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
 }
 
+.searchIcon {
+  background-color: var(--light-gray);
+  border-radius: 5px 0 0 5px;
+}
+
+.smallFont {
+  font-size: 12px;
+  color: var(--dark-gray);
+}
+
+.mediumFont {
+  font-size: 13px;
+  color: var(--dark-gray);
+}
+
+.smallFont-dark {
+  color: var(--light-gray);
+}
+
+.mediumFont-dark {
+  color: var(--light-gray);
+}
+.bg-medium {
+  background-color: var(--dark-gray);
+}
+.grayscale {
+  filter: grayscale(1);
+}
 </style>
 <template>
-<transition name="slide-fade" mode="out-in">
+<transition name="fade" mode="out-in">
   <div class="parent">
     <div class="stats" ref="statsContainer">
-      <b-row align-v="center" align-h="center">
-        <b-col v-for="(btn, idx) in buttons" :key="idx">
-          <b-button
-            :pressed.sync="btn.state"
-            variant="outline-info"
-            size="md"
-            block
-          >{{ btn.caption }}</b-button>
+      <!--<b-row align-v="center" align-h="start">
+        <b-col style="text-align: left" class="smallFont" :class="{ 'smallFont-dark': darkMode }">
+          <span style="margin-right: 5px">Filters</span>
+          <b-icon icon='filter'></b-icon>
         </b-col>
+      </b-row>!-->
+      <b-row align-v="end" align-h="center" no-gutters>
         <b-col cols="1">
-          <b-button size="sm" class="refresh" ref="refresh" @click='updateBuilds()'
-          :variant="getInverseVariant">
+          <b-button size="sm" class="refresh" ref="refresh"
+          :variant="getInverseVariant" @click='updateBuilds()'>
             <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
             <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
+          </b-button>
+        </b-col>
+        <b-col v-for="(btn, idx) in buttons" :key="idx" class="mx-2">
+          <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">{{ btn.caption }}</span>
+          <b-button :pressed.sync="btn.state" :variant="getVariant" block size="sm">
+            <img :src="'/images/lanes/'+ btn.caption.toLowerCase() +'.png'"
+            :alt="btn.caption.toLowerCase()" width="24px"
+            :class="{ 'grayscale': !btn.state }"/>
           </b-button>
         </b-col>
       </b-row>
       <br>
       <b-row align-v="center" align-h="center">
         <b-col>
-          <b-form-input v-model="searchText" type="search" ref="filterBox"
-          placeholder="Filter by Name" autofocus class=filterShadow
-          :class="{ 'text-white bg-dark': darkMode}">
-          </b-form-input>
+          <b-row no-gutters>
+            <b-col cols="1" class="searchIcon" :class="{ 'bg-medium': darkMode}">
+              <b-icon icon='search' class="svgAlign"></b-icon>
+            </b-col>
+            <b-col>
+              <input v-model="searchText" type="search" ref="filterBox" size="md"
+              placeholder="Filter by Name" autofocus class="form-control filterShadow"
+              :class="{ 'text-white bg-dark': darkMode}">
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
       <br>
-      <b-table striped ref="statsTable"
-        small no-border-collapse
-        sticky-header="715px"
-        responsive="false"
-        :class="{ 'dark': darkMode}"
-        :fields="fields"
-        :items="filtered"
-        style="overflow-x: hidden; "
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :dark="darkMode"
-        id="statsTable"
-      >
-        <!-- A custom formatted column -->
-        <template v-slot:cell(name)="filtered">
-          <div style="text-align: left;">
-            <b-button block @click="changeSelected(filtered.item.idx)"
-            size="sm" class="champName champBtn"
-            :class="{ 'btn-secondary': darkMode, 'btn-light': !darkMode}">
-              <b-row align-v="center" align-h="start" no-gutters>
-                <b-col>
-                  <img :src="filtered.item.imgPath" :alt="filtered.item.name" width="32px"
-                  style="margin-right: 10%;"/>
-                  {{ filtered.item.name }}
-                </b-col>
-              </b-row>
-            </b-button>
-          </div>
-        </template>
-        <!-- Optional default data cell scoped slot -->
-        <template v-slot:cell(banRate)="filtered">{{ filtered.item.banRate + '%' }}</template>
-        <!-- Optional default data cell scoped slot -->
-        <template v-slot:cell(pickRate)="filtered">{{ filtered.item.pickRate + '%' }}</template>
-        <!-- Optional default data cell scoped slot -->
-        <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
-        <!-- Optional default data cell scoped slot -->
-        <template v-slot:cell(lanes)="filtered">
-         <b-row no-gutters>
-            <b-col v-for="lane in filtered.item.lanes" :key="lane">
-              <b-button @click="changeSelectedWithRole(filtered.item.idx, lane)"
-                size="sm" class="roleBtn"
-                :class="{ 'btn-secondary': darkMode, 'btn-light': !darkMode}">
-                <img :src="'/images/lanes/'+lane+'.png'"
-                  :alt="filtered.item.name" width="24px"/>
+      <div class="tableBorder" :class="{ 'bg-dark': darkMode}">
+        <b-table ref="statsTable"
+          small no-border-collapse
+          borderless striped
+          sticky-header="664px"
+          responsive="false"
+          :class="{ 'dark': darkMode}"
+          :fields="fields"
+          :items="filtered"
+          style="overflow-x: hidden; vertical-align: middle;"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          :dark="darkMode"
+          thead-class="tableHeader"
+          id="statsTable">
+          <!-- A custom formatted column -->
+          <template v-slot:cell(name)="filtered">
+            <div class="text-left">
+              <b-button block @click="changeSelected(filtered.item.idx)"
+              size="sm" class="champName champBtn"
+              :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}">
+                <b-row align-v="center" align-h="start" no-gutters>
+                  <b-col>
+                    <img :src="filtered.item.imgPath" :alt="filtered.item.name" width="32px"
+                    style="margin-right: 15px;"/>
+                    <span>{{ filtered.item.name }}</span>
+                  </b-col>
+                </b-row>
               </b-button>
-            </b-col>
-          </b-row>
-        </template>
-      </b-table>
+            </div>
+          </template>
+          <!-- Optional default data cell scoped slot -->
+          <template v-slot:cell(banRate)="filtered">{{ filtered.item.banRate + '%' }}</template>
+          <!-- Optional default data cell scoped slot -->
+          <template v-slot:cell(pickRate)="filtered">{{ filtered.item.pickRate + '%' }}</template>
+          <!-- Optional default data cell scoped slot -->
+          <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
+          <!-- Optional default data cell scoped slot -->
+          <template v-slot:cell(lanes)="filtered">
+          <b-row no-gutters>
+              <b-col v-for="lane in filtered.item.lanes" :key="lane">
+                <b-button @click="changeSelectedWithRole(filtered.item.idx, lane)"
+                  size="sm" class="roleBtn"
+                  :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}">
+                  <img :src="'/images/lanes/'+lane+'.png'"
+                    :alt="lane" width="24px"/>
+                </b-button>
+              </b-col>
+            </b-row>
+          </template>
+        </b-table>
+      </div>
     </div>
     <div class="build" ref="buildContainer">
       <div class="bld-grid-container">
-        <div class="bld-Role">
+        <div class="bld-Role" :class="{ 'bg-dark': darkMode }">
             <b-row align-v="center" align-h="center">
               <b-col cols="5">
                 <b-row align-v="center" align-h="center">
                   <b-col cols="7" >
-                    <!--<h6> {{ selected.name }} </h6>-->
-                    <img :src="selected.imgPath" class="dropShadow" :key="selected.name"/>
+                    <div class="pl-1 text-center">
+                      {{ selected.name }}
+                    </div>
+                    <img :src="selected.imgPath" class="dropShadow bigChampImg"
+                    :key="selected.name"/>
                   </b-col>
                   <b-col cols="5">
                     <b-col>
@@ -288,7 +358,7 @@ button:hover {
                         :key="build.spells[0].name"
                       />
                     </b-col>
-                    <b-col>
+                    <b-col class="mt-3">
                       <img class="dropShadow"
                         :src="build.spells[1].imgPath"
                         :alt="build.spells[1].name"
@@ -300,57 +370,60 @@ button:hover {
               </b-col>
               <b-col cols="7">
                 <b-row align-v="center" align-h="center">
-                  <b-col cols="4">
-                    <b-form-select v-model="selectedRole" ref="laneDropdown"
-                    :class="{ 'text-white bg-dark darkSelect': darkMode}">
-                      <b-form-select-option
-                        v-for="(role, index) in selected.roles"
-                        :key="index"
-                        :value="role"
-                        @click="chooseBuild(role)"
-                      >{{ role.lane }}</b-form-select-option>
-                    </b-form-select>
-                  </b-col>
-                  <b-col cols="8">
-                    <b-form-group ref="roleRadio">
-                      <b-form-radio
-                        v-for="(buildOpt, index) in selectedRole.builds"
-                        :key="index"
-                        v-model="build"
-                        name="some-radios"
-                        :value="buildOpt"
-                        :text="buildOpt.name"
-                      >
-                        {{ buildOpt.name }}
-                      </b-form-radio>
-                    </b-form-group>
+                  <b-col>
+                    <b-row align-v="center" align-h="start">
+                      <b-col cols="9" class='pt-2  ml-4'>
+                        <b-form-select v-model="selectedRole" ref="laneDropdown" size="sm"
+                        :class="{ 'text-white bg-dark darkSelect': darkMode}" plain>
+                          <b-form-select-option
+                            v-for="(role, index) in selected.roles"
+                            :key="index"
+                            :value="role"
+                            @click="chooseBuild(role)"
+                          >{{ role.lane }}</b-form-select-option>
+                        </b-form-select>
+                        <b-form-group ref="roleRadio">
+                          <b-form-radio
+                            v-for="(buildOpt, index) in selectedRole.builds"
+                            :key="index"
+                            v-model="build"
+                            name="some-radios"
+                            :value="buildOpt"
+                            :text="buildOpt.name"
+                            class="mediumFont pt-2 text-left"
+                            :class="{ 'mediumFont-dark': darkMode }">
+                            {{ buildOpt.name }}
+                          </b-form-radio>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
                   </b-col>
                 </b-row>
               </b-col>
             </b-row>
         </div>
-        <div class="bld-RuneHeader">
-          <h4>Runes</h4>
+        <div class="bld-RuneHeader pt-3">
+          Runes
         </div>
-        <div class="bld-Runes">
+        <div class="bld-Runes" :class="{ 'bg-dark': darkMode }">
           <b-row>
             <b-col>
               <div class="primary-container">
                 <div class="runeRowHeader" ref="primaryRuneHeader"
-                :class="{ 'bg-dark': darkMode}">
+                :class="{ 'bg-medium': darkMode}">
                   <b-row no-gutters align-v="center" align-h="center">
                     <b-col cols="3">
                       <img :src="runeMap[build.runes.primaryBranch].imgPath"
                       class="runes dropShadow activeRune" width="32px"
                       :key="build.runes.primaryBranch"/>
                     </b-col>
-                    <b-col cols="9">
+                    <b-col cols="9" class="pl-4">
                       {{ runeMap[build.runes.primaryBranch].name }}
                     </b-col>
                   </b-row>
                 </div>
                 <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="runeRow">
+                  <b-row no-gutters align-v="center" align-h="center" class="my-3">
                     <b-col v-for="rune in runeMap[build.runes.primaryBranch].runeRows[0]"
                     :key="rune.name">
                       <img :src="rune.imgPath"
@@ -361,7 +434,7 @@ button:hover {
                   </b-row>
                 </div>
                 <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="runeRow"
+                  <b-row no-gutters align-v="center" align-h="center" class="my-2"
                   v-for="runeRow in runeMap[build.runes.primaryBranch].runeRows.slice(1)"
                   :key="runeRow.name">
                     <b-col v-for="rune in runeRow" :key="rune.name">
@@ -377,20 +450,20 @@ button:hover {
             <b-col>
               <div class="secondary-container">
                 <div class="runeRowHeader" ref="secondaryRuneHeader"
-                :class="{ 'bg-dark': darkMode}">
+                :class="{ 'bg-medium': darkMode}">
                   <b-row no-gutters align-v="center" align-h="center">
                     <b-col cols="3">
                       <img :src="runeMap[build.runes.secondaryBranch].imgPath"
                       class="runes dropShadow activeRune" width="32px"
                       :key="build.runes.secondaryBranch"/>
                     </b-col>
-                    <b-col cols="9">
+                    <b-col cols="9" class="pl-4">
                       {{ runeMap[build.runes.secondaryBranch].name }}
                     </b-col>
                   </b-row>
                 </div>
                 <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="runeRow"
+                  <b-row no-gutters align-v="center" align-h="center" class="my-2"
                   v-for="runeRow in runeMap[build.runes.secondaryBranch].runeRows.slice(1)"
                   :key="runeRow.name">
                     <b-col v-for="rune in runeRow" :key="rune.name">
@@ -401,7 +474,7 @@ button:hover {
                   </b-row>
                 </div>
                 <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="shardRow"
+                  <b-row no-gutters align-v="center" align-h="center" class="my-1"
                   v-for="(auxRow, rowIndex) in shardMap" :key="rowIndex">
                     <b-col v-for="(shard, colIndex) in auxRow" :key="colIndex">
                       <img :src="shard.imgPath"
@@ -415,13 +488,15 @@ button:hover {
             </b-col>
           </b-row>
         </div>
-        <div class="bld-SkillHeader">
-          <h4>Skills</h4>
+        <div class="bld-SkillHeader pt-3">
+          Skills
         </div>
-        <div class="bld-Skills">
-          <b-row align-v="center" align-h="center" style="padding-bottom: 1%">
-            <b-col :key="build.skills[0].name">
-              {{ build.skills[0].name }}
+        <div class="bld-Skills" :class="{ 'bg-dark': darkMode }">
+          <b-row align-v="center" align-h="center">
+            <b-col :key="build.skills[0].name" cols="3">
+              <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">
+                {{ build.skills[0].name }}
+              </span>
               <br />
               <div :key="build.skills[0].button" >{{ build.skills[0].button }}</div>
               <img :src="build.skills[0].imgPath"
@@ -432,8 +507,10 @@ button:hover {
                 <b-icon icon="arrow-right"></b-icon>
               </div>
             </b-col>
-            <b-col :key="build.skills[1].name">
-              {{ build.skills[1].name }}
+            <b-col :key="build.skills[1].name" cols="3">
+              <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">
+                {{ build.skills[1].name }}
+              </span>
               <br />
               <div :key="build.skills[1].button" >{{ build.skills[1].button }}</div>
               <img :src="build.skills[1].imgPath"
@@ -444,8 +521,11 @@ button:hover {
                 <b-icon icon="arrow-right"></b-icon>
               </div>
             </b-col>
-            <b-col :key="build.skills[2].name">
-              {{ build.skills[2].name }}
+            <b-col :key="build.skills[2].name" cols="3">
+              <span class="smallFont"
+              :class="{ 'smallFont-dark': darkMode }">
+                {{ build.skills[2].name }}
+              </span>
               <br />
               <div :key="build.skills[2].button" >{{ build.skills[2].button }}</div>
               <img :src="build.skills[2].imgPath"
@@ -453,78 +533,50 @@ button:hover {
             </b-col>
           </b-row>
         </div>
-        <div class="bld-ItemHeader">
-          <h4>Items</h4>
+        <div class="bld-ItemHeader pt-3">
+          Items
         </div>
-        <div class="itemContainer">
-          <div class="Early">
-            <b-row align-v="center" no-gutters class="itemRow">
-              <b-col cols="1" style="text-align: right">
-                Early
-              </b-col>
-              <b-col cols="1">
-              </b-col>
-              <b-col>
-                <img
-                  v-for="(item, index) in build.items.general.start"
-                  :key="index" :src="item.imgPath" class="items dropShadow"
-                  v-b-tooltip.left.hover.left = "{ variant: 'secondary' }" :title="item.name"
-                />
-              </b-col>
-            </b-row>
-          </div>
-          <div class="Core">
-            <b-row align-v="center" no-gutters class="itemRow">
-              <b-col cols="1" style="text-align: right">
-                Core
-              </b-col>
-              <b-col cols="1">
-              </b-col>
-              <b-col>
-                <img
-                  v-for="(item, index) in build.items.general.core"
-                  :key="index"
-                  :src="item.imgPath"
-                  class="items dropShadow"
-                  v-b-tooltip.left.hover = "{ variant: 'secondary' }" :title="item.name"
-                />
-              </b-col>
-            </b-row>
-          </div>
-          <div class="Late">
-            <b-row align-v="center" no-gutters class="itemRow">
-              <b-col cols="1" style="text-align: right">
-                Late
-              </b-col>
-              <b-col cols="1">
-              </b-col>
-              <b-col>
-                <img
-                  v-for="(item, index) in build.items.general.full"
-                  :key="index" :src="item.imgPath" class="items dropShadow" tabindex="0"
-                  data-toggle="tooltip" data-placement="top" :title="item.name"
-                />
-              </b-col>
-            </b-row>
-          </div>
-          <div class="Situational">
-            <b-row align-v="center" no-gutters class="itemRow">
-              <b-col cols="1" style="text-align: right">
-                Situational
-              </b-col>
-              <b-col cols="1">
-              </b-col>
-              <b-col>
-                <img
-                  v-for="(item, index) in build.items.situational"
-                  :key="index"
-                  :src="item.imgPath"
-                  class="items dropShadow"
-                  v-b-tooltip.left.hover = "{ variant: 'secondary' }" :title="item.name"
-                />
-              </b-col>
-            </b-row>
-          </div>
+        <div class="bld-Items" :class="{ 'bg-dark': darkMode }">
+          <b-row align-v="center" no-gutters class="itemRow">
+            <b-col cols="2" class="text-center">
+              Early
+            </b-col>
+            <b-col>
+              <img v-for="(item, index) in build.items.general.start"
+                :key="index" :src="item.imgPath" class="mx-2  mb-2 dropShadow"
+                v-b-tooltip :title="item.name"/>
+            </b-col>
+          </b-row>
+          <b-row align-v="center" no-gutters class="itemRow">
+            <b-col cols="2" class="text-center">
+              Core
+            </b-col>
+            <b-col>
+              <img v-for="(item, index) in build.items.general.core"
+                :key="index" :src="item.imgPath" class="mx-2 mb-2 dropShadow"
+                v-b-tooltip :title="item.name"/>
+            </b-col>
+          </b-row>
+          <b-row align-v="center" align-h="center" no-gutters>
+            <b-col cols="2" class="text-center">
+              Late
+            </b-col>
+            <b-col>
+              <img v-for="(item, index) in build.items.general.full"
+                :key="index" :src="item.imgPath" class="mx-2 mb-2 dropShadow"
+                v-b-tooltip :title="item.name"/>
+            </b-col>
+          </b-row>
+          <b-row align-v="center" no-gutters class="itemRow">
+            <b-col cols="2" class="text-center">
+              Situational
+            </b-col>
+            <b-col>
+              <img v-for="(item, index) in build.items.situational"
+                :key="index" :src="item.imgPath" class="mx-2 dropShadow"
+                v-b-tooltip :title="item.name"/>
+            </b-col>
+          </b-row>
         </div>
       </div>
     </div>
@@ -577,6 +629,12 @@ export default {
     };
   },
   computed: {
+    getTipVariant() {
+      if (this.darkMode === true) {
+        return 'light';
+      }
+      return 'dark';
+    },
     getVariant() {
       if (this.darkMode === true) {
         return 'outline-dark';
@@ -597,6 +655,7 @@ export default {
     },
     filtered() {
       const buttonStates = this.btnStates;
+      console.log(buttonStates);
       if (buttonStates.includes(null) && this.searchText !== '') {
         const filtered = this.allChampions.filter((champion) => {
           if (
@@ -637,7 +696,7 @@ export default {
     },
     btnStates() {
       return this.buttons.map((btn) => {
-        if (btn.state === true) return btn.caption;
+        if (btn.state === true) return btn.caption.toLowerCase();
         return null;
       });
     },
