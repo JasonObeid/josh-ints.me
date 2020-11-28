@@ -2,4 +2,4 @@ Flask
 Flask-Cors
 requests
 Flask-Caching
-flask_sqlalchemy
+flask-compress
