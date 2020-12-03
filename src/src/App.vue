@@ -1,6 +1,5 @@
 <template>
-  <div id="app" ref="app" class="bg-default noXOverflow"
-  :class="{'noYOverflow': $route.path === '/builds'}">
+  <div id="app" ref="app" class="bg-default">
     <transition name="fade" mode="out-in">
       <router-view/>
     </transition>
@@ -15,6 +14,7 @@
   overflow-x: hidden;
 }
 #app {
+  -webkit-font-smoothing: antialiased;
   font-family: sans-serif;
 }
 </style>

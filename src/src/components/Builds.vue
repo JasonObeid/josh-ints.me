@@ -13,6 +13,7 @@
   opacity: 0
 }
 .parent {
+  height: 100vh;
   vertical-align: middle;
   align-items: top;
   text-align: center;
@@ -38,14 +39,15 @@
   grid-template-columns: 1fr;
   gap: 0px 0px;
   grid-template-areas:
-    "bld-Role" "bld-RuneHeader" "bld-Runes"
-    "bld-SkillHeader" "bld-Skills" "bld-ItemHeader" "bld-Items";
+    "bld-Role" "bld-Runes"
+    "bld-Skills" "bld-Items";
   align-items: center;
   align-self: center;
   vertical-align: middle;
 }
 
 div.bld-Role {
+  height: 13vh;
   grid-area: bld-Role;
   font-weight: 100;
   background-color: white;
@@ -55,13 +57,8 @@ div.bld-Role {
               0 2px 2px rgba(0,0,0,0.11)
 }
 
-.bld-RuneHeader {
-  grid-area: bld-RuneHeader;
-  text-align: left;
-  font-weight: bold;
-}
-
 div.bld-Runes {
+  height: 33vh;
   grid-area: bld-Runes;
   background-color: white;
   padding: 10px;
@@ -70,13 +67,8 @@ div.bld-Runes {
               0 2px 2px rgba(0,0,0,0.11)
 }
 
-.bld-SkillHeader {
-  grid-area: bld-SkillHeader;
-  text-align: left;
-  font-weight: bold;
-}
-
 div.bld-Skills {
+  height: 11vh;
   grid-area: bld-Skills;
   background-color: white;
   padding: 10px;
@@ -85,13 +77,8 @@ div.bld-Skills {
               0 2px 2px rgba(0,0,0,0.11)
 }
 
-.bld-ItemHeader {
-  grid-area: bld-ItemHeader;
-  text-align: left;
-  font-weight: bold;
-}
-
 div.bld-Items {
+  height: 25vh;
   text-align: left;
   grid-area: bld-Items;
   background-color: white;
@@ -115,7 +102,15 @@ table > tbody > tr > td {
 table {
   vertical-align: middle;
 }
-
+.table.b-table > thead > tr > th > div {
+  font-size: 8px !important;
+  vertical-align: middle !important;
+}
+.tableHeader {
+  font-size: 14px !important;
+  font-weight: normal !important;
+  vertical-align: middle !important;
+}
 .champName {
   align-items: left;
   text-align: left;
@@ -288,7 +283,7 @@ button:hover {
         <b-table ref="statsTable"
           small no-border-collapse
           borderless striped
-          sticky-header="688px"
+          sticky-header="71vh"
           responsive="false"
           :class="{ 'dark': darkMode}"
           :fields="fields"
@@ -323,16 +318,13 @@ button:hover {
           <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
           <!-- Optional default data cell scoped slot -->
           <template v-slot:cell(lanes)="filtered">
-          <b-row no-gutters>
-              <b-col v-for="lane in filtered.item.lanes" :key="lane">
-                <b-button @click="changeSelectedWithRole(filtered.item.idx, lane)"
-                  size="sm" class="roleBtn"
-                  :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}">
-                  <img :src="'/images/lanes/'+lane+'.png'"
-                    :alt="lane" width="24px"/>
-                </b-button>
-              </b-col>
-            </b-row>
+            <b-button v-for="lane in filtered.item.lanes" :key="lane"
+            @click="changeSelectedWithRole(filtered.item.idx, lane)"
+              size="sm" class="roleBtn mx-1"
+              :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}">
+              <img :src="'/images/lanes/'+lane+'.png'"
+                :alt="lane" width="24px" height="auto"/>
+            </b-button>
           </template>
         </b-table>
       </div>
@@ -341,34 +333,24 @@ button:hover {
       <div class="bld-grid-container">
         <div class="bld-Role" :class="{ 'bg-dark': darkMode }">
             <b-row align-v="center" align-h="center">
-              <b-col cols="5">
-                <b-row align-v="center" align-h="center">
-                  <b-col cols="7" >
-                    <div class="pl-1 text-center">
-                      {{ selected.name }}
-                    </div>
-                    <img :src="selected.imgPath" class="dropShadow bigChampImg"
-                    :key="selected.name"/>
-                  </b-col>
-                  <b-col cols="5">
-                    <b-col>
-                      <img class="dropShadow"
-                        :src="build.spells[0].imgPath"
-                        :alt="build.spells[0].name"
-                        :key="build.spells[0].name"
-                      />
-                    </b-col>
-                    <b-col class="mt-3">
-                      <img class="dropShadow"
-                        :src="build.spells[1].imgPath"
-                        :alt="build.spells[1].name"
-                        :key="build.spells[1].name"
-                      />
-                    </b-col>
-                  </b-col>
-                </b-row>
+              <b-col cols="3">
+                <div class="pl-1 text-center">
+                  {{ selected.name }}
+                </div>
+                <img :src="selected.imgPath" class="dropShadow bigChampImg"
+                :key="selected.name"/>
               </b-col>
-              <b-col cols="7">
+              <b-col cols="3">
+                <img class="dropShadow mr-3"
+                :src="build.spells[0].imgPath"
+                :alt="build.spells[0].name"
+                :key="build.spells[0].name"/>
+                <img class="dropShadow"
+                :src="build.spells[1].imgPath"
+                :alt="build.spells[1].name"
+                :key="build.spells[1].name"/>
+              </b-col>
+              <b-col cols="6">
                 <b-row align-v="center" align-h="center">
                   <b-col>
                     <b-row align-v="center" align-h="start">
@@ -382,7 +364,7 @@ button:hover {
                             @click="chooseBuild(role)"
                           >{{ role.lane }}</b-form-select-option>
                         </b-form-select>
-                        <b-form-group ref="roleRadio">
+                        <b-form-group ref="roleRadio" class="pt-2 mb-1">
                           <b-form-radio
                             v-for="(buildOpt, index) in selectedRole.builds"
                             :key="index"
@@ -390,7 +372,7 @@ button:hover {
                             name="some-radios"
                             :value="buildOpt"
                             :text="buildOpt.name"
-                            class="mediumFont pt-2 text-left"
+                            class="mediumFont text-left"
                             :class="{ 'mediumFont-dark': darkMode }">
                             {{ buildOpt.name }}
                           </b-form-radio>
@@ -402,10 +384,7 @@ button:hover {
               </b-col>
             </b-row>
         </div>
-        <div class="bld-RuneHeader pt-3">
-          Runes
-        </div>
-        <div class="bld-Runes" :class="{ 'bg-dark': darkMode }">
+        <div class="bld-Runes mt-4" :class="{ 'bg-dark': darkMode }">
           <b-row>
             <b-col>
               <div class="primary-container">
@@ -422,8 +401,8 @@ button:hover {
                     </b-col>
                   </b-row>
                 </div>
-                <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="my-3">
+                <div class="runeRowGroup pt-1">
+                  <b-row no-gutters align-v="center" align-h="center" class="mb-2 mt-1">
                     <b-col v-for="rune in runeMap[build.runes.primaryBranch].runeRows[0]"
                     :key="rune.name">
                       <img :src="rune.imgPath"
@@ -433,13 +412,15 @@ button:hover {
                     </b-col>
                   </b-row>
                 </div>
+                <svg width="85%" height="1"><rect width="100%"
+                height="1" style="fill: var(--medium-gray)"></rect></svg>
                 <div class="runeRowGroup">
                   <b-row no-gutters align-v="center" align-h="center" class="my-2"
                   v-for="runeRow in runeMap[build.runes.primaryBranch].runeRows.slice(1)"
                   :key="runeRow.name">
                     <b-col v-for="rune in runeRow" :key="rune.name">
                       <img :src="rune.imgPath"
-                      class="runes dropShadow" width="36px"
+                      class="runes dropShadow" height="36px" width="auto"
                       :class="{ 'activeRune': isActiveRune(rune.id) }"
                       :key="rune.name"/>
                     </b-col>
@@ -462,17 +443,19 @@ button:hover {
                     </b-col>
                   </b-row>
                 </div>
-                <div class="runeRowGroup">
+                <div class="runeRowGroup pt-1">
                   <b-row no-gutters align-v="center" align-h="center" class="my-2"
                   v-for="runeRow in runeMap[build.runes.secondaryBranch].runeRows.slice(1)"
                   :key="runeRow.name">
                     <b-col v-for="rune in runeRow" :key="rune.name">
                       <img :src="rune.imgPath"
-                      class="runes dropShadow" width="36px"
+                      class="runes dropShadow" height="30px" width="auto"
                       :class="{ 'activeRune': isActiveRune(rune.id) }"/>
                     </b-col>
                   </b-row>
                 </div>
+                <svg width="85%" height="1"><rect width="100%"
+                height="1" style="fill: var(--medium-gray)"></rect></svg>
                 <div class="runeRowGroup">
                   <b-row no-gutters align-v="center" align-h="center" class="my-1"
                   v-for="(auxRow, rowIndex) in shardMap" :key="rowIndex">
@@ -488,11 +471,8 @@ button:hover {
             </b-col>
           </b-row>
         </div>
-        <div class="bld-SkillHeader pt-3">
-          Skills
-        </div>
-        <div class="bld-Skills" :class="{ 'bg-dark': darkMode }">
-          <b-row align-v="center" align-h="center">
+        <div class="bld-Skills mt-4" :class="{ 'bg-dark': darkMode }">
+          <b-row align-v="center" align-h="center" class="pb-2">
             <b-col :key="build.skills[0].name" cols="3">
               <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">
                 {{ build.skills[0].name }}
@@ -533,11 +513,8 @@ button:hover {
             </b-col>
           </b-row>
         </div>
-        <div class="bld-ItemHeader pt-3">
-          Items
-        </div>
-        <div class="bld-Items" :class="{ 'bg-dark': darkMode }">
-          <b-row align-v="center" no-gutters class="itemRow">
+        <div class="bld-Items mt-4" :class="{ 'bg-dark': darkMode }">
+          <b-row align-v="center" no-gutters class="itemRow pt-2">
             <b-col cols="2" class="text-center">
               Early
             </b-col>
@@ -547,7 +524,7 @@ button:hover {
                 v-b-tooltip :title="item.name"/>
             </b-col>
           </b-row>
-          <b-row align-v="center" no-gutters class="itemRow">
+          <b-row align-v="center" no-gutters class="itemRow pt-2">
             <b-col cols="2" class="text-center">
               Core
             </b-col>
@@ -557,7 +534,7 @@ button:hover {
                 v-b-tooltip :title="item.name"/>
             </b-col>
           </b-row>
-          <b-row align-v="center" align-h="center" no-gutters>
+          <b-row align-v="center" align-h="center" no-gutters class="itemRow pt-2">
             <b-col cols="2" class="text-center">
               Late
             </b-col>
@@ -567,7 +544,7 @@ button:hover {
                 v-b-tooltip :title="item.name"/>
             </b-col>
           </b-row>
-          <b-row align-v="center" no-gutters class="itemRow">
+          <b-row align-v="center" no-gutters class="itemRow pt-2 pb-1">
             <b-col cols="2" class="text-center">
               Situational
             </b-col>
