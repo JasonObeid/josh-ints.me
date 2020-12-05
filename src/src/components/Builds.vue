@@ -169,7 +169,6 @@ button:hover {
               0 8px 16px rgba(0,0,0,0.11)
 }
 
-
 .runes {
   filter: grayscale(100%);
   opacity: .27;
