@@ -13,6 +13,11 @@
 .noXOverflow {
   overflow-x: hidden;
 }
+@font-face {
+    font-family: "Public Sans";
+    src: local("Public Sans"),
+    url(./fonts/PublicSans-VariableFont_wght.ttf) format("truetype");
+  }
 #app {
   -webkit-font-smoothing: antialiased;
   font-family: sans-serif;

@@ -98,7 +98,10 @@ table > tbody > tr > td {
     font-size: 8px !important;
     vertical-align: middle !important;
 }
-
+.table th, .table td {
+  font-size: 8px !important;
+  vertical-align: middle !important;
+}
 table {
   vertical-align: middle;
 }
@@ -294,7 +297,6 @@ button:hover {
           :dark="darkMode"
           thead-class="tableHeader"
           id="statsTable">
-          <!-- A custom formatted column -->
           <template v-slot:cell(name)="filtered">
             <div class="text-left">
               <b-button block @click="changeSelected(filtered.item.idx)"
@@ -310,13 +312,13 @@ button:hover {
               </b-button>
             </div>
           </template>
-          <!-- Optional default data cell scoped slot -->
+
           <template v-slot:cell(banRate)="filtered">{{ filtered.item.banRate + '%' }}</template>
-          <!-- Optional default data cell scoped slot -->
+
           <template v-slot:cell(pickRate)="filtered">{{ filtered.item.pickRate + '%' }}</template>
-          <!-- Optional default data cell scoped slot -->
+
           <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
-          <!-- Optional default data cell scoped slot -->
+
           <template v-slot:cell(lanes)="filtered">
             <b-button v-for="lane in filtered.item.lanes" :key="lane"
             @click="changeSelectedWithRole(filtered.item.idx, lane)"
@@ -564,8 +566,8 @@ button:hover {
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
