@@ -1,6 +1,6 @@
 <style scoped>
-
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition-property: opacity;
   transition-duration: 0.25s;
 }
@@ -9,8 +9,8 @@
   transition-delay: 0.25s;
 }
 
-.fade-enter, .fade-leave-active {
-  opacity: 0
+.fade-leave-active {
+  opacity: 0;
 }
 .parent {
   height: 100vh;
@@ -35,6 +35,7 @@
 }
 
 .bld-grid-container {
+  align-content: center;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0px 0px;
@@ -53,8 +54,7 @@ div.bld-Role {
   background-color: white;
   padding: 5px 10px 10px 10px;
   border-radius: 10px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-              0 2px 2px rgba(0,0,0,0.11)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 
 div.bld-Runes {
@@ -63,42 +63,39 @@ div.bld-Runes {
   background-color: white;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-              0 2px 2px rgba(0,0,0,0.11)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 
 div.bld-Skills {
-  height: 11vh;
+  height: 12vh;
   grid-area: bld-Skills;
   background-color: white;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-              0 2px 2px rgba(0,0,0,0.11)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 
 div.bld-Items {
-  height: 25vh;
+  height: 24vh;
   text-align: left;
   grid-area: bld-Items;
   background-color: white;
   padding: 7px 10px;
   border-radius: 10px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-              0 2px 2px rgba(0,0,0,0.11)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 div.tableBorder {
   background-color: white;
   padding: 7px 10px;
   border-radius: 10px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-              0 2px 2px rgba(0,0,0,0.11)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 table > tbody > tr > td {
-    font-size: 8px !important;
-    vertical-align: middle !important;
+  font-size: 8px !important;
+  vertical-align: middle !important;
 }
-.table th, .table td {
+.table th,
+.table td {
   font-size: 8px !important;
   vertical-align: middle !important;
 }
@@ -162,16 +159,14 @@ button:hover {
 }
 
 .dropShadow {
-  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-              0 2px 2px rgba(0,0,0,0.11),
-              0 4px 4px rgba(0,0,0,0.11),
-              0 6px 8px rgba(0,0,0,0.11),
-              0 8px 16px rgba(0,0,0,0.11)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
+    0 4px 4px rgba(0, 0, 0, 0.11), 0 6px 8px rgba(0, 0, 0, 0.11),
+    0 8px 16px rgba(0, 0, 0, 0.11);
 }
 
 .runes {
   filter: grayscale(100%);
-  opacity: .27;
+  opacity: 0.27;
   border-radius: 50%;
 }
 
@@ -190,7 +185,7 @@ button:hover {
   padding: 2% 5%;
   border-radius: 10px;
   background-color: var(--light-gray);
-  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .runeRowGroup {
   margin: 3% 0;
@@ -239,125 +234,161 @@ button:hover {
 }
 </style>
 <template>
-<transition name="fade" mode="out-in">
-  <div class="parent">
-    <div class="stats" ref="statsContainer">
-      <!--<b-row align-v="center" align-h="start">
+  <transition name="fade" mode="out-in">
+    <div class="parent">
+      <div class="stats" ref="statsContainer">
+        <!--<b-row align-v="center" align-h="start">
         <b-col style="text-align: left" class="smallFont" :class="{ 'smallFont-dark': darkMode }">
           <span style="margin-right: 5px">Filters</span>
           <b-icon icon='filter'></b-icon>
         </b-col>
-      </b-row>!-->
-      <b-row align-v="end" align-h="center" no-gutters>
-        <b-col cols="1">
-          <b-button size="sm" class="refresh" ref="refresh"
-          :variant="getInverseVariant" @click='updateBuilds()'>
-            <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
-            <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
-          </b-button>
-        </b-col>
-        <b-col v-for="(btn, idx) in buttons" :key="idx" class="mx-2">
-          <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">{{ btn.caption }}</span>
-          <b-button :pressed.sync="btn.state" :variant="getVariant" block size="sm">
-            <img :src="'/images/lanes/'+ btn.caption.toLowerCase() +'.png'"
-            :alt="btn.caption.toLowerCase()" width="24px"
-            :class="{ 'grayscale': !btn.state }"/>
-          </b-button>
-        </b-col>
-      </b-row>
-      <br>
-      <b-row align-v="center" align-h="center">
-        <b-col>
-          <b-row no-gutters>
-            <b-col cols="1" class="searchIcon" :class="{ 'bg-medium': darkMode}">
-              <b-icon icon='search' class="svgAlign"></b-icon>
-            </b-col>
-            <b-col>
-              <input v-model="searchText" type="search" ref="filterBox" size="md"
-              placeholder="Filter by Name" autofocus class="form-control filterShadow"
-              :class="{ 'text-white bg-dark': darkMode}">
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
-      <br>
-      <div class="tableBorder" :class="{ 'bg-dark': darkMode}">
-        <b-table ref="statsTable"
-          small no-border-collapse
-          borderless striped
-          sticky-header="71vh"
-          responsive="false"
-          :class="{ 'dark': darkMode}"
-          :fields="fields"
-          :items="filtered"
-          style="overflow-x: hidden; vertical-align: middle;"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :dark="darkMode"
-          thead-class="tableHeader"
-          id="statsTable">
-          <template v-slot:cell(name)="filtered">
-            <div class="text-left">
-              <b-button block @click="changeSelected(filtered.item.idx)"
-              size="sm" class="champName champBtn"
-              :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}">
-                <b-row align-v="center" align-h="start" no-gutters>
-                  <b-col>
-                    <img :src="filtered.item.imgPath" :alt="filtered.item.name" width="32px"
-                    style="margin-right: 15px;"/>
-                    <span>{{ filtered.item.name }}</span>
-                  </b-col>
-                </b-row>
-              </b-button>
-            </div>
-          </template>
-
-          <template v-slot:cell(banRate)="filtered">{{ filtered.item.banRate + '%' }}</template>
-
-          <template v-slot:cell(pickRate)="filtered">{{ filtered.item.pickRate + '%' }}</template>
-
-          <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
-
-          <template v-slot:cell(lanes)="filtered">
-            <b-button v-for="lane in filtered.item.lanes" :key="lane"
-            @click="changeSelectedWithRole(filtered.item.idx, lane)"
-              size="sm" class="roleBtn mx-1"
-              :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}">
-              <img :src="'/images/lanes/'+lane+'.png'"
-                :alt="lane" width="24px" height="auto"/>
+        </b-row>!-->
+        <b-row align-v="end" align-h="center" no-gutters>
+          <b-col cols="1">
+            <b-button
+              size="sm"
+              class="refresh"
+              ref="refresh"
+              :variant="getInverseVariant"
+              @click="updateBuilds()"
+            >
+              <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
+              <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
             </b-button>
-          </template>
-        </b-table>
+          </b-col>
+          <b-col v-for="(btn, idx) in buttons" :key="idx" class="mx-2">
+            <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">{{ btn.caption }}</span>
+            <b-button :pressed.sync="btn.state" :variant="getVariant" block size="sm">
+              <img
+                :src="'/images/lanes/'+ btn.caption.toLowerCase() +'.png'"
+                :alt="btn.caption.toLowerCase()"
+                width="24px"
+                :class="{ 'grayscale': !btn.state }"
+              />
+            </b-button>
+          </b-col>
+        </b-row>
+        <br />
+        <b-row align-v="center" align-h="center">
+          <b-col>
+            <b-row no-gutters>
+              <b-col cols="1" class="searchIcon" :class="{ 'bg-medium': darkMode}">
+                <b-icon icon="search" class="svgAlign"></b-icon>
+              </b-col>
+              <b-col>
+                <input
+                  v-model="searchText"
+                  type="search"
+                  ref="filterBox"
+                  size="md"
+                  placeholder="Filter by Name"
+                  autofocus
+                  class="form-control filterShadow"
+                  :class="{ 'text-white bg-dark': darkMode}"
+                />
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+        <br />
+        <div class="tableBorder" :class="{ 'bg-dark': darkMode}">
+          <b-table
+            ref="statsTable"
+            small
+            no-border-collapse
+            borderless
+            striped
+            sticky-header="71vh"
+            responsive="false"
+            :class="{ 'dark': darkMode}"
+            :fields="fields"
+            :items="filtered"
+            style="overflow-x: hidden; vertical-align: middle;"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+            :dark="darkMode"
+            thead-class="tableHeader"
+            id="statsTable"
+          >
+            <template v-slot:cell(name)="filtered">
+              <div class="text-left">
+                <b-button
+                  block
+                  @click="changeSelected(filtered.item.idx)"
+                  size="sm"
+                  class="champName champBtn"
+                  :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}"
+                >
+                  <b-row align-v="center" align-h="start" no-gutters>
+                    <b-col>
+                      <img
+                        :src="filtered.item.imgPath"
+                        :alt="filtered.item.name"
+                        width="32px"
+                        style="margin-right: 15px;"
+                      />
+                      <span>{{ filtered.item.name }}</span>
+                    </b-col>
+                  </b-row>
+                </b-button>
+              </div>
+            </template>
+
+            <template v-slot:cell(banRate)="filtered">{{ filtered.item.banRate + '%' }}</template>
+
+            <template v-slot:cell(pickRate)="filtered">{{ filtered.item.pickRate + '%' }}</template>
+
+            <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
+
+            <template v-slot:cell(lanes)="filtered">
+              <b-button
+                v-for="lane in filtered.item.lanes"
+                :key="lane"
+                @click="changeSelectedWithRole(filtered.item.idx, lane)"
+                size="sm"
+                class="roleBtn mx-1"
+                :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}"
+              >
+                <img :src="'/images/lanes/'+lane+'.png'" :alt="lane" width="24px" height="auto" />
+              </b-button>
+            </template>
+          </b-table>
+        </div>
       </div>
-    </div>
-    <div class="build" ref="buildContainer">
-      <div class="bld-grid-container">
-        <div class="bld-Role" :class="{ 'bg-dark': darkMode }">
+      <div class="build" ref="buildContainer">
+        <div class="bld-grid-container">
+          <div class="bld-Role" :class="{ 'bg-dark': darkMode }">
             <b-row align-v="center" align-h="center">
               <b-col cols="3">
-                <div class="pl-1 text-center">
-                  {{ selected.name }}
-                </div>
-                <img :src="selected.imgPath" class="dropShadow bigChampImg"
-                :key="selected.name"/>
+                <div class="pl-1 text-center">{{ selected.name }}</div>
+                <img :src="selected.imgPath" class="dropShadow bigChampImg" :key="selected.name" />
               </b-col>
               <b-col cols="3">
-                <img class="dropShadow mr-3"
-                :src="build.spells[0].imgPath"
-                :alt="build.spells[0].name"
-                :key="build.spells[0].name"/>
-                <img class="dropShadow"
-                :src="build.spells[1].imgPath"
-                :alt="build.spells[1].name"
-                :key="build.spells[1].name"/>
+                <img
+                  class="dropShadow mr-3"
+                  :src="build.spells[0].imgPath"
+                  :alt="build.spells[0].name"
+                  :key="build.spells[0].name"
+                />
+                <img
+                  class="dropShadow"
+                  :src="build.spells[1].imgPath"
+                  :alt="build.spells[1].name"
+                  :key="build.spells[1].name"
+                />
               </b-col>
               <b-col cols="6">
                 <b-row align-v="center" align-h="center">
                   <b-col>
                     <b-row align-v="center" align-h="start">
-                      <b-col cols="9" class='pt-2  ml-4'>
-                        <b-form-select v-model="selectedRole" ref="laneDropdown" size="sm"
-                        :class="{ 'text-white bg-dark darkSelect': darkMode}" plain>
+                      <b-col cols="9" class="pt-2 ml-4">
+                        <b-form-select
+                          v-model="selectedRole"
+                          ref="laneDropdown"
+                          size="sm"
+                          :class="{ 'text-white bg-dark darkSelect': darkMode}"
+                          plain
+                        >
                           <b-form-select-option
                             v-for="(role, index) in selected.roles"
                             :key="index"
@@ -374,9 +405,8 @@ button:hover {
                             :value="buildOpt"
                             :text="buildOpt.name"
                             class="mediumFont text-left"
-                            :class="{ 'mediumFont-dark': darkMode }">
-                            {{ buildOpt.name }}
-                          </b-form-radio>
+                            :class="{ 'mediumFont-dark': darkMode }"
+                          >{{ buildOpt.name }}</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -384,182 +414,254 @@ button:hover {
                 </b-row>
               </b-col>
             </b-row>
-        </div>
-        <div class="bld-Runes mt-4" :class="{ 'bg-dark': darkMode }">
-          <b-row>
-            <b-col>
-              <div class="primary-container">
-                <div class="runeRowHeader" ref="primaryRuneHeader"
-                :class="{ 'bg-medium': darkMode}">
-                  <b-row no-gutters align-v="center" align-h="center">
-                    <b-col cols="3">
-                      <img :src="runeMap[build.runes.primaryBranch].imgPath"
-                      class="runes dropShadow activeRune" width="32px"
-                      :key="build.runes.primaryBranch"/>
-                    </b-col>
-                    <b-col cols="9" class="pl-4">
-                      {{ runeMap[build.runes.primaryBranch].name }}
-                    </b-col>
-                  </b-row>
+          </div>
+          <div class="bld-Runes mt-4" :class="{ 'bg-dark': darkMode }">
+            <b-row>
+              <b-col>
+                <div class="primary-container">
+                  <div
+                    class="runeRowHeader"
+                    ref="primaryRuneHeader"
+                    :class="{ 'bg-medium': darkMode}"
+                  >
+                    <b-row no-gutters align-v="center"
+                    align-h="center" style="flex-wrap: nowrap;">
+                      <b-col cols="3">
+                        <img
+                          :src="runeMap[build.runes.primaryBranch].imgPath"
+                          class="runes dropShadow activeRune"
+                          width="32px"
+                          :key="build.runes.primaryBranch"
+                        />
+                      </b-col>
+                      <b-col cols="9" class="pl-4">
+                        {{ runeMap[build.runes.primaryBranch].name }}
+                      </b-col>
+                    </b-row>
+                  </div>
+                  <div class="runeRowGroup pt-1">
+                    <b-row no-gutters align-v="center" align-h="center" class="mb-2 mt-1">
+                      <b-col
+                        v-for="rune in runeMap[build.runes.primaryBranch].runeRows[0]"
+                        :key="rune.name"
+                      >
+                        <img
+                          :src="rune.imgPath"
+                          class="runes dropShadow"
+                          width="64px"
+                          :class="{ 'activeRune': isActiveRune(rune.id) }"
+                          :key="rune.name"
+                        />
+                      </b-col>
+                    </b-row>
+                  </div>
+                  <svg width="85%" height="2">
+                    <rect width="100%" height="2" style="fill: var(--light-gray)" />
+                  </svg>
+                  <div class="runeRowGroup">
+                    <b-row
+                      no-gutters
+                      align-v="center"
+                      align-h="center"
+                      class="my-2"
+                      v-for="runeRow in runeMap[build.runes.primaryBranch].runeRows.slice(1)"
+                      :key="runeRow.name"
+                    >
+                      <b-col v-for="rune in runeRow" :key="rune.name">
+                        <img
+                          :src="rune.imgPath"
+                          class="runes dropShadow"
+                          height="36px"
+                          width="auto"
+                          :class="{ 'activeRune': isActiveRune(rune.id) }"
+                          :key="rune.name"
+                        />
+                      </b-col>
+                    </b-row>
+                  </div>
                 </div>
-                <div class="runeRowGroup pt-1">
-                  <b-row no-gutters align-v="center" align-h="center" class="mb-2 mt-1">
-                    <b-col v-for="rune in runeMap[build.runes.primaryBranch].runeRows[0]"
-                    :key="rune.name">
-                      <img :src="rune.imgPath"
-                      class="runes dropShadow" width="64px"
-                      :class="{ 'activeRune': isActiveRune(rune.id) }"
-                      :key="rune.name"/>
-                    </b-col>
-                  </b-row>
+              </b-col>
+              <b-col>
+                <div class="secondary-container">
+                  <div
+                    class="runeRowHeader"
+                    ref="secondaryRuneHeader"
+                    :class="{ 'bg-medium': darkMode}"
+                  >
+                    <b-row no-gutters align-v="center" align-h="center">
+                      <b-col cols="3">
+                        <img
+                          :src="runeMap[build.runes.secondaryBranch].imgPath"
+                          class="runes dropShadow activeRune"
+                          width="32px"
+                          :key="build.runes.secondaryBranch"
+                        />
+                      </b-col>
+                      <b-col cols="9" class="pl-4">
+                        {{ runeMap[build.runes.secondaryBranch].name }}
+                      </b-col>
+                    </b-row>
+                  </div>
+                  <div class="runeRowGroup pt-1">
+                    <b-row
+                      no-gutters
+                      align-v="center"
+                      align-h="center"
+                      class="my-2"
+                      v-for="runeRow in runeMap[build.runes.secondaryBranch].runeRows.slice(1)"
+                      :key="runeRow.name"
+                    >
+                      <b-col v-for="rune in runeRow" :key="rune.name">
+                        <img
+                          :src="rune.imgPath"
+                          class="runes dropShadow"
+                          height="30px"
+                          width="auto"
+                          :class="{ 'activeRune': isActiveRune(rune.id) }"
+                        />
+                      </b-col>
+                    </b-row>
+                  </div>
+                  <svg width="85%" height="2">
+                    <rect width="100%" height="2" style="fill: var(--light-gray)" />
+                  </svg>
+                  <div class="runeRowGroup">
+                    <b-row
+                      no-gutters
+                      align-v="center"
+                      align-h="center"
+                      class="my-1"
+                      v-for="(auxRow, rowIndex) in shardMap"
+                      :key="rowIndex"
+                    >
+                      <b-col v-for="(shard, colIndex) in auxRow" :key="colIndex">
+                        <img
+                          :src="shard.imgPath"
+                          class="runes dropShadow"
+                          height="24px"
+                          width="auto"
+                          :ref="shard.id"
+                          :class="{ 'activeRune': isActiveShard(shard.id, rowIndex) }"
+                          :key="shard.id"
+                        />
+                      </b-col>
+                    </b-row>
+                  </div>
                 </div>
-                <svg width="85%" height="1"><rect width="100%"
-                height="1" style="fill: var(--medium-gray)"></rect></svg>
-                <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="my-2"
-                  v-for="runeRow in runeMap[build.runes.primaryBranch].runeRows.slice(1)"
-                  :key="runeRow.name">
-                    <b-col v-for="rune in runeRow" :key="rune.name">
-                      <img :src="rune.imgPath"
-                      class="runes dropShadow" height="36px" width="auto"
-                      :class="{ 'activeRune': isActiveRune(rune.id) }"
-                      :key="rune.name"/>
-                    </b-col>
-                  </b-row>
+              </b-col>
+            </b-row>
+          </div>
+          <div class="bld-Skills mt-4" :class="{ 'bg-dark': darkMode }">
+            <b-row align-v="center" align-h="center" class="pb-2">
+              <b-col :key="build.skills[0].name" cols="3">
+                <span
+                  class="smallFont"
+                  :class="{ 'smallFont-dark': darkMode }"
+                >{{ build.skills[0].name }}</span>
+                <br />
+                <div :key="build.skills[0].button">{{ build.skills[0].button }}</div>
+                <img
+                  :src="build.skills[0].imgPath"
+                  :key="build.skills[0].imgPath"
+                  class="dropShadow"
+                />
+              </b-col>
+              <b-col>
+                <div>
+                  <b-icon icon="arrow-right"></b-icon>
                 </div>
-              </div>
-            </b-col>
-            <b-col>
-              <div class="secondary-container">
-                <div class="runeRowHeader" ref="secondaryRuneHeader"
-                :class="{ 'bg-medium': darkMode}">
-                  <b-row no-gutters align-v="center" align-h="center">
-                    <b-col cols="3">
-                      <img :src="runeMap[build.runes.secondaryBranch].imgPath"
-                      class="runes dropShadow activeRune" width="32px"
-                      :key="build.runes.secondaryBranch"/>
-                    </b-col>
-                    <b-col cols="9" class="pl-4">
-                      {{ runeMap[build.runes.secondaryBranch].name }}
-                    </b-col>
-                  </b-row>
+              </b-col>
+              <b-col :key="build.skills[1].name" cols="3">
+                <span
+                  class="smallFont"
+                  :class="{ 'smallFont-dark': darkMode }"
+                >{{ build.skills[1].name }}</span>
+                <br />
+                <div :key="build.skills[1].button">{{ build.skills[1].button }}</div>
+                <img
+                  :src="build.skills[1].imgPath"
+                  :key="build.skills[1].imgPath"
+                  class="dropShadow"
+                />
+              </b-col>
+              <b-col>
+                <div>
+                  <b-icon icon="arrow-right"></b-icon>
                 </div>
-                <div class="runeRowGroup pt-1">
-                  <b-row no-gutters align-v="center" align-h="center" class="my-2"
-                  v-for="runeRow in runeMap[build.runes.secondaryBranch].runeRows.slice(1)"
-                  :key="runeRow.name">
-                    <b-col v-for="rune in runeRow" :key="rune.name">
-                      <img :src="rune.imgPath"
-                      class="runes dropShadow" height="30px" width="auto"
-                      :class="{ 'activeRune': isActiveRune(rune.id) }"/>
-                    </b-col>
-                  </b-row>
-                </div>
-                <svg width="85%" height="1"><rect width="100%"
-                height="1" style="fill: var(--medium-gray)"></rect></svg>
-                <div class="runeRowGroup">
-                  <b-row no-gutters align-v="center" align-h="center" class="my-1"
-                  v-for="(auxRow, rowIndex) in shardMap" :key="rowIndex">
-                    <b-col v-for="(shard, colIndex) in auxRow" :key="colIndex">
-                      <img :src="shard.imgPath"
-                      class="runes dropShadow" height="24px" width="auto" :ref="shard.id"
-                      :class="{ 'activeRune': isActiveShard(shard.id, rowIndex) }"
-                      :key="shard.id"/>
-                    </b-col>
-                  </b-row>
-                </div>
-              </div>
-            </b-col>
-          </b-row>
-        </div>
-        <div class="bld-Skills mt-4" :class="{ 'bg-dark': darkMode }">
-          <b-row align-v="center" align-h="center" class="pb-2">
-            <b-col :key="build.skills[0].name" cols="3">
-              <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">
-                {{ build.skills[0].name }}
-              </span>
-              <br />
-              <div :key="build.skills[0].button" >{{ build.skills[0].button }}</div>
-              <img :src="build.skills[0].imgPath"
-              :key="build.skills[0].imgPath" class="dropShadow"/>
-            </b-col>
-            <b-col>
-              <div>
-                <b-icon icon="arrow-right"></b-icon>
-              </div>
-            </b-col>
-            <b-col :key="build.skills[1].name" cols="3">
-              <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">
-                {{ build.skills[1].name }}
-              </span>
-              <br />
-              <div :key="build.skills[1].button" >{{ build.skills[1].button }}</div>
-              <img :src="build.skills[1].imgPath"
-              :key="build.skills[1].imgPath" class="dropShadow"/>
-            </b-col>
-            <b-col>
-              <div>
-                <b-icon icon="arrow-right"></b-icon>
-              </div>
-            </b-col>
-            <b-col :key="build.skills[2].name" cols="3">
-              <span class="smallFont"
-              :class="{ 'smallFont-dark': darkMode }">
-                {{ build.skills[2].name }}
-              </span>
-              <br />
-              <div :key="build.skills[2].button" >{{ build.skills[2].button }}</div>
-              <img :src="build.skills[2].imgPath"
-              :key="build.skills[2].imgPath" class="dropShadow"/>
-            </b-col>
-          </b-row>
-        </div>
-        <div class="bld-Items mt-4" :class="{ 'bg-dark': darkMode }">
-          <b-row align-v="center" no-gutters class="itemRow pt-2">
-            <b-col cols="2" class="text-center">
-              Early
-            </b-col>
-            <b-col>
-              <img v-for="(item, index) in build.items.general.start"
-                :key="index" :src="item.imgPath" class="mx-2  mb-2 dropShadow"
-                v-b-tooltip :title="item.name"/>
-            </b-col>
-          </b-row>
-          <b-row align-v="center" no-gutters class="itemRow pt-2">
-            <b-col cols="2" class="text-center">
-              Core
-            </b-col>
-            <b-col>
-              <img v-for="(item, index) in build.items.general.core"
-                :key="index" :src="item.imgPath" class="mx-2 mb-2 dropShadow"
-                v-b-tooltip :title="item.name"/>
-            </b-col>
-          </b-row>
-          <b-row align-v="center" align-h="center" no-gutters class="itemRow pt-2">
-            <b-col cols="2" class="text-center">
-              Late
-            </b-col>
-            <b-col>
-              <img v-for="(item, index) in build.items.general.full"
-                :key="index" :src="item.imgPath" class="mx-2 mb-2 dropShadow"
-                v-b-tooltip :title="item.name"/>
-            </b-col>
-          </b-row>
-          <b-row align-v="center" no-gutters class="itemRow pt-2 pb-1">
-            <b-col cols="2" class="text-center">
-              Situational
-            </b-col>
-            <b-col>
-              <img v-for="(item, index) in build.items.situational"
-                :key="index" :src="item.imgPath" class="mx-2 dropShadow"
-                v-b-tooltip :title="item.name"/>
-            </b-col>
-          </b-row>
+              </b-col>
+              <b-col :key="build.skills[2].name" cols="3">
+                <span
+                  class="smallFont"
+                  :class="{ 'smallFont-dark': darkMode }"
+                >{{ build.skills[2].name }}</span>
+                <br />
+                <div :key="build.skills[2].button">{{ build.skills[2].button }}</div>
+                <img
+                  :src="build.skills[2].imgPath"
+                  :key="build.skills[2].imgPath"
+                  class="dropShadow"
+                />
+              </b-col>
+            </b-row>
+          </div>
+          <div class="bld-Items mt-4" :class="{ 'bg-dark': darkMode }">
+            <b-row align-v="center" no-gutters class="py-1">
+              <b-col cols="2" class="text-center">Early</b-col>
+              <b-col>
+                <img
+                  v-for="(item, index) in build.items.general.start"
+                  :key="index"
+                  :src="item.imgPath"
+                  class="mx-2 mb-2 dropShadow"
+                  v-b-tooltip
+                  :title="item.name"
+                />
+              </b-col>
+            </b-row>
+            <b-row align-v="center" no-gutters class="py-1">
+              <b-col cols="2" class="text-center">Core</b-col>
+              <b-col>
+                <img
+                  v-for="(item, index) in build.items.general.core"
+                  :key="index"
+                  :src="item.imgPath"
+                  class="mx-2 mb-2 dropShadow"
+                  v-b-tooltip
+                  :title="item.name"
+                />
+              </b-col>
+            </b-row>
+            <b-row align-v="center" align-h="center" no-gutters class="py-1">
+              <b-col cols="2" class="text-center">Late</b-col>
+              <b-col>
+                <img
+                  v-for="(item, index) in build.items.general.full"
+                  :key="index"
+                  :src="item.imgPath"
+                  class="mx-2 mb-2 dropShadow"
+                  v-b-tooltip
+                  :title="item.name"
+                />
+              </b-col>
+            </b-row>
+            <b-row align-v="center" no-gutters class="py-1 pb-1">
+              <b-col cols="2" class="text-center">Situational</b-col>
+              <b-col>
+                <img
+                  v-for="(item, index) in build.items.situational"
+                  :key="index"
+                  :src="item.imgPath"
+                  class="mx-2 dropShadow"
+                  v-b-tooltip
+                  :title="item.name"
+                />
+              </b-col>
+            </b-row>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</transition>
+  </transition>
 </template>
 
 <script>

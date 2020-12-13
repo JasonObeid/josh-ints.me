@@ -5,7 +5,7 @@ html {
   --light-gray: #edf0f5;
   --medium-gray: #9CA3AF;
   --dark-gray: #4B5563;
-  --background: #F3F4F6;
+  --background: #ece8df;
   --brand: #d8c7a5;
   --brand-dark: #4e4c32;
   --brand-accent: #E0E7FF;

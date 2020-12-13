@@ -19,8 +19,8 @@ const store = new Vuex.Store({
     darkMode: false,
   },
   mutations: {
-    toggle(state) {
-      state.darkMode = !state.darkMode;
+    toggle() {
+      store.state.darkMode = !store.state.darkMode;
     },
   },
 });
@@ -28,5 +28,5 @@ const store = new Vuex.Store({
 new Vue({
   router,
   store,
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');
