@@ -13,7 +13,7 @@
   opacity: 0;
 }
 .parent {
-  height: 100vh;
+  height: 56rem;
   vertical-align: middle;
   align-items: top;
   text-align: center;
@@ -48,17 +48,17 @@
 }
 
 div.bld-Role {
-  height: 13vh;
+  height: 7.7rem;
   grid-area: bld-Role;
   font-weight: 100;
   background-color: white;
-  padding: 5px 10px 10px 10px;
+  padding: 3px 10px 10px 10px;
   border-radius: 10px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 
 div.bld-Runes {
-  height: 33vh;
+  height: 20rem;
   grid-area: bld-Runes;
   background-color: white;
   padding: 10px;
@@ -67,7 +67,7 @@ div.bld-Runes {
 }
 
 div.bld-Skills {
-  height: 12vh;
+  height: 6.6rem;
   grid-area: bld-Skills;
   background-color: white;
   padding: 10px;
@@ -76,41 +76,28 @@ div.bld-Skills {
 }
 
 div.bld-Items {
-  height: 24vh;
+  height: 14.5rem;
   text-align: left;
   grid-area: bld-Items;
   background-color: white;
-  padding: 7px 10px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
 div.tableBorder {
   background-color: white;
-  padding: 7px 10px;
+  padding: 5px 10px;
   border-radius: 10px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11);
 }
-table > tbody > tr > td {
-  font-size: 8px !important;
-  vertical-align: middle !important;
-}
-.table th,
-.table td {
-  font-size: 8px !important;
-  vertical-align: middle !important;
-}
-table {
-  vertical-align: middle;
-}
-.table.b-table > thead > tr > th > div {
-  font-size: 8px !important;
-  vertical-align: middle !important;
-}
-.tableHeader {
+
+th {
+  text-align: -internal-center;
   font-size: 14px !important;
   font-weight: normal !important;
   vertical-align: middle !important;
 }
+
 .champName {
   align-items: left;
   text-align: left;
@@ -176,6 +163,14 @@ button:hover {
   border: 2px solid #3273fa;
 }
 
+.activeKeystone {
+  width: auto;
+  height: 72px;
+  filter: none;
+  opacity: 1;
+  border: 2px solid #3273fa;
+}
+
 .refresh {
   border-radius: 50%;
   padding: 4px 6px;
@@ -188,8 +183,6 @@ button:hover {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .runeRowGroup {
-  margin: 3% 0;
-  border-radius: 10px;
 }
 
 .svgAlign {
@@ -232,17 +225,12 @@ button:hover {
 .grayscale {
   filter: grayscale(1);
 }
+
 </style>
 <template>
   <transition name="fade" mode="out-in">
     <div class="parent">
       <div class="stats" ref="statsContainer">
-        <!--<b-row align-v="center" align-h="start">
-        <b-col style="text-align: left" class="smallFont" :class="{ 'smallFont-dark': darkMode }">
-          <span style="margin-right: 5px">Filters</span>
-          <b-icon icon='filter'></b-icon>
-        </b-col>
-        </b-row>!-->
         <b-row align-v="end" align-h="center" no-gutters>
           <b-col cols="1">
             <b-button
@@ -251,18 +239,20 @@ button:hover {
               ref="refresh"
               :variant="getInverseVariant"
               @click="updateBuilds()"
+              v-b-tooltip
+              title="Refresh Stats"
             >
               <b-icon icon="arrow-clockwise" v-if="!showUpdate"></b-icon>
               <b-spinner small v-if="showUpdate" class="align-middle"></b-spinner>
             </b-button>
           </b-col>
-          <b-col v-for="(btn, idx) in buttons" :key="idx" class="mx-2">
+          <b-col v-for="(btn, idx) in buttons" :key="idx" class="ml-4">
             <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">{{ btn.caption }}</span>
             <b-button :pressed.sync="btn.state" :variant="getVariant" block size="sm">
               <img
                 :src="'/images/lanes/'+ btn.caption.toLowerCase() +'.png'"
                 :alt="btn.caption.toLowerCase()"
-                width="24px"
+                width="24px" height="auto"
                 :class="{ 'grayscale': !btn.state }"
               />
             </b-button>
@@ -272,7 +262,7 @@ button:hover {
         <b-row align-v="center" align-h="center">
           <b-col>
             <b-row no-gutters>
-              <b-col cols="1" class="searchIcon" :class="{ 'bg-medium': darkMode}">
+              <b-col cols="1" class="searchIcon shadow-sm" :class="{ 'bg-medium': darkMode}">
                 <b-icon icon="search" class="svgAlign"></b-icon>
               </b-col>
               <b-col>
@@ -291,23 +281,27 @@ button:hover {
           </b-col>
         </b-row>
         <br />
-        <div class="tableBorder" :class="{ 'bg-dark': darkMode}">
+        <div class="tableBorder mt-1" :class="{ 'bg-dark': darkMode}">
           <b-table
             ref="statsTable"
             small
             no-border-collapse
             borderless
             striped
-            sticky-header="71vh"
+            sticky-header="42.4rem"
             responsive="false"
             :class="{ 'dark': darkMode}"
             :fields="fields"
             :items="filtered"
-            style="overflow-x: hidden; vertical-align: middle;"
+            style="overflow-x: hidden;
+                   font-family: 'Roboto Light';
+                   font-size: 14px !important;
+                   font-weight: normal !important;
+                   vertical-align: middle !important;"
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
             :dark="darkMode"
-            thead-class="tableHeader"
+            thead-tr-class="tableHeader"
             id="statsTable"
           >
             <template v-slot:cell(name)="filtered">
@@ -318,13 +312,14 @@ button:hover {
                   size="sm"
                   class="champName champBtn"
                   :class="{ 'btn-dark bg-medium': darkMode, 'btn-light': !darkMode}"
+                  style="font-family: 'Roboto';"
                 >
                   <b-row align-v="center" align-h="start" no-gutters>
                     <b-col>
                       <img
                         :src="filtered.item.imgPath"
                         :alt="filtered.item.name"
-                        width="32px"
+                        width="32px" height="auto"
                         style="margin-right: 15px;"
                       />
                       <span>{{ filtered.item.name }}</span>
@@ -417,7 +412,7 @@ button:hover {
           </div>
           <div class="bld-Runes mt-4" :class="{ 'bg-dark': darkMode }">
             <b-row>
-              <b-col>
+              <b-col cols="6">
                 <div class="primary-container">
                   <div
                     class="runeRowHeader"
@@ -430,7 +425,7 @@ button:hover {
                         <img
                           :src="runeMap[build.runes.primaryBranch].imgPath"
                           class="runes dropShadow activeRune"
-                          width="32px"
+                          width="40px" height="auto"
                           :key="build.runes.primaryBranch"
                         />
                       </b-col>
@@ -439,8 +434,9 @@ button:hover {
                       </b-col>
                     </b-row>
                   </div>
-                  <div class="runeRowGroup pt-1">
-                    <b-row no-gutters align-v="center" align-h="center" class="mb-2 mt-1">
+                  <div class="runeRowGroup pt-2">
+                    <b-row no-gutters align-v="center" align-h="center"
+                    class="my-2 flex-nowrap">
                       <b-col
                         v-for="rune in runeMap[build.runes.primaryBranch].runeRows[0]"
                         :key="rune.name"
@@ -448,8 +444,8 @@ button:hover {
                         <img
                           :src="rune.imgPath"
                           class="runes dropShadow"
-                          width="64px"
-                          :class="{ 'activeRune': isActiveRune(rune.id) }"
+                          width="54px" height="auto"
+                          :class="{ 'activeKeystone': isActiveRune(rune.id) }"
                           :key="rune.name"
                         />
                       </b-col>
@@ -463,7 +459,7 @@ button:hover {
                       no-gutters
                       align-v="center"
                       align-h="center"
-                      class="my-2"
+                      class="pt-1"
                       v-for="runeRow in runeMap[build.runes.primaryBranch].runeRows.slice(1)"
                       :key="runeRow.name"
                     >
@@ -471,7 +467,7 @@ button:hover {
                         <img
                           :src="rune.imgPath"
                           class="runes dropShadow"
-                          height="36px"
+                          height="40px"
                           width="auto"
                           :class="{ 'activeRune': isActiveRune(rune.id) }"
                           :key="rune.name"
@@ -481,7 +477,7 @@ button:hover {
                   </div>
                 </div>
               </b-col>
-              <b-col>
+              <b-col cols="6">
                 <div class="secondary-container">
                   <div
                     class="runeRowHeader"
@@ -493,7 +489,7 @@ button:hover {
                         <img
                           :src="runeMap[build.runes.secondaryBranch].imgPath"
                           class="runes dropShadow activeRune"
-                          width="32px"
+                          width="40px" height="auto"
                           :key="build.runes.secondaryBranch"
                         />
                       </b-col>
@@ -507,7 +503,7 @@ button:hover {
                       no-gutters
                       align-v="center"
                       align-h="center"
-                      class="my-2"
+                      class="pt-1"
                       v-for="runeRow in runeMap[build.runes.secondaryBranch].runeRows.slice(1)"
                       :key="runeRow.name"
                     >
@@ -515,7 +511,7 @@ button:hover {
                         <img
                           :src="rune.imgPath"
                           class="runes dropShadow"
-                          height="30px"
+                          height="40px"
                           width="auto"
                           :class="{ 'activeRune': isActiveRune(rune.id) }"
                         />
@@ -530,7 +526,7 @@ button:hover {
                       no-gutters
                       align-v="center"
                       align-h="center"
-                      class="my-1"
+                      class="pt-1"
                       v-for="(auxRow, rowIndex) in shardMap"
                       :key="rowIndex"
                     >
@@ -538,7 +534,7 @@ button:hover {
                         <img
                           :src="shard.imgPath"
                           class="runes dropShadow"
-                          height="24px"
+                          height="27px"
                           width="auto"
                           :ref="shard.id"
                           :class="{ 'activeRune': isActiveShard(shard.id, rowIndex) }"

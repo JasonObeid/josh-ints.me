@@ -12,7 +12,9 @@ html {
   --brand-font: #4e3d1b;
   font-size: 1rem;
 }
-
+.navbar-brand {
+  font-family: "Roboto Medium";
+}
 .bg-default {
   background-color: var(--background);
 }
@@ -128,7 +130,8 @@ a.navlink-dark-active {
 <template>
 <main id="home">
 <div>
-<b-navbar toggleable="lg" class="bg-medium d-flex" :class="{ 'navbar-Dark text-white': darkMode }">
+<b-navbar toggleable="lg" class="bg-medium d-flex py-1"
+ :class="{ 'navbar-Dark text-white': darkMode }">
   <b-navbar-brand class="caps-spacing ml-5" :class="{ 'text-white': darkMode }">
     JOSH-INTS.ME
   </b-navbar-brand>
