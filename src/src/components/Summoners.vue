@@ -267,6 +267,9 @@ button.sort
 {
   border-bottom: 3px solid #3a3e42;
 }
+.summonerTable {
+  background-color: #f9f8f7;
+}
 </style>
 
 <template>
@@ -306,12 +309,13 @@ button.sort
         </button>
       </li>
     </ul>
-    <div class="tab-content" ref="myTabContent">
+    <transition-group tag="div">
+    <div class="tab-content" ref="myTabContent" key="tab">
       <div v-for="(summoner, index) in summoners" :key="index"
       class="tab-pane fade" :ref=(summoner.name)
       :class="{ 'active show': isActiveTab(summoner.name) }">
         <table class="table table-borderless table-striped summonerTable"
-        :class="{ 'table-dark text-white': darkMode }">
+        :class="{ 'table-dark text-white bg-dark': darkMode }">
           <thead>
             <tr align="center">
               <th>Champion</th>
@@ -333,7 +337,7 @@ button.sort
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody is="transition-group">
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
                 <td><router-link
                 :to="{ name: 'Home',
@@ -542,6 +546,7 @@ button.sort
         </table>
       </div>
     </div>
+    </transition-group>
     <b-modal ref="addSummonerModal" id="addSummonerModal"
       title="Add a new summoner" hide-footer :header-bg-variant="getVariant"
       :header-text-variant="getInverseVariant" :body-bg-variant="getVariant"
@@ -567,8 +572,8 @@ button.sort
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 export default {
   data() {
     return {
