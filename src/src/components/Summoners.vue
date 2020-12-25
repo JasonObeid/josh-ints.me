@@ -129,7 +129,10 @@ button.sort
 }
 
 .nav-tabsDark {
-  border-bottom: 1px solid #545658;
+  border-bottom: 0px solid #545658;
+}
+.nav-tabs {
+  border-bottom: 0px solid #545658;
 }
 
 .table td
@@ -143,6 +146,7 @@ button.sort
 }
 .summonerTab-inactive
 {
+  background-color: #f9f8f7;
   border-bottom: 3px solid transparent;
 }
 .sort
@@ -270,12 +274,21 @@ button.sort
 .summonerTable {
   background-color: #f9f8f7;
 }
+.tab-content {
+  width: 94rem;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+}
+.smaller {
+  font-size: 60%;
+  letter-spacing: 1px;
+}
 </style>
 
 <template>
 <transition name="fade" mode="out-in">
   <div class="flex-container">
-     <ul class="nav nav-tabs pl-2" width='100%' ref="summonerTab"
+     <ul class="nav nav-tabs pl-2" ref="summonerTab"
       :class="{ 'nav-tabsDark': darkMode }">
       <li v-for="(summoner, index) in summoners"
       :key="index" :title="summoner.name"
@@ -309,8 +322,9 @@ button.sort
         </button>
       </li>
     </ul>
-    <transition-group tag="div">
-    <div class="tab-content" ref="myTabContent" key="tab">
+    <div :class="darkMode ? 'bg-medium':'bg-default'">
+    <div class="tab-content p-2 mx-2" ref="myTabContent"
+    key="tab" :class="darkMode ? 'table-dark': 'summonerTable'">
       <div v-for="(summoner, index) in summoners" :key="index"
       class="tab-pane fade" :ref=(summoner.name)
       :class="{ 'active show': isActiveTab(summoner.name) }">
@@ -321,10 +335,7 @@ button.sort
               <th>Champion</th>
               <th>Runes</th>
               <th>Items</th>
-              <th>W/L</th>
-              <th>Score</th>
-              <th>KDA</th>
-              <th>CS</th>
+              <th>Stats</th>
               <th class="sort" @click='sortByInt(summoner)'>
                 Int Score
                 <b-icon :icon="intSortIcon"></b-icon>
@@ -337,7 +348,7 @@ button.sort
               </th>
             </tr>
           </thead>
-          <tbody is="transition-group">
+          <tbody>
               <tr v-for="(match, index) in summoner.matchInfo" :key="index">
                 <td><router-link
                 :to="{ name: 'Home',
@@ -426,29 +437,32 @@ button.sort
                     </tr>
                   </div>
                 </td>
-                <td v-if="match.stats.win == true" class="win"
-                :class="{ 'winDark': darkMode }">
-                  <p>{{ winLoss(match.stats.win) + ': ' }}</p>
-                  <a>{{ match.gameInfo.queue}}</a>
+                <td :class="getWinLossClass(match.stats.win)">
+                  <div>{{ winLoss(match.stats.win) + ': '}}</div>
+                  <div class="small">{{ match.gameInfo.queue }}</div>
+                  <br>
+                  <div>
+                    {{match.stats.kills + ' / ' + match.stats.deaths + ' / ' + match.stats.assists}}
+                  </div>
+                  <div>
+                    <span>{{ match.stats.kda}}</span>
+                    <span class="smaller">{{ ' KDA' }}</span>
+                  </div>
+                  <div>
+                    <span>{{ match.stats.creepScore }}</span>
+                    <span class="smaller">{{ ' CS' }}</span>
+                  </div>
                 </td>
-                <td v-else class="loss"
-                :class="{ 'lossDark': darkMode }">
-                  <p>{{ winLoss(match.stats.win) + ': ' }}</p>
-                  <a>{{ match.gameInfo.queue}}</a>
+                <td>
+                  <p>{{ match.stats.intScore + '%' }}</p>
                 </td>
-                <td class="trinket">
-                  {{ match.stats.kills + '/' + match.stats.deaths + '/' + match.stats.assists }}
-                </td>
-                <td class="trinket">{{ match.stats.kda }}</td>
-                <td class="trinket">{{ match.stats.creepScore }}</td>
-                <td class="trinket">{{ match.stats.intScore + '%' }}</td>
                 <td class='blueTeam'>
                   <div class="my-1" v-for="(player, index)
                   in match.teamInfo.blue" :key="index">
                     <router-link :to="{ name: 'Home',
                     params: { champName: player.champName.toLowerCase() } }">
                       <img class="smallChampIcon"
-                      :src="player.champImgPath" width="20px" height="auto"
+                      :src="player.champImgPath" width="28px" height="auto"
                       :alt="player.champName">
                     </router-link>
                     <a v-if="player.participantId === match.teamInfo.blueTeamTankIndex &&
@@ -522,7 +536,7 @@ button.sort
                     <router-link :to="{ name: 'Home',
                     params: { champName: player.champName.toLowerCase() } }">
                       <img class="smallChampIcon"
-                      :src="player.champImgPath" width="20px" height="auto"
+                      :src="player.champImgPath" width="28px" height="auto"
                       :alt="player.champName">
                     </router-link>
                   </div>
@@ -546,7 +560,7 @@ button.sort
         </table>
       </div>
     </div>
-    </transition-group>
+    </div>
     <b-modal ref="addSummonerModal" id="addSummonerModal"
       title="Add a new summoner" hide-footer :header-bg-variant="getVariant"
       :header-text-variant="getInverseVariant" :body-bg-variant="getVariant"
@@ -572,8 +586,8 @@ button.sort
 <script>
 import axios from 'axios';
 
-// const localhost = '/api';
-const localhost = 'http://localhost:5000/api';
+const localhost = '/api';
+// const localhost = 'http://localhost:5000/api';
 export default {
   data() {
     return {
@@ -708,10 +722,25 @@ export default {
       this.activeItem = menuItem;
     },
     winLoss(game) {
-      if (game === true) {
+      if (game) {
         return 'Win';
       }
       return 'Loss';
+    },
+    getWinLossClass(game) {
+      let className = '';
+      if (game) {
+        className += 'win';
+        if (this.darkMode) {
+          className += ' winDark';
+        }
+      } else {
+        className += 'loss';
+        if (this.darkMode) {
+          className += ' lossDark';
+        }
+      }
+      return className;
     },
     getSummoners(run = 'goTab0') {
       const path = `${localhost}/summoners`;

@@ -13,7 +13,7 @@
   opacity: 0;
 }
 .parent {
-  height: 56rem;
+  height: 100vh;
   vertical-align: middle;
   align-items: top;
   text-align: center;
@@ -235,6 +235,13 @@ button:hover {
   position: absolute; /* add for smooth transition between elements */
   opacity: 0;
 }
+.v-align-middle {
+  vertical-align: middle;
+}
+.tableCells {
+  position: relative;
+  top: 0.6rem;
+}
 </style>
 <template>
   <transition name="fade" mode="out-in">
@@ -257,7 +264,8 @@ button:hover {
           </b-col>
           <b-col v-for="(btn, idx) in buttons" :key="idx" class="ml-4">
             <span class="smallFont" :class="{ 'smallFont-dark': darkMode }">{{ btn.caption }}</span>
-            <b-button :pressed.sync="btn.state" :variant="getVariant" block size="sm">
+            <b-button :variant="getVariant" block size="sm" :pressed.sync="btn.state"
+            @click="syncButtonFilters(btn.caption)">
               <img
                 :src="'/images/lanes/'+ btn.caption.toLowerCase() +'.png'"
                 :alt="btn.caption.toLowerCase()"
@@ -303,18 +311,17 @@ button:hover {
             :fields="fields"
             :items="filtered"
             style="overflow-x: hidden;
-                   font-family: 'Roboto Light';
-                   font-size: 14px !important;
-                   font-weight: normal !important;
-                   vertical-align: middle !important;"
+                   font-size: 14px !important;"
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
             :dark="darkMode"
-            thead-tr-class="tableHeader"
             id="statsTable"
           >
-            <template v-slot:cell(name)="filtered">
-              <div class="text-left">
+            <template v-slot:head()="fields">
+              <span class="font-weight-normal">{{ fields.label }}</span>
+            </template>
+            <template v-slot:cell(name)="filtered" class="v-align-middle">
+              <div class="text-left v-align-middle">
                 <b-button
                   block
                   @click="changeSelected(filtered.item.idx)"
@@ -338,14 +345,30 @@ button:hover {
               </div>
             </template>
 
-            <template v-slot:cell(banRate)="filtered">{{ filtered.item.banRate + '%' }}</template>
+            <template v-slot:cell(banRate)="filtered">
+              <span class="tableCells"
+              :class="{ 'font-weight-bold' : isBoldBanRate(filtered.item.banRate) }">
+                {{ filtered.item.banRate + '%' }}
+              </span>
+            </template>
 
-            <template v-slot:cell(pickRate)="filtered">{{ filtered.item.pickRate + '%' }}</template>
+            <template v-slot:cell(pickRate)="filtered">
+              <span class="tableCells"
+              :class="{ 'font-weight-bold' : isBoldPickRate(filtered.item.pickRate) }">
+                {{ filtered.item.pickRate + '%' }}
+              </span>
+            </template>
 
-            <template v-slot:cell(winRate)="filtered">{{ filtered.item.winRate + '%' }}</template>
+            <template v-slot:cell(winRate)="filtered">
+              <span class="tableCells"
+              :class="{ 'font-weight-bold' : isBoldWinRate(filtered.item.winRate) }">
+                {{ filtered.item.winRate + '%' }}
+              </span>
+            </template>
 
             <template v-slot:cell(lanes)="filtered">
               <b-button
+                style="position: relative; top: 0.2rem;"
                 v-for="lane in filtered.item.lanes"
                 :key="lane"
                 @click="changeSelectedWithRole(filtered.item.idx, lane)"
@@ -464,7 +487,8 @@ button:hover {
                     </b-row>
                   </div>
                   <svg width="85%" height="2">
-                    <rect width="100%" height="2" style="fill: var(--light-gray)" />
+                    <rect width="100%" height="2"
+                    :style="darkMode ? 'fill: var(--dark-gray);' : 'fill: var(--light-gray);'"/>
                   </svg>
                   <div class="runeRowGroup">
                     <b-row no-gutters align-v="center"
@@ -582,7 +606,8 @@ button:hover {
                     </b-row>
                   </div>
                   <svg width="85%" height="2">
-                    <rect width="100%" height="2" style="fill: var(--light-gray)" />
+                    <rect width="100%" height="2"
+                    :style="darkMode ? 'fill: var(--dark-gray);' : 'fill: var(--light-gray);'"/>
                   </svg>
                   <div class="runeRowGroup">
                     <b-row no-gutters align-v="center"
@@ -647,11 +672,8 @@ button:hover {
                 >{{ build.skills[0].name }}</span>
                 <br />
                 <div :key="build.skills[0].button">{{ build.skills[0].button }}</div>
-                <transition name="fade" mode="out-in">
-                <div class="dropShadow" :key="build.skills[0].name" style="width:40px;height:40px;"
-                :style="'background: url(./' + build.skills[0].imgPath + ');'">
-                </div>
-                </transition>
+                <img :src="'./' + build.skills[0].imgPath"
+                :key="build.skills[0].imgPath" class="dropShadow"/>
               </b-col>
               <b-col>
                 <div>
@@ -748,8 +770,8 @@ button:hover {
 <script>
 import axios from 'axios';
 
-// const localhost = '/api';
-const localhost = 'http://localhost:5000/api';
+const localhost = '/api';
+// const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
@@ -761,6 +783,7 @@ export default {
         { caption: 'ADC', state: true },
         { caption: 'Support', state: true },
       ],
+      filterCount: 0,
       sortBy: 'pickRate',
       sortDesc: true,
       fields: [
@@ -863,6 +886,36 @@ export default {
     },
   },
   methods: {
+    syncButtonFilters(buttonName) {
+      if (this.filterCount === 0) {
+        for (let i = 0; i < this.buttons.length; i += 1) {
+          if (this.buttons[i].caption !== buttonName) {
+            this.buttons[i].state = false;
+          } else {
+            this.buttons[i].state = true;
+          }
+        }
+      }
+      this.filterCount += 1;
+    },
+    isBoldBanRate(value) {
+      if (value >= 15) {
+        return true;
+      }
+      return false;
+    },
+    isBoldWinRate(value) {
+      if (value >= 53) {
+        return true;
+      }
+      return false;
+    },
+    isBoldPickRate(value) {
+      if (value >= 7) {
+        return true;
+      }
+      return false;
+    },
     isActiveRune(runeId) {
       const { runes } = this.build.runes;
       for (let i = 0; i < runes.length; i += 1) {

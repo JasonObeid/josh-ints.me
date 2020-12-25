@@ -129,7 +129,7 @@ a.navlink-dark-active {
 
 <template>
 <main id="home">
-<div>
+<div :class="darkMode ? 'bg-medium':'bg-default'">
 <b-navbar toggleable="lg" class="bg-medium d-flex py-1"
  :class="{ 'navbar-Dark text-white': darkMode }">
   <b-navbar-brand class="caps-spacing ml-5" :class="{ 'text-white': darkMode }">
@@ -157,16 +157,14 @@ a.navlink-dark-active {
   </b-button>
 
 </b-navbar>
-  <b-row align-v="center" align-h="center" ref="activeContainer"
-  :class="{ 'text-white bg-medium': darkMode }" class="pb-2">
-    <b-col cols="9">
-      <transition name="fade" mode="out-in">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </transition>
-    </b-col>
-  </b-row>
+  <div ref="activeContainer" :class="{ 'text-white bg-medium': darkMode }"
+  class="pb-2 m-auto" style="width: 94.5rem !important;">
+    <transition name="fade" mode="out-in">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
+  </div>
 </div>
 </main>
 </template>
