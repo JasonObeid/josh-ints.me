@@ -307,6 +307,10 @@ button.sort
   -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+.smaller {
+  font-size: 8pt;
+  letter-spacing: 1px;
+}
 </style>
 
 <template>
@@ -547,7 +551,6 @@ button.sort
         </div>
       </div>
     </div>
-    </div>
     <b-modal ref="addSummonerModal" id="addSummonerModal"
       title="Add a new summoner" hide-footer :header-bg-variant="getVariant"
       :header-text-variant="getInverseVariant" :body-bg-variant="getVariant"
@@ -573,8 +576,9 @@ button.sort
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
+
 export default {
   data() {
     return {
@@ -714,7 +718,7 @@ export default {
       }
       return 'Loss';
     },
-    getWinLossClass(game) 
+    getWinLossClass(game) {
       if (game) {
         if (this.darkMode) {
           return 'winDark';
