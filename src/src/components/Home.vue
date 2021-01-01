@@ -129,7 +129,7 @@ a.navlink-dark-active {
 
 <template>
 <main id="home">
-<div>
+<div :class="darkMode ? 'bg-medium':'bg-default'">
 <b-navbar toggleable="lg" class="bg-medium d-flex py-1"
  :class="{ 'navbar-Dark text-white': darkMode }">
   <b-navbar-brand class="caps-spacing ml-5" :class="{ 'text-white': darkMode }">

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" ref="app" class="bg-default">
+  <div id="app" ref="app">
     <transition name="fade" mode="out-in">
       <router-view/>
     </transition>

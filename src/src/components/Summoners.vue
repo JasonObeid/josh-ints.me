@@ -146,7 +146,10 @@ button.sort
 }
 
 .nav-tabsDark {
-  border-bottom: 1px solid #545658;
+  border-bottom: 0px solid #545658;
+}
+.nav-tabs {
+  border-bottom: 0px solid #545658;
 }
 
 .table td
@@ -160,6 +163,7 @@ button.sort
 }
 .summonerTab-inactive
 {
+  background-color: #f9f8f7;
   border-bottom: 3px solid transparent;
 }
 .sort
@@ -279,6 +283,7 @@ button.sort
 {
   border-bottom: 3px solid #3a3e42;
 }
+
 .teammateBtn {
   font-size: 9pt;
 }
@@ -542,6 +547,7 @@ button.sort
         </div>
       </div>
     </div>
+    </div>
     <b-modal ref="addSummonerModal" id="addSummonerModal"
       title="Add a new summoner" hide-footer :header-bg-variant="getVariant"
       :header-text-variant="getInverseVariant" :body-bg-variant="getVariant"
@@ -703,12 +709,12 @@ export default {
       this.activeItem = menuItem;
     },
     winLoss(game) {
-      if (game === true) {
+      if (game) {
         return 'Win';
       }
       return 'Loss';
     },
-    getWinLossClass(game) {
+    getWinLossClass(game) 
       if (game) {
         if (this.darkMode) {
           return 'winDark';
