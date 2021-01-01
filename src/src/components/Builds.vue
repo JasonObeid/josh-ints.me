@@ -182,8 +182,6 @@ button:hover {
   background-color: var(--light-gray);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-.runeRowGroup {
-}
 
 .svgAlign {
   position: absolute;
@@ -663,8 +661,8 @@ button:hover {
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
