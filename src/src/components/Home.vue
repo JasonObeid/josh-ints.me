@@ -157,8 +157,11 @@ a.navlink-dark-active {
   </b-button>
 
 </b-navbar>
-  <div ref="activeContainer" :class="{ 'text-white bg-medium': darkMode }"
-  class="pb-2 m-auto" style="width: 94.5rem !important;">
+  <div
+    ref="activeContainer"
+    :class="{ 'text-white bg-medium': darkMode }"
+    class="row col-9 d-flex justify-content-center m-auto pb-2"
+  >
     <transition name="fade" mode="out-in">
       <keep-alive>
         <router-view></router-view>

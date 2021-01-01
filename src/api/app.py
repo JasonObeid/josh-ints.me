@@ -22,7 +22,7 @@ SUMMONERS = [
     {
         'id': '',
         'summId': '',
-        'name': 'sodhi',
+        'name': 'MundoLikey',
         'history': [],
         'startIndex': 0,
         'endIndex': 10,
@@ -98,18 +98,12 @@ def all_summoners():
     return jsonify(summonersResponse)
 
 
-@app.route('/api/summoners/<summoner_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/summoners/<summoner_id>', methods=['PUT', 'DELETE'])
 def single_summoner(summoner_id):
-    if request.method == 'GET':
-        summonersResponse['message'] = f'hello there, {summoner_id}'
     if request.method == 'PUT':
         post_data = request.get_json()
-        if(len(post_data) > 1):
-            summonersResponse['message'] = get_more_matches_summoner(
-                summoner_id, post_data)
-        else:
-            summonersResponse['message'] = replace_summoner(
-                summoner_id, post_data)
+        summonersResponse[summoner_id] = get_more_matches_summoner(
+            summoner_id, post_data)
     if request.method == 'DELETE':
         remove_summoner(summoner_id)
         summonersResponse['message'] = 'Summoner removed!'
@@ -154,7 +148,7 @@ def test():
         return jsonify(indexMap)
 
 
-#endpoint helper functions
+# endpoint helper functions
 def remove_summoner(summoner_id):
     for summoner in SUMMONERS:
         if summoner['id'] == summoner_id:
@@ -163,42 +157,20 @@ def remove_summoner(summoner_id):
     return False
 
 
-def update_summoner(summoner_id, history, startIndex, endIndex, matchInfo):
-    for summoner in SUMMONERS:
-        if summoner['id'] == summoner_id:
-            summoner['history'] += history
-            summoner['startIndex'] = startIndex
-            summoner['endIndex'] = endIndex
-            summoner['matchInfo'] += matchInfo
-            return True
-    return False
-
-
-def replace_summoner(summoner_id, post_data):
-    remove_summoner(summoner_id)
-    accId, summId = getIds(post_data.get('name'))
-    history = getHistory(accId)
-    SUMMONERS.append({
-        'id': accId,
-        'summId': summId,
-        'name': post_data.get('name'),
-        'history': history,
-        'matchInfo': getMatch(history, accId),
-        'startIndex': 0,
-        'endIndex': 10,
-        'rank': getRank(summId)
-    })
-    return 'Summoner updated!'
-
-
 def get_more_matches_summoner(summoner_id, post_data):
     accId = post_data.get('id')
     startIndex = post_data.get('startIndex')
     endIndex = post_data.get('endIndex')
     history = getHistory(accId, startIndex, endIndex)
     matchInfo = getMatch(history, accId)
-    update_summoner(summoner_id, history, startIndex, endIndex, matchInfo)
-    return 'Summoner updated!'
+    for summoner in SUMMONERS:
+        if summoner['id'] == summoner_id:
+            summoner['history'] += history
+            summoner['startIndex'] = startIndex
+            summoner['endIndex'] = endIndex
+            summoner['matchInfo'] += matchInfo
+            return summoner
+    return SUMMONERS[0]
 
 
 def refreshSummoners():
