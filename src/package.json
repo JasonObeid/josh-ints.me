@@ -12,7 +12,7 @@
     "axios": "^0.18.1",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.1",
-    "@popperjs/core": "1.16",
+    "@popperjs/core": "^1.16",
     "core-js": "^3.6.5",
     "serialize-javascript": "^5.0.1",
     "vue": "^2.6.12",
