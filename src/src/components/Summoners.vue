@@ -311,6 +311,24 @@ button.sort
   font-size: 8pt;
   letter-spacing: 1px;
 }
+
+@keyframes fadeIn {
+  0% {opacity:0.5;}
+  50% {opacity:0.8;}
+  100% {opacity:0.5;}
+}
+
+@keyframes fadeOut {
+  0% {opacity:0.8;}
+  50% {opacity:0.5;}
+  100% {opacity:0.8;}
+}
+.animate-flicker:nth-child(even) {
+    animation: fadeIn 2s infinite ease-in-out;
+}
+.animate-flicker:nth-child(odd) {
+    animation: fadeOut 2s infinite ease-in-out;
+}
 </style>
 
 <template>
@@ -355,12 +373,17 @@ button.sort
       <div v-for="(summoner, index) in summoners" :key="index"
       class="tab-pane fade" :ref=(summoner.name)
       :class="{ 'active show': isActiveTab(summoner.name) }">
+        <div v-if="!summoner.hasOwnProperty('matchInfo')">
+          <div v-for="index in 4" :key="index" style="height: 11.2rem;"
+          class="mx-0 my-3 py-2 match dropShadow bg-medium animate-flicker"
+          no-gutters align-v="center" align-h="center"
+          :class="darkMode ? 'text-white':''">
+          </div>
+        </div>
         <div v-for="(match, index) in summoner.matchInfo" :key="index"
         class="mx-0 my-3 py-2 match dropShadow" no-gutters align-v="center" align-h="center"
-        :class="darkMode ? 'text-white ' + getWinLossClass(match.stats.win) :
-        getWinLossClass(match.stats.win)">
-          <div class="indicator d-flex m-auto w-25 h-75 rounded-lg"
-          :class="getWinLossClass(match.stats.win)">
+        :class="getWinLossClass(match.stats.win) + matchClass">
+          <div class="indicator d-flex m-auto w-25 h-75 rounded-lg">
           </div>
           <div>
             <div>{{ winLoss(match.stats.win) + ': '}}</div>
@@ -542,13 +565,18 @@ button.sort
             </div>
           </div>
         </div>
-        <div v-if="summoners.length != 0" class="mx-3 mt-4 mb-2">
+        <div class="mx-3 mt-4 mb-2">
           <button type="button" class="btn btn-secondary btn-block"
           @click="getMoreMatches(summoner)">
               Load more
               <b-spinner small v-if="showRefresh" class="align-middle"></b-spinner>
           </button>
         </div>
+      </div>
+      <div v-if="summoners.length === 0" class="mx-3 mt-4 mb-2 text-left" style="height:48.5rem;
+      white-space: pre-wrap;
+      ">
+        <h1>No active summoners, click the plus icon to add one</h1>
       </div>
     </div>
     <b-modal ref="addSummonerModal" id="addSummonerModal"
@@ -576,8 +604,8 @@ button.sort
 <script>
 import axios from 'axios';
 
-const localhost = '/api';
-// const localhost = 'http://localhost:5000/api';
+// const localhost = '/api';
+const localhost = 'http://localhost:5000/api';
 
 export default {
   data() {
@@ -736,8 +764,10 @@ export default {
         axios.get(path)
           .then((res) => {
             this.summoners = res.data.summoners;
-            const len = this.summoners.length - 1;
-            this.setActiveTab(this.summoners[len].name);
+            const len = this.summoners.length;
+            if (len > 0) {
+              this.setActiveTab(this.summoners[len - 1].name);
+            }
           })
           .catch((error) => {
             console.error(error);
@@ -746,7 +776,10 @@ export default {
         axios.get(path)
           .then((res) => {
             this.summoners = res.data.summoners;
-            this.setActiveTab(this.summoners[0].name);
+            const len = this.summoners.length;
+            if (len > 0) {
+              this.setActiveTab(this.summoners[0].name);
+            }
           })
           .catch((error) => {
             console.error(error);
@@ -812,9 +845,11 @@ export default {
       axios.delete(path)
         .then(() => {
           this.summoners = this.summoners.filter((summoner) => summoner.id !== summonerID);
-          const summonerCount = this.summoners.length - 1;
-          if (this.isActiveTab(name)) {
-            this.setActiveTab(this.summoners[summonerCount].name);
+          const summonerCount = this.summoners.length;
+          if (summonerCount > 0) {
+            if (this.isActiveTab(name)) {
+              this.setActiveTab(this.summoners[summonerCount - 1].name);
+            }
           }
           this.showRefresh = false;
         })
@@ -873,6 +908,16 @@ export default {
     }, */
   },
   computed: {
+    matchClass() {
+      let classList = '';
+      if (this.darkMode) {
+        classList += ' text-white';
+      }
+      if (this.showRefresh) {
+        classList += ' animate-flicker';
+      }
+      return classList;
+    },
     getTabVariant() {
       if (this.darkMode === true) {
         return 'light';
