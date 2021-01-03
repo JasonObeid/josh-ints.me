@@ -760,11 +760,11 @@ export default {
         .then((res) => {
           console.log(res);
           this.summoners = res.data.summoners;
+          this.showRefresh = false;
         })
         .catch((error) => {
           console.error(error);
         });
-      this.showRefresh = false;
     },
     addSummoner(payload) {
       const path = `${localhost}/summoners`;
