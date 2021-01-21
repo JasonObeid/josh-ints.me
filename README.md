@@ -1,4 +1,9 @@
-## Want to use this project?
+## josh-ints.me
+
+A website for League of Legends: Match History, Stats, and Build Guides.
+
+Languages - Javascript, Python
+Frameworks - RESTful APIs with Flask, Vue.js, Bootstrap CSS
 
 1. Fork/Clone
 
@@ -6,7 +11,7 @@
 
     ```sh
     $ cd server
-    $ python3.7 -m venv env
+    $ python3 -m venv env
     $ source env/bin/activate
     (env)$ pip install -r requirements.txt
     (env)$ python app.py
@@ -23,6 +28,3 @@
     ```
 
     Navigate to [http://localhost:8080](http://localhost:8080)
-
-
-Based on: [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
