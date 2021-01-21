@@ -3,6 +3,7 @@
 A website for League of Legends: Match History, Stats, and Build Guides.
 
 Languages - Javascript, Python
+
 Frameworks - RESTful APIs with Flask, Vue.js, Bootstrap CSS
 
 1. Fork/Clone
