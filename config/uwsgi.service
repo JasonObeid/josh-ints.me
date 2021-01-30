@@ -6,9 +6,6 @@ After=network.target
 [Service]
 User=*name*
 Group=www-data
-WorkingDirectory=/home/*name*/josh-ints.me/src/api
+WorkingDirectory=/var/lib/jenkins/workspace/josh-ints.me_master/src/api
 Environment="PATH=/home/*name*/env/bin"
-ExecStart=/home/*name*/env/bin/uwsgi --socket 127.0.0.1:3031 -w wsgi:app --master --processes 4 --threads 2 --stats 127.0.0.1:9191
-
-[Install]
-WantedBy=multi-user.target
+ExecStart=/home/*name*/env/bin/uwsgi --socket 127.0.0.1:3031 --wsgi-file app.py --callable app --master --processes 4 --threads 2 --stats 127.0.0.1:9191

@@ -1,12 +1,14 @@
 ## Want to use this project?
 
+Flask + Vue.js SPA for League of Legends: Match History, Stats, and Build Guides
+
 1. Fork/Clone
 
 1. Run the server-side Flask app in one terminal window:
 
     ```sh
     $ cd server
-    $ python3.7 -m venv env
+    $ python3 -m venv env
     $ source env/bin/activate
     (env)$ pip install -r requirements.txt
     (env)$ python app.py
@@ -23,6 +25,3 @@
     ```
 
     Navigate to [http://localhost:8080](http://localhost:8080)
-
-
-Based on: [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
