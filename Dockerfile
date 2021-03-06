@@ -18,7 +18,7 @@ RUN apk update && apk add --no-cache python3 && \
     rm -r /root/.cache
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 COPY --from=build-vue /src/dist /usr/share/nginx/html
-COPY ./public/images /usr/share/nginx/html/images
+COPY /src/public/images /usr/share/nginx/html/images
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./api .
 RUN pip3 install -r requirements.txt
