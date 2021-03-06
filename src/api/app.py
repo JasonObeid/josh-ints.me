@@ -12,8 +12,7 @@ from statistics import mean, mode
 import requests
 from flask import Flask, jsonify, request, send_from_directory
 from flask_caching import Cache
-from flask_cors import CORS
-from flask_compress import Compress
+from flask_cors import Compress
 from utils.helperFunctions import *
 
 # starting summoners
@@ -57,8 +56,6 @@ cache = Cache(app)
 
 # enable CORS.
 CORS(app, resources={r'/*': {'origins': '*'}})
-
-Compress(app)
 
 # '/<path:path>') means path plus passes path as parameter
 # you can have multiple routes for one method
